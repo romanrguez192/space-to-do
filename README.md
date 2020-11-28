@@ -1,6 +1,6 @@
 # Space To Do
 
-## Intalled dependencies
+## Installed dependencies
 ```
 npm install @react-navigation/native
 
