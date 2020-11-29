@@ -6,6 +6,7 @@ import {
   Text,
   Image,
   Dimensions,
+  SafeAreaView,
 } from "react-native";
 import { Input, Icon } from "react-native-elements";
 import { color, Value } from "react-native-reanimated";
@@ -42,6 +43,7 @@ const LoginScreen = () => {
   }, [visiblePassword]);
 
   return (
+   <SafeAreaView style={styles.areaview}>
     <ScrollView contentContainerStyle={styles.container}>
       {/* Logo de Space To Do */}
       <Image source={logo} style={styles.logo} />
@@ -72,6 +74,7 @@ const LoginScreen = () => {
         <Text style={styles.buttonText}>Ingresar</Text>
       </TouchableOpacity>
     </ScrollView>
+   </SafeAreaView>
   );
 };
 
@@ -81,6 +84,11 @@ const windowHeight = Dimensions.get('window').height;
 
 // Estilos
 const styles = StyleSheet.create({
+  areaview: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+
   container: {
     backgroundColor: "#fff",
     alignItems: "center",
