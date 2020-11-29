@@ -7,6 +7,10 @@ import {
   Image,
   Dimensions,
   SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
+  View,
+  TouchableHighlight,
 } from "react-native";
 import { Input, Icon } from "react-native-elements";
 import { color, Value } from "react-native-reanimated";
@@ -42,38 +46,50 @@ const LoginScreen = () => {
     }
   }, [visiblePassword]);
 
+
+
   return (
    <SafeAreaView style={styles.areaview}>
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* Logo de Space To Do */}
-      <Image source={logo} style={styles.logo} />
-      {/* Correo electrónico */}
-      <Input
-        labelStyle={styles.inputText}
-        placeholder="email@address.com"
-        leftIcon={{ type: "font-awesome", name: "envelope", color: "#bbb" }}
-        label="Correo Electrónico"
-        leftIconContainerStyle={{ marginRight: 5 }}
-        autoCapitalize="none"
-        autoCompleteType="email"
-      />
-      {/* Contraseña */}
-      <Input
-        labelStyle={styles.inputText}
-        ref={passwordInput}
-        placeholder="Contraseña"
-        leftIcon={{ type: "font-awesome", name: "lock", color: "#bbb" }}
-        label="Contraseña"
-        secureTextEntry={true}
-        leftIconContainerStyle={{ marginRight: 5 }}
-        rightIcon={eyeIcon}
-        righttIconContainerStyle={{ marginLeft: 5 }}
-      />
-      {/* Botón para ingresar */}
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Ingresar</Text>
-      </TouchableOpacity>
-    </ScrollView>
+     <KeyboardAvoidingView
+      enabled behavior={Platform.OS === 'ios' ? 'padding' : null}
+      style = {styles.keyboardstyle}
+      keyboardVerticalOffset = '100'
+     >
+      <ScrollView contentContainerStyle={styles.container}>
+        {/* Logo de Space To Do */}
+        <Image source={logo} style={styles.logo} />
+        {/* Correo electrónico */}
+        <Input
+          labelStyle={styles.inputText}
+          placeholder="email@address.com"
+          leftIcon={{ type: "font-awesome", name: "envelope", color: "#bbb" }}
+          label="Correo Electrónico"
+          leftIconContainerStyle={{ marginRight: 5 }}
+          autoCapitalize="none"
+          autoCompleteType="email"
+        />
+        {/* Contraseña */}
+        <Input
+          labelStyle={styles.inputText}
+          ref={passwordInput}
+          placeholder="Contraseña"
+          leftIcon={{ type: "font-awesome", name: "lock", color: "#bbb" }}
+          label="Contraseña"
+          secureTextEntry={true}
+          leftIconContainerStyle={{ marginRight: 5 }}
+          rightIcon={eyeIcon}
+          righttIconContainerStyle={{ marginLeft: 5 }}
+        />      
+        {/* Botón para ingresar */}
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Ingresar</Text>
+        </TouchableOpacity>
+        {/* Botón para registrarse */}
+        <TouchableOpacity >
+        <Text style={styles.buttonText2}>¿No tienes cuenta? ¡Regístrate aquí!</Text>
+        </TouchableOpacity>
+      </ScrollView>
+      </KeyboardAvoidingView>
    </SafeAreaView>
   );
 };
@@ -87,6 +103,20 @@ const styles = StyleSheet.create({
   areaview: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+
+  buttonText2: {
+    marginBottom: 20,
+    marginTop: 20,
+    fontSize: 16,
+    fontWeight: 'bold',
+    display: 'flex',
+    color:'#2c279f',
+  },
+
+  keyboardstyle: {
+    flexGrow: 1,
+
   },
 
   container: {
@@ -112,7 +142,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: windowWidth * 0.6,
-    height: windowHeight * 0.5,
+    height: windowHeight * 0.4,
     resizeMode: "contain",
   },
 });
