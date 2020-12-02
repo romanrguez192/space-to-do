@@ -8,5 +8,7 @@ expo install react-native-gesture-handler react-native-reanimated react-native-s
 
 npm install @react-navigation/stack
 
+npm install --save react-native-simple-radio-button
+
 npm install react-native-elements
 ```
