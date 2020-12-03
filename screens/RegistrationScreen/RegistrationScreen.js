@@ -213,9 +213,9 @@ const RegistrationScreen = () => {
             labelHorizontal={true}
             onPress={(value) => handleChangeGender(value)}
             formHorizontal={true}
-            buttonColor={"#2f81b7"}
+            buttonColor={"#2d3f50"}
             labelColor={"#2d3f50"}
-            selectedButtonColor={"#3b99d8"}
+            selectedButtonColor={"#2d3f50"}
             selectedLabelColor={"#2d3f50"}
             style={styles.radiostyle}
           />

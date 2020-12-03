@@ -16,9 +16,17 @@ export default function App() {
         {/* Pantalla de Inicio de Sesión */}
         <Stack.Screen
           name="Iniciar Sesión"
-          component={RegistrationScreen}
+          component={LoginScreen}
           options={{
             title: "Iniciar Sesión",
+            headerTitleStyle: { color: "#2d3f50" },
+          }}
+        />
+        <Stack.Screen
+          name="Registrarse"
+          component={RegistrationScreen}
+          options={{
+            title: "Registrarse",
             headerTitleStyle: { color: "#2d3f50" },
           }}
         />

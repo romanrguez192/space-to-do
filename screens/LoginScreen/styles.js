@@ -15,8 +15,8 @@ export default StyleSheet.create({
     marginTop: 20,
     fontSize: 16,
     fontWeight: "bold",
-    display: "flex",
     color: "#2c279f",
+    flexDirection: 'row',
   },
   keyboardstyle: {
     flexGrow: 1,

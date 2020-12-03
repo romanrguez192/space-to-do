@@ -35,6 +35,7 @@ const LoginScreen = () => {
     );
   };
 
+
   // Función a ejecutar cuando cambia la visibilidad de la contraseña
   useEffect(() => {
     if (visiblePassword) {
