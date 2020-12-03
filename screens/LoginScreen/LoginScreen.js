@@ -62,7 +62,8 @@ const LoginScreen = (props) => {
 
     // TODO: Colocar carga
 
-    // TODO: Agregar navegaciones
+    props.navigation.navigate('Inicio');
+    
 
     // TODO: Mantener al usuario con su cuenta ingresada
 

@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import LoginScreen from "./screens/LoginScreen/LoginScreen";
 import RegistrationScreen from "./screens/RegistrationScreen/RegistrationScreen";
+import HomeScreen from "./screens/HomeScreen/HomeScreen"
 
 // Stack Navigator que permite la navegación entre pantallas
 const Stack = createStackNavigator();
@@ -26,6 +27,14 @@ export default function App() {
           component={RegistrationScreen}
           options={{
             title: "Registrarse",
+            headerTitleStyle: { color: "#2d3f50" },
+          }}
+        />
+        <Stack.Screen
+          name="Inicio"
+          component={HomeScreen}
+          options={{
+            title: "Inicio",
             headerTitleStyle: { color: "#2d3f50" },
           }}
         />
