@@ -6,8 +6,10 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
+  View,
 } from "react-native";
-import { Input, Icon } from "react-native-elements";
+import { Input, Icon, Overlay } from "react-native-elements";
 import RadioForm from "react-native-simple-radio-button";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
@@ -18,6 +20,7 @@ const RegistrationScreen = () => {
   const passwordInput = useRef(null);
   const passwordInput2 = useRef(null);
   const [eyeIcon, setEyeIcon] = useState(null);
+  const [visibleOverlay, setVisibleOverlay] = useState(false);
   const [user, setUser] = useState({
     name: "",
     username: "",
@@ -68,7 +71,7 @@ const RegistrationScreen = () => {
     setUser({ ...user, gender: value ? "F" : "M" });
   };
 
-  const registerUser = () => {
+  const registerUser = async () => {
     const values = Object.values(user);
 
     if (values.some((value) => value === "")) {
@@ -80,6 +83,23 @@ const RegistrationScreen = () => {
     if (user.password !== user.confirmPassword) {
       // TODO: Cambiar alerta
       alert("Las contraseñas deben coincidir");
+      return;
+    }
+
+    const usersRef = firebase.firestore().collection("users");
+    let validUsername = true;
+    setVisibleOverlay(true);
+
+    await usersRef.get().then((snapshot) => {
+      if (snapshot.docs.some((doc) => doc.data().username === user.username)) {
+        validUsername = false;
+      }
+    });
+
+    if (!validUsername) {
+      setVisibleOverlay(false);
+      // TODO: Cambiar alerta
+      alert("Nombre de usuario no disponible");
       return;
     }
 
@@ -95,11 +115,11 @@ const RegistrationScreen = () => {
           email: user.email,
           gender: user.gender,
         };
-        const usersRef = firebase.firestore().collection("users");
         usersRef
           .doc(uid)
           .set(data)
           .then(() => {
+            setVisibleOverlay(false);
             // TODO: Cambiar alerta y redirigir
             alert("Usuario creado");
           })
@@ -112,6 +132,8 @@ const RegistrationScreen = () => {
         // TODO: Texto errores
         alert(error);
       });
+
+    setVisibleOverlay(false);
   };
 
   return (
@@ -204,6 +226,10 @@ const RegistrationScreen = () => {
           >
             <Text style={styles.buttonText}>Registrarse</Text>
           </TouchableOpacity>
+
+          <Overlay isVisible={visibleOverlay} overlayStyle={{ padding: 60 }}>
+            <ActivityIndicator size="large" color="#9e9e9e" />
+          </Overlay>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
