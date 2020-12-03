@@ -45,7 +45,7 @@ const RegistrationScreen = () => {
 
   // Variables
   var genero = [
-    { label: "Masculino", value: 0 },
+    { label: "Masculino   ", value: 0 },
     { label: "Femenino", value: 1 },
   ];
 
@@ -85,6 +85,8 @@ const RegistrationScreen = () => {
       return;
     }
     
+    
+
     firebase
       .auth()
       .createUserWithEmailAndPassword(user.email, user.password)
@@ -190,7 +192,7 @@ const RegistrationScreen = () => {
           <RadioForm
             radio_props={genero}
             initial={-1}
-            labelHorizontal={false}
+            labelHorizontal={true}
             onPress={(value) => {}}
             formHorizontal={true}
             buttonColor={"#2f81b7"}

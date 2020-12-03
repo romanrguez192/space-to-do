@@ -18,6 +18,7 @@ export default StyleSheet.create({
     color: "#2d3f50",
     fontSize: 16,
     marginBottom: 10,
+    marginLeft: '-76%',
   },
   bienvenida: {
     color: "#2d3f50",
@@ -54,10 +55,5 @@ export default StyleSheet.create({
   buttonText: {
     fontSize: 20,
     color: "#fff",
-  },
-  logo: {
-    width: windowWidth * 0.6,
-    height: windowHeight * 0.4,
-    resizeMode: "contain",
   },
 });
