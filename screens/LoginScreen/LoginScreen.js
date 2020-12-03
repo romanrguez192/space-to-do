@@ -14,7 +14,7 @@ import styles from "./styles";
 import { firebase } from "../../firebase/config";
 
 // Pantalla de Inicio de Sesión
-const LoginScreen = () => {
+const LoginScreen = (props) => {
   const [visiblePassword, setVisiblePassword] = useState(false);
   const passwordInput = useRef(null);
   const [eyeIcon, setEyeIcon] = useState(null);
@@ -136,7 +136,7 @@ const LoginScreen = () => {
             <Text style={styles.buttonText}>Ingresar</Text>
           </TouchableOpacity>
           {/* Botón para registrarse */}
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => props.navigation.navigate('Registrarse')}>
             <Text style={styles.buttonText2}>
               ¿No tienes cuenta? ¡Regístrate aquí!
             </Text>

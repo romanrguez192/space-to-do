@@ -15,7 +15,7 @@ import styles from "./styles";
 import { firebase } from "../../firebase/config";
 
 // Pantalla de Registro
-const RegistrationScreen = () => {
+const RegistrationScreen = (props) => {
   const [visiblePassword, setVisiblePassword] = useState(false);
   const passwordInput = useRef(null);
   const passwordInput2 = useRef(null);
