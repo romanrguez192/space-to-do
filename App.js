@@ -7,6 +7,8 @@ import RegistrationScreen from "./screens/RegistrationScreen/RegistrationScreen"
 // Stack Navigator que permite la navegación entre pantallas
 const Stack = createStackNavigator();
 
+// TODO: Agregar las demás pantallas
+
 export default function App() {
   return (
     <NavigationContainer>

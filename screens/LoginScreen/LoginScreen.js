@@ -59,6 +59,12 @@ const LoginScreen = () => {
 
     // TODO: Cambiar el input por uno de error en dicho caso
 
+    // TODO: Colocar carga
+
+    // TODO: Agregar navegaciones
+
+    // TODO: Mantener al usuario con su cuenta ingresada
+
     firebase
       .auth()
       .signInWithEmailAndPassword(user.email, user.password)
