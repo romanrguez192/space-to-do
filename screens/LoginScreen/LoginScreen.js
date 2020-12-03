@@ -11,12 +11,13 @@ import {
 import { Input, Icon } from "react-native-elements";
 import logo from "../../assets/logo.png";
 import styles from "./styles";
-import { firebase } from '../../firebase/config'
+import { firebase } from "../../firebase/config";
 
 // Pantalla de Inicio de Sesión
 const LoginScreen = () => {
   const [visiblePassword, setVisiblePassword] = useState(false);
   const passwordInput = useRef(null);
+  const [eyeIcon, setEyeIcon] = useState(null);
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -33,8 +34,6 @@ const LoginScreen = () => {
       />
     );
   };
-
-  const [eyeIcon, setEyeIcon] = useState(createEyeIcon("eye-slash"));
 
   // Función a ejecutar cuando cambia la visibilidad de la contraseña
   useEffect(() => {

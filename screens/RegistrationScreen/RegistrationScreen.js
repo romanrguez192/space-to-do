@@ -8,12 +8,7 @@ import {
   Platform,
 } from "react-native";
 import { Input, Icon } from "react-native-elements";
-import { color, Value } from "react-native-reanimated";
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel,
-} from "react-native-simple-radio-button";
+import RadioForm from "react-native-simple-radio-button";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
 
@@ -22,14 +17,21 @@ const RegistrationScreen = () => {
   const [visiblePassword, setVisiblePassword] = useState(false);
   const passwordInput = useRef(null);
   const passwordInput2 = useRef(null);
+  const [eyeIcon, setEyeIcon] = useState(null);
   const [user, setUser] = useState({
     name: "",
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
-    gender: "F", // TODO: Cambiar esto cuando esté bien el radiobutton
+    gender: "",
   });
+
+  // Géneros para el Radiobutton
+  const gender = [
+    { label: "Masculino   ", value: 0 },
+    { label: "Femenino", value: 1 },
+  ];
 
   // Función para crear el icono del ojo con o sin slash ("eye" o "eye-slash" como parámetro)
   const createEyeIcon = (name) => {
@@ -42,14 +44,6 @@ const RegistrationScreen = () => {
       />
     );
   };
-
-  // Variables
-  var genero = [
-    { label: "Masculino   ", value: 0 },
-    { label: "Femenino", value: 1 },
-  ];
-
-  const [eyeIcon, setEyeIcon] = useState(createEyeIcon("eye-slash"));
 
   // Función a ejecutar cuando cambia la visibilidad de la contraseña
   useEffect(() => {
@@ -70,6 +64,10 @@ const RegistrationScreen = () => {
     setUser({ ...user, [name]: value });
   };
 
+  const handleChangeGender = (value) => {
+    setUser({ ...user, gender: value ? "F" : "M" });
+  };
+
   const registerUser = () => {
     const values = Object.values(user);
 
@@ -84,8 +82,6 @@ const RegistrationScreen = () => {
       alert("Las contraseñas deben coincidir");
       return;
     }
-    
-    
 
     firebase
       .auth()
@@ -190,10 +186,10 @@ const RegistrationScreen = () => {
           <Text style={styles.textTitle}>Género</Text>
           {/* Género */}
           <RadioForm
-            radio_props={genero}
+            radio_props={gender}
             initial={-1}
             labelHorizontal={true}
-            onPress={(value) => {}}
+            onPress={(value) => handleChangeGender(value)}
             formHorizontal={true}
             buttonColor={"#2f81b7"}
             labelColor={"#2d3f50"}
@@ -202,7 +198,10 @@ const RegistrationScreen = () => {
             style={styles.radiostyle}
           />
           {/* Botón para finalizar registro */}
-          <TouchableOpacity style={styles.button} onPress={() => registerUser()}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => registerUser()}
+          >
             <Text style={styles.buttonText}>Registrarse</Text>
           </TouchableOpacity>
         </ScrollView>
