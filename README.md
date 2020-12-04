@@ -14,5 +14,5 @@ npm install react-native-elements
 
 npm install firebase
 
-npm install @ react-navigation / drawer 
+npm install @react-navigation/drawer
 ```
