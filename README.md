@@ -13,4 +13,6 @@ npm install react-native-simple-radio-button
 npm install react-native-elements
 
 npm install firebase
+
+npm install @ react-navigation / drawer 
 ```
