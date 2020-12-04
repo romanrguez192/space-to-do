@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
+  Button,
 } from "react-native";
 import { Input, Icon } from "react-native-elements";
 import styles from "./styles";
@@ -14,6 +15,16 @@ import { firebase } from "../../firebase/config";
 
 // Pantalla de Inicio de Sesión
 const HomeScreen = (props) => {
+
+  const singout = () => {
+    firebase.auth().signOut().then(() => {
+      // Sign-out successful.
+      alert("Saliste de tu cuenta");
+    }).catch((error) => {
+      // An error happened.
+      alert(error);
+    });
+  }
 
   return (
     <SafeAreaView style={styles.areaview}>
@@ -25,14 +36,17 @@ const HomeScreen = (props) => {
       >
         <ScrollView contentContainerStyle={styles.container}>
           <TouchableOpacity>
-          <Icon
-            type='font-awesome'
-            name='plus'
-            size={40}
-            color='#fff'
-            alignItems='center'
-            style={styles.addButton}/>
+            <Icon
+              type="font-awesome"
+              name="plus"
+              size={40}
+              color="#fff"
+              alignItems="center"
+              style={styles.addButton}
+            />
           </TouchableOpacity>
+          <Text>{props.extraData.name}</Text>
+          <Button title="Salir" onPress={() => singout()} />
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

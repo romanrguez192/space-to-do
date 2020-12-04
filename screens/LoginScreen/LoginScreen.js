@@ -7,8 +7,10 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
-import { Input, Icon } from "react-native-elements";
+import { Input, Icon, Overlay } from "react-native-elements";
 import logo from "../../assets/logo.png";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
@@ -17,6 +19,7 @@ import { firebase } from "../../firebase/config";
 const LoginScreen = (props) => {
   const [visiblePassword, setVisiblePassword] = useState(false);
   const passwordInput = useRef(null);
+  const [visibleOverlay, setVisibleOverlay] = useState(false);
   const [eyeIcon, setEyeIcon] = useState(null);
   const [user, setUser] = useState({
     email: "",
@@ -35,7 +38,6 @@ const LoginScreen = (props) => {
     );
   };
 
-
   // Función a ejecutar cuando cambia la visibilidad de la contraseña
   useEffect(() => {
     if (visiblePassword) {
@@ -51,25 +53,19 @@ const LoginScreen = (props) => {
     setUser({ ...user, [name]: value });
   };
 
-  const loginUser = () => {
-    if (user.email === "" || user.password === "") {
-      // TODO: Cambiar texto de la alerta
-      alert("Algo para que rellene todo.");
+  const loginUser = async () => {
+    if (user.email.trim() === "" || user.password.trim() === "") {
+      Alert.alert("Error", "Ingresa tu correo y tu contraseña.");
       return;
     }
 
-    // TODO: Cambiar el input por uno de error en dicho caso
-
-    // TODO: Colocar carga
-
-    props.navigation.navigate('Inicio');
-    
-
     // TODO: Mantener al usuario con su cuenta ingresada
 
-    firebase
+    setVisibleOverlay(true);
+
+    await firebase
       .auth()
-      .signInWithEmailAndPassword(user.email, user.password)
+      .signInWithEmailAndPassword(user.email.trim(), user.password)
       .then((response) => {
         const uid = response.user.uid;
         const usersRef = firebase.firestore().collection("users");
@@ -78,13 +74,13 @@ const LoginScreen = (props) => {
           .get()
           .then((firestoreDocument) => {
             if (!firestoreDocument.exists) {
-              // TODO: Cambiar alerta
-              alert("Este usuario ya no existe.");
+              Alert.alert("Error", "Este usuario ya no existe.");
               return;
             }
-            const data = firestoreDocument.data();
-            // TODO: Redirigir
-            alert(data.name);
+            const userData = firestoreDocument.data();
+            setVisibleOverlay(false);
+            // TODO: Mejorar navegación
+            props.navigation.navigate("Inicio", {user: userData});
           })
           .catch((error) => {
             // TODO: Textos de error
@@ -95,6 +91,8 @@ const LoginScreen = (props) => {
         // TODO: Textos de error
         alert(error);
       });
+
+    setVisibleOverlay(false);
   };
 
   return (
@@ -137,11 +135,16 @@ const LoginScreen = (props) => {
             <Text style={styles.buttonText}>Ingresar</Text>
           </TouchableOpacity>
           {/* Botón para registrarse */}
-          <TouchableOpacity onPress={() => props.navigation.navigate('Registrarse')}>
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate("Registrarse")}
+          >
             <Text style={styles.buttonText2}>
               ¿No tienes cuenta? ¡Regístrate aquí!
             </Text>
           </TouchableOpacity>
+          <Overlay isVisible={visibleOverlay} overlayStyle={{ padding: 70 }}>
+            <ActivityIndicator size="large" color="#9e9e9e" />
+          </Overlay>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

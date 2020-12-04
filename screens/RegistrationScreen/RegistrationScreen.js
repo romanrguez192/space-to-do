@@ -7,7 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
-  View,
+  Alert,
 } from "react-native";
 import { Input, Icon, Overlay } from "react-native-elements";
 import RadioForm from "react-native-simple-radio-button";
@@ -74,15 +74,18 @@ const RegistrationScreen = (props) => {
   const registerUser = async () => {
     const values = Object.values(user);
 
-    if (values.some((value) => value === "")) {
-      // TODO: Cambiar alerta
-      alert("Debe llenar todos los campos.");
+    if (values.some((value) => value.trim() === "")) {
+      Alert.alert("Error", "Debe llenar todos los campos.");
+      return;
+    }
+
+    if (user.username.trim().indexOf(" ") != -1) {
+      Alert.alert("Error", "El nombre de usuario no puede contener espacios.");
       return;
     }
 
     if (user.password !== user.confirmPassword) {
-      // TODO: Cambiar alerta
-      alert("Las contraseñas deben coincidir");
+      Alert.alert("Error", "Ambas contraseñas deben coincidir.");
       return;
     }
 
@@ -91,28 +94,27 @@ const RegistrationScreen = (props) => {
     setVisibleOverlay(true);
 
     await usersRef.get().then((snapshot) => {
-      if (snapshot.docs.some((doc) => doc.data().username === user.username)) {
+      if (snapshot.docs.some((doc) => doc.data().username === user.username.trim())) {
         validUsername = false;
       }
     });
 
     if (!validUsername) {
       setVisibleOverlay(false);
-      // TODO: Cambiar alerta
-      alert("Nombre de usuario no disponible");
+      Alert.alert("Error", "Este nombre de usuario no está disponible");
       return;
     }
 
-    firebase
+    await firebase
       .auth()
-      .createUserWithEmailAndPassword(user.email, user.password)
+      .createUserWithEmailAndPassword(user.email.trim(), user.password)
       .then((response) => {
         const uid = response.user.uid;
         const data = {
           id: uid,
-          name: user.name,
-          username: user.username,
-          email: user.email,
+          name: user.name.trim(),
+          username: user.username.trim(),
+          email: user.email.trim(),
           gender: user.gender,
         };
         usersRef
@@ -120,8 +122,9 @@ const RegistrationScreen = (props) => {
           .set(data)
           .then(() => {
             setVisibleOverlay(false);
-            // TODO: Cambiar alerta y redirigir
-            alert("Usuario creado");
+            // TODO: Cambiar esta alerta por una mejor
+            Alert.alert("Enhorabuena", "Usuario creado satisfactoriamente");
+            props.navigation.navigate("Inicio", {user: data});
           })
           .catch((error) => {
             // TODO: Texto errores
@@ -226,8 +229,7 @@ const RegistrationScreen = (props) => {
           >
             <Text style={styles.buttonText}>Registrarse</Text>
           </TouchableOpacity>
-
-          <Overlay isVisible={visibleOverlay} overlayStyle={{ padding: 60 }}>
+          <Overlay isVisible={visibleOverlay} overlayStyle={{ padding: 70 }}>
             <ActivityIndicator size="large" color="#9e9e9e" />
           </Overlay>
         </ScrollView>
