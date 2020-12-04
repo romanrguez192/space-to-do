@@ -15,18 +15,29 @@ export default StyleSheet.create({
   },
   container: {
     backgroundColor: "#fff",
-    alignItems: "center",
     paddingLeft: 25,
     paddingRight: 25,
     paddingBottom: 25,
   },
-  addButton: {
-    backgroundColor: "#e54e42",
-    height: 60,
-    width: 60,
-    justifyContent: "center",
-    alignItems: "center",
+  buttonStyle: {
+    paddingBottom: 15,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },  
+  iconStyle: {
+    width: 50,
+    height: 50,
     borderRadius: 50,
-    
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  messageStyle: {
+    color: "#2d3f50",
+    fontSize: 40,
+    paddingBottom: 30,
+  },
+  ButtonContainer1: {
+    justifyContent: "center",
+    flexDirection: 'row',
   },
 });
