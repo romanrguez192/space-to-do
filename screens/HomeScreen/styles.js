@@ -35,9 +35,13 @@ export default StyleSheet.create({
     color: "#2d3f50",
     fontSize: 40,
     paddingBottom: 30,
+    textAlign: "center",
+    overflow: "hidden",
   },
   ButtonContainer1: {
     justifyContent: "center",
     flexDirection: 'row',
+    alignItems: "center",
+    alignSelf: "center",
   },
 });
