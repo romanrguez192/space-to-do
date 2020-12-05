@@ -109,6 +109,11 @@ const RegistrationScreen = (props) => {
       return;
     }
 
+    const colorHEX = () => {
+      const colores = ["#e67e22", "#8e44ad", "#1abc9c", "#e74c3c", "#16a085"];
+      return colores[(Math.random() * (colores.length - 1)).toFixed()];
+    };
+
     firebase
       .auth()
       .createUserWithEmailAndPassword(user.email.trim(), user.password)
@@ -121,6 +126,7 @@ const RegistrationScreen = (props) => {
           email: user.email.trim(),
           gender: user.gender,
           imageID: "",
+          avatarColor: colorHEX(),
         };
         usersRef
           .doc(uid)

@@ -6,7 +6,7 @@ const LoadScreen = () => {
     <View
       style={{
         flex: 1,
-        backgroundColor: "#2d3f50",
+        backgroundColor: "#fff",
         alignItems: "center",
         justifyContent: "center",
       }}
