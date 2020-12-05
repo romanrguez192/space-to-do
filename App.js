@@ -3,7 +3,7 @@ import { ActivityIndicator, View, Text, Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { LoginScreen, HomeScreen, RegistrationScreen } from "./screens";
+import { LoginScreen, HomeScreen, RegistrationScreen, ListsScreen } from "./screens";
 import { firebase } from "./firebase/config";
 
 // Drawer Navigator que permite la navegación con un menú desplegable
@@ -58,6 +58,7 @@ export default function App() {
         <Drawer.Screen name="Nombre del Home">
           {(props) => <HomeScreen {...props} extraData={userID} />}
         </Drawer.Screen>
+        <Drawer.Screen name="Listas de Tareas" component={ListsScreen} />
       </Drawer.Navigator>
     );
   };
