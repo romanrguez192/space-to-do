@@ -94,7 +94,11 @@ const RegistrationScreen = (props) => {
     setVisibleOverlay(true);
 
     await usersRef.get().then((snapshot) => {
-      if (snapshot.docs.some((doc) => doc.data().username === user.username.trim())) {
+      if (
+        snapshot.docs.some(
+          (doc) => doc.data().username === user.username.trim()
+        )
+      ) {
         validUsername = false;
       }
     });

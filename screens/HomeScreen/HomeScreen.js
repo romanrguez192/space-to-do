@@ -15,15 +15,15 @@ import {
 import { Input, Icon, Avatar, ListItem } from "react-native-elements";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
-import uuid4 from 'uuid/v4'
-import * as ImagePicker from 'expo-image-picker'
-import * as Permissions from 'expo-permissions'
+import uuid4 from "uuid/v4";
+import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
 
 // Pantalla de Inicio de Sesión
 const HomeScreen = (props) => {
   useEffect(() => {
-    getUserByID(props.extraData)
-  }, [])
+    getUserByID(props.extraData);
+  }, []);
 
   const singout = () => {
     firebase
@@ -38,7 +38,7 @@ const HomeScreen = (props) => {
         alert(error);
       });
   };
-  const [image, setImage] = useState({uri: ""})
+  const [image, setImage] = useState({ uri: "" });
   const [user, setUser] = useState({
     email: "",
     gender: "",
@@ -46,34 +46,34 @@ const HomeScreen = (props) => {
     imageID: "",
     name: "",
     username: "",
-  })
-  const [loading, setLoading] = useState(true)
+  });
+  const [loading, setLoading] = useState(true);
 
-  const getUserByID = async(id) => {
-    const dbRef = firebase.firestore().collection('users').doc(id)
-    const doc = await dbRef.get()
-    const resul = doc.data()
-    setUser({...resul})
-    await getImageByID(user.imageID)
-  }
+  const getUserByID = async (id) => {
+    const dbRef = firebase.firestore().collection("users").doc(id);
+    const doc = await dbRef.get();
+    const resul = doc.data();
+    setUser({ ...resul });
+    await getImageByID(user.imageID);
+  };
 
   const uploadImage = (uri) => {
     return new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest()
-      xhr.onerror = reject
+      let xhr = new XMLHttpRequest();
+      xhr.onerror = reject;
       xhr.onreadystatechange = () => {
-        if(xhr.readyState === 4){
-          resolve(xhr.response)
+        if (xhr.readyState === 4) {
+          resolve(xhr.response);
         }
-      }
-      xhr.open("GET", uri)
-      xhr.responseType ="blob"
-      xhr.send()
-    }) 
-  }
+      };
+      xhr.open("GET", uri);
+      xhr.responseType = "blob";
+      xhr.send();
+    });
+  };
 
-  const updateUser = async() => {
-    const dbRef = firebase.firestore().collection('users').doc(props.extraData)
+  const updateUser = async () => {
+    const dbRef = firebase.firestore().collection("users").doc(props.extraData);
     await dbRef.set({
       name: user.name,
       email: user.email,
@@ -81,67 +81,76 @@ const HomeScreen = (props) => {
       id: user.id,
       imageID: user.imageID,
       username: user.username,
-    })
-  }
+    });
+  };
 
-  const pickImage = async() => {
-    const permission = await Permissions.askAsync(Permissions.CAMERA_ROLL)
-    if(permission.granted){
+  const pickImage = async () => {
+    const permission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (permission.granted) {
       const resulImage = await ImagePicker.launchImageLibraryAsync({
         allowsEditing: true,
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         aspect: [3, 3],
         quality: 1,
-      })
+      });
 
-      if(!resulImage.cancelled) {
-        const uuid = uuid4()
-        setUser({...user, imageID: uuid })
-        uploadImage(resulImage.uri).then( resolve => {
-          const ref = firebase.storage().ref().child(`images/${uuid}.jpg`)
-          ref.put(resolve).then(resolve => {
-            Alert.alert("Imagen subida correctamente")
-          }).catch(err => {
-            Alert.alert("No se pudo cargar la imagen intente de nuevo")
+      if (!resulImage.cancelled) {
+        const uuid = uuid4();
+        setUser({ ...user, imageID: uuid });
+        uploadImage(resulImage.uri)
+          .then((resolve) => {
+            const ref = firebase.storage().ref().child(`images/${uuid}.jpg`);
+            ref
+              .put(resolve)
+              .then((resolve) => {
+                Alert.alert("Imagen subida correctamente");
+              })
+              .catch((err) => {
+                Alert.alert("No se pudo cargar la imagen intente de nuevo");
+              });
           })
-          
-        }).catch(err => {
-          console.log(err)
-        })
-        updateUser()
+          .catch((err) => {
+            console.log(err);
+          });
+        updateUser();
       }
     }
-  }
+  };
 
-  const getImageByID = async(id) => {
-    if(id !== ''){
-      firebase.storage().ref(`images/${id}.jpg`).getDownloadURL().then(resolve => {
-        setImage({uri: resolve})
-      }).catch(err => {
-        console.log(err)
-      })
+  const getImageByID = async (id) => {
+    if (id !== "") {
+      firebase
+        .storage()
+        .ref(`images/${id}.jpg`)
+        .getDownloadURL()
+        .then((resolve) => {
+          setImage({ uri: resolve });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   const getTitleByName = (name) => {
-    let resul = name.toUpperCase().charAt(0)
-    if(name.indexOf(' ') + 1 === 0) return resul 
-    return resul.concat(name.toUpperCase().charAt(name.indexOf(' ') + 1)) 
-  }
+    let resul = name.toUpperCase().charAt(0);
+    if (name.indexOf(" ") + 1 === 0) return resul;
+    return resul.concat(name.toUpperCase().charAt(name.indexOf(" ") + 1));
+  };
 
-  if(loading){
-    return(
+  if (loading) {
+    return (
       <View>
         <ActivityIndicator size="large" color="#9e9e9e" />
       </View>
-    )
+    );
   }
 
   const colorHEX = () => {
-    const colores = ["#e67e22", "#8e44ad", "#1abc9c", "#e74c3c", "#16a085"]
-    return colores[(Math.random() * (colores.length - 1)).toFixed()]
-  }
+    const colores = ["#e67e22", "#8e44ad", "#1abc9c", "#e74c3c", "#16a085"];
+    return colores[(Math.random() * (colores.length - 1)).toFixed()];
+  };
 
   return (
     <SafeAreaView style={styles.areaview}>
@@ -153,7 +162,7 @@ const HomeScreen = (props) => {
       >
         <ScrollView contentContainerStyle={styles.container}>
           <Button title="Salir" onPress={() => singout()} />
-          <Text style={styles.messageStyle}>{ user.username }</Text>
+          <Text style={styles.messageStyle}>{user.username}</Text>
           <View style={styles.ButtonContainer1}>
             <TouchableOpacity style={styles.buttonStyle}>
               <Icon
@@ -276,27 +285,21 @@ const HomeScreen = (props) => {
           />
           {/* EJEMPLO PARA CARGAR LA IMAGEN */}
           <ListItem key={user.id}>
-            {
-              user.imageID === "" 
-              ? 
-              <Avatar 
-                size="medium" 
+            {user.imageID === "" ? (
+              <Avatar
+                size="medium"
                 title={getTitleByName(user.name)}
-                containerStyle={{backgroundColor: colorHEX()}}
+                containerStyle={{ backgroundColor: colorHEX() }}
               />
-              :
-              <Avatar 
-                size="medium" 
-                source={{uri: image.uri}}
-              />
-            }
-            
-          <ListItem.Content>
-            
-            <ListItem.Title>{user.imageID}</ListItem.Title>
-            <ListItem.Subtitle >{user.email}</ListItem.Subtitle>
-          </ListItem.Content>
-          <Icon name="add" onPress={pickImage}/>
+            ) : (
+              <Avatar size="medium" source={{ uri: image.uri }} />
+            )}
+
+            <ListItem.Content>
+              <ListItem.Title>{user.imageID}</ListItem.Title>
+              <ListItem.Subtitle>{user.email}</ListItem.Subtitle>
+            </ListItem.Content>
+            <Icon name="add" onPress={pickImage} />
           </ListItem>
           {/* FIN DE EJEMPLO */}
 
