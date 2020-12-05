@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { ActivityIndicator, View, Text } from "react-native";
+import { ActivityIndicator, View, Text, Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import LoginScreen from "./screens/LoginScreen/LoginScreen";
-import RegistrationScreen from "./screens/RegistrationScreen/RegistrationScreen";
-import HomeScreen from "./screens/HomeScreen/HomeScreen";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { LoginScreen, HomeScreen, RegistrationScreen } from "./screens";
 import { firebase } from "./firebase/config";
+
+// Drawer Navigator que permite la navegación con un menú desplegable
+const Drawer = createDrawerNavigator();
 
 // Stack Navigator que permite la navegación entre pantallas
 const Stack = createStackNavigator();
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const [userID, setUserID] = useState("");
 
   useEffect(() => {
     const usersRef = firebase.firestore().collection("users");
@@ -22,14 +24,15 @@ export default function App() {
           .doc(user.uid)
           .get()
           .then((document) => {
-            const userData = document.data();
+            setUserID(document.id);
             setLoading(false);
-            setUser(userData);
           })
           .catch((error) => {
+            alert(error);
             setLoading(false);
           });
       } else {
+        setUserID("");
         setLoading(false);
       }
     });
@@ -49,19 +52,28 @@ export default function App() {
     );
   }
 
+  const DrawerNavigator = () => {
+    return (
+      <Drawer.Navigator initialRouteName="Nombre del Home">
+        <Drawer.Screen name="Nombre del Home">
+          {(props) => <HomeScreen {...props} extraData={userID} />}
+        </Drawer.Screen>
+      </Drawer.Navigator>
+    );
+  };
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {user ? (
+        {userID ? (
           <Stack.Screen
             name="Inicio"
+            component={DrawerNavigator}
             options={{
               title: "Inicio",
               headerTitleStyle: { color: "#2d3f50" },
             }}
-          >
-            {(props) => <HomeScreen {...props} extraData={user} />}
-          </Stack.Screen>
+          />
         ) : (
           <>
             {/* Pantalla de Inicio de Sesión */}

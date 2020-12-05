@@ -53,17 +53,15 @@ const LoginScreen = (props) => {
     setUser({ ...user, [name]: value });
   };
 
-  const loginUser = async () => {
+  const loginUser = () => {
     if (user.email.trim() === "" || user.password.trim() === "") {
       Alert.alert("Error", "Ingresa tu correo y tu contraseña.");
       return;
     }
 
-    // TODO: Mantener al usuario con su cuenta ingresada
-
     setVisibleOverlay(true);
 
-    await firebase
+    firebase
       .auth()
       .signInWithEmailAndPassword(user.email.trim(), user.password)
       .then((response) => {
@@ -77,22 +75,21 @@ const LoginScreen = (props) => {
               Alert.alert("Error", "Este usuario ya no existe.");
               return;
             }
-            const userData = firestoreDocument.data();
             setVisibleOverlay(false);
-            // TODO: Mejorar navegación
-            props.navigation.navigate("Inicio", {user: userData});
+            // TODO: Cambiar esta alerta por una mejor
+            Alert.alert("Enhorabuena", "Has iniciado sesión");
           })
           .catch((error) => {
+            setVisibleOverlay(false);
             // TODO: Textos de error
             alert(error);
           });
       })
       .catch((error) => {
+        setVisibleOverlay(false);
         // TODO: Textos de error
         alert(error);
       });
-
-    setVisibleOverlay(false);
   };
 
   return (

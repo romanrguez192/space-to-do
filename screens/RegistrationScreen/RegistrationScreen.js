@@ -105,7 +105,7 @@ const RegistrationScreen = (props) => {
       return;
     }
 
-    await firebase
+    firebase
       .auth()
       .createUserWithEmailAndPassword(user.email.trim(), user.password)
       .then((response) => {
@@ -124,19 +124,18 @@ const RegistrationScreen = (props) => {
             setVisibleOverlay(false);
             // TODO: Cambiar esta alerta por una mejor
             Alert.alert("Enhorabuena", "Usuario creado satisfactoriamente");
-            props.navigation.navigate("Inicio", {user: data});
           })
           .catch((error) => {
+            setVisibleOverlay(false);
             // TODO: Texto errores
             alert(error);
           });
       })
       .catch((error) => {
+        setVisibleOverlay(false);
         // TODO: Texto errores
         alert(error);
       });
-
-    setVisibleOverlay(false);
   };
 
   return (
