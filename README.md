@@ -15,4 +15,10 @@ npm install react-native-elements
 npm install firebase
 
 npm install @react-navigation/drawer
+
+npm install react-native-uuid
+
+expo install expo-permissions
+
+expo install expo-image-picker
 ```

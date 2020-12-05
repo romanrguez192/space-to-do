@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
+import { block } from "react-native-reanimated";
 
 // Dimensiones de la ventana
 const windowWidth = Dimensions.get("window").width;
@@ -44,4 +45,8 @@ export default StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
   },
+  titleIMG:{
+    color: "#fff"
+  },
+  
 });

@@ -3,14 +3,13 @@ import '@firebase/auth';
 import '@firebase/firestore';
 
 var firebaseConfig = {
-    apiKey: "AIzaSyCyFM8N1XBSaPjZ1eNkoQ_G3AWAtF0iJXw",
-    authDomain: "space-to-do.firebaseapp.com",
-    databaseURL: "https://space-to-do.firebaseio.com",
-    projectId: "space-to-do",
-    storageBucket: "space-to-do.appspot.com",
-    messagingSenderId: "1004724691500",
-    appId: "1:1004724691500:web:7fad698876e16772b7a789",
-    measurementId: "G-5HJRKJYZEL"
+  apiKey: "AIzaSyCH18boiLMcrtxUoF0Qv8rO5sVYvlkpnJc",
+  authDomain: "space-to-do-ihc.firebaseapp.com",
+  projectId: "space-to-do-ihc",
+  storageBucket: "space-to-do-ihc.appspot.com",
+  messagingSenderId: "853717455324",
+  appId: "1:853717455324:web:11cd9e129d825cec8b3f19",
+  measurementId: "G-R46CDS746S"
 };
   
 if (!firebase.apps.length) {

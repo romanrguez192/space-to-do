@@ -116,6 +116,7 @@ const RegistrationScreen = (props) => {
           username: user.username.trim(),
           email: user.email.trim(),
           gender: user.gender,
+          imageID: "",
         };
         usersRef
           .doc(uid)
