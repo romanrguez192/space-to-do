@@ -11,7 +11,6 @@ import {
   Button,
   ActivityIndicator,
   Alert,
-  Dimensions,
 } from "react-native";
 import { Input, Icon, Avatar, ListItem } from "react-native-elements";
 import styles from "./styles";
@@ -20,17 +19,13 @@ import uuid4 from "uuid/v4";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import LoadScreen from "../LoadScreen/LoadScreen";
-import calendario from "../../assets/calendario.jpg"
+import ContentLoader,{ FacebookLoader, InstagramLoader } from "react-native-easy-content-loader";
 
 // Pantalla de Inicio de Sesión
 const HomeScreen = (props) => {
   useEffect(() => {
     getUserByID(props.extraData);
   }, []);
-
-
-  const windowWidth = Dimensions.get("window").width;
-  const windowHeight = Dimensions.get("window").height;
 
   const singout = () => {
     firebase
@@ -46,7 +41,15 @@ const HomeScreen = (props) => {
       });
   };
   const [image, setImage] = useState({ uri: "" });
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({
+    username: "",
+    email: "",
+    name: "",
+    imageID: "",
+    avatarColor: "",
+    id: "",
+    gender: "",
+  });
   const [loading, setLoading] = useState(true);
 
   const getUserByID = async (id) => {
@@ -55,7 +58,6 @@ const HomeScreen = (props) => {
     const resul = doc.data();
     setUser(resul);
     getImageByID(resul.imageID);
-    setLoading(false);
   };
 
   const uploadImage = (uri) => {
@@ -80,6 +82,9 @@ const HomeScreen = (props) => {
   };
 
   const pickImage = async () => {
+    if(user.imageID)
+      deleteImage()
+
     const permission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (permission.granted) {
       const resulImage = await ImagePicker.launchImageLibraryAsync({
@@ -90,6 +95,7 @@ const HomeScreen = (props) => {
       });
 
       if (!resulImage.cancelled) {
+        setLoading(true)
         const uuid = uuid4();
         setUser({ ...user, imageID: uuid });
         uploadImage(resulImage.uri)
@@ -127,6 +133,7 @@ const HomeScreen = (props) => {
     } else {
       setImage({ uri: "" });
     }
+    setLoading(false)
   };
 
   const getTitleByName = (name) => {
@@ -135,9 +142,9 @@ const HomeScreen = (props) => {
     return resul.concat(name.toUpperCase().charAt(name.indexOf(" ") + 1));
   };
 
-  if (loading) {
-    return <LoadScreen />;
-  }
+  // if (loading) {
+  //   return <LoadScreen />;
+  // }
 
   const deleteImage = () => {
     if (!(user.imageID === "")) {
@@ -157,54 +164,171 @@ const HomeScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.areaview}>
-      <KeyboardAvoidingView
-        enabled
-        behavior={Platform.OS === "ios" ? "padding" : null}
-        style={styles.keyboardstyle}
-        keyboardVerticalOffset="100"
+      <ContentLoader
+        active
+        loading={loading}
+        avatarStyles={{display:'none'}}
+        listSize={5}
+        tHeight={20}
+        tWidth={150}
+        sTWidth={200}
       >
-        <ScrollView contentContainerStyle={styles.container}>
-          <Text style={styles.messageStyle}>¡Hola, {user.username}!</Text>
-          <View style={styles.pantContainer}>
-          <TouchableOpacity underlayColor='rgba(73,182,77,1,0.9)' >
-            <View style={styles.categoriesItemContainer}>
-              <Image style={styles.categoriesPhoto} source={calendario} />
-              <Text style={styles.categoriesName}>CALENDARIO</Text>
+        <KeyboardAvoidingView
+          enabled
+          behavior={Platform.OS === "ios" ? "padding" : null}
+          style={styles.keyboardstyle}
+          keyboardVerticalOffset="100"
+        >
+          <ScrollView contentContainerStyle={styles.container}>
+            <Button title="Salir" onPress={() => singout()} />
+            <Text style={styles.messageStyle}>{user.username}</Text>
+            <View style={styles.ButtonContainer1}>
+              <TouchableOpacity style={styles.buttonStyle}>
+                <Icon
+                  type="font-awesome"
+                  name="tasks"
+                  size={30}
+                  color="#e54e42"
+                  backgroundColor="#e54e4250"
+                  alignItems="center"
+                  style={styles.iconStyle}
+                />
+                <Text
+                  style={{
+                    paddingTop: 5,
+                    left: 1,
+                    fontSize: 15,
+                    fontWeight: "500",
+                    color: "#2d3f50",
+                  }}
+                >
+                  Tareas
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.buttonStyle}>
+                <Icon
+                  type="font-awesome"
+                  name="user"
+                  size={30}
+                  color="#3b99d8"
+                  backgroundColor="#3b99d850"
+                  alignItems="center"
+                  style={styles.iconStyle}
+                />
+                <Text
+                  style={{
+                    paddingTop: 5,
+                    left: 6,
+                    fontSize: 15,
+                    fontWeight: "500",
+                    color: "#2d3f50",
+                  }}
+                >
+                  Perfil
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.buttonStyle}>
+                <Icon
+                  type="font-awesome"
+                  name="star"
+                  size={30}
+                  color="#8B008B"
+                  backgroundColor="#8B008B50"
+                  alignItems="center"
+                  style={styles.iconStyle}
+                />
+                <Text
+                  style={{
+                    paddingTop: 5,
+                    left: -13,
+                    fontSize: 15,
+                    fontWeight: "500",
+                    color: "#2d3f50",
+                  }}
+                >
+                  Importante
+                </Text>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-          </View>
-          <View
-            style={{
-              borderBottomColor: "#bbb",
-              borderBottomWidth: 1,
-            }}
-          />
-          {/* EJEMPLO PARA CARGAR LA IMAGEN */}
-          <ListItem key={user.id}>
-            {user.imageID === "" ? (
-              <Avatar
-                size="medium"
-                title={getTitleByName(user.name)}
-                containerStyle={{ backgroundColor: user.avatarColor }}
-              />
-            ) : (
-              <Avatar size="medium" source={{ uri: image.uri }} />
-            )}
-
-            <ListItem.Content>
-              <ListItem.Title>{user.name}</ListItem.Title>
-              <ListItem.Subtitle>{user.email}</ListItem.Subtitle>
-            </ListItem.Content>
-            <Icon name="add" onPress={pickImage} />
-            <View>
-              <Button title="delete" onPress={deleteImage}></Button>
+            <View style={styles.ButtonContainer1}>
+              <TouchableOpacity style={styles.buttonStyle}>
+                <Icon
+                  type="font-awesome"
+                  name="search"
+                  size={30}
+                  color="#2c279f"
+                  backgroundColor="#2c279f50"
+                  alignItems="center"
+                  style={styles.iconStyle}
+                />
+                <Text
+                  style={{
+                    paddingTop: 5,
+                    left: 1,
+                    fontSize: 15,
+                    fontWeight: "500",
+                    color: "#2d3f50",
+                  }}
+                >
+                  Buscar
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.buttonStyle}>
+                <Icon
+                  type="font-awesome"
+                  name="plus"
+                  size={30}
+                  color="#FF8C00"
+                  backgroundColor="#FF8C0050"
+                  alignItems="center"
+                  style={styles.iconStyle}
+                />
+                <Text
+                  style={{
+                    paddingTop: 5,
+                    left: 2,
+                    fontSize: 15,
+                    fontWeight: "500",
+                    color: "#2d3f50",
+                  }}
+                >
+                  Añadir
+                </Text>
+              </TouchableOpacity>
             </View>
-          </ListItem>
-          {/* FIN DE EJEMPLO */}
+            <View
+              style={{
+                borderBottomColor: "#bbb",
+                borderBottomWidth: 1,
+              }}
+            />
+            {/* EJEMPLO PARA CARGAR LA IMAGEN */}
+            <ListItem key={user.id}>
+              {user.imageID === "" ? (
+                <Avatar
+                  size="medium"
+                  title={getTitleByName(user.name)}
+                  containerStyle={{ backgroundColor: user.avatarColor }}
+                />
+              ) : (
+                <Avatar size="medium" source={{ uri: image.uri }} />
+              )}
 
-          <View>{/* TODO: AGREGAR LA LISTA DE TAREAS POR CULMINAR */}</View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+              <ListItem.Content>
+                <ListItem.Title>{user.name}</ListItem.Title>
+                <ListItem.Subtitle>{user.email}</ListItem.Subtitle>
+              </ListItem.Content>
+              <Icon name="add" onPress={pickImage} />
+              <View>
+                <Button title="delete" onPress={deleteImage}></Button>
+              </View>
+            </ListItem>
+            {/* FIN DE EJEMPLO */}
+
+            <View>{/* TODO: AGREGAR LA LISTA DE TAREAS POR CULMINAR */}</View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </ContentLoader>
     </SafeAreaView>
   );
 };
