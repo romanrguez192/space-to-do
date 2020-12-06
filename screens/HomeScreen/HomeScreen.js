@@ -20,6 +20,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import LoadScreen from "../LoadScreen/LoadScreen";
 import ContentLoader,{ FacebookLoader, InstagramLoader } from "react-native-easy-content-loader";
+import ProfilePicture from "../../components/ProfilePicture";
 
 // Pantalla de Inicio de Sesión
 const HomeScreen = (props) => {
@@ -136,11 +137,7 @@ const HomeScreen = (props) => {
     setLoading(false)
   };
 
-  const getTitleByName = (name) => {
-    let resul = name.toUpperCase().charAt(0);
-    if (name.indexOf(" ") + 1 === 0) return resul;
-    return resul.concat(name.toUpperCase().charAt(name.indexOf(" ") + 1));
-  };
+  
 
   // if (loading) {
   //   return <LoadScreen />;
@@ -304,16 +301,7 @@ const HomeScreen = (props) => {
             />
             {/* EJEMPLO PARA CARGAR LA IMAGEN */}
             <ListItem key={user.id}>
-              {user.imageID === "" ? (
-                <Avatar
-                  size="medium"
-                  title={getTitleByName(user.name)}
-                  containerStyle={{ backgroundColor: user.avatarColor }}
-                />
-              ) : (
-                <Avatar size="medium" source={{ uri: image.uri }} />
-              )}
-
+              <ProfilePicture user={user} image={image} />
               <ListItem.Content>
                 <ListItem.Title>{user.name}</ListItem.Title>
                 <ListItem.Subtitle>{user.email}</ListItem.Subtitle>

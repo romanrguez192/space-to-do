@@ -14,40 +14,73 @@ import {
 } from "react-native-paper";
 import { Icon } from "react-native-elements";
 import { firebase } from "../firebase/config";
-
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-
-const singout = () => {
-  firebase
-    .auth()
-    .signOut()
-    .then(() => {
-      // Sign-out successful.
-      alert("Saliste de tu cuenta");
-    })
-    .catch((error) => {
-      // An error happened.
-      alert(error);
-    });
-};
+import ProfilePicture from "../components/ProfilePicture";
+import { LoadScreen } from "../screens";
 
 function Sidebar({ ...props }) {
+  const [user, setUser] = useState(null);
+  const [image, setImage] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getUserByID(props.userID);
+  }, []);
+
+  const getUserByID = async (id) => {
+    const dbRef = firebase.firestore().collection("users").doc(id);
+    const doc = await dbRef.get();
+    const resul = doc.data();
+    setUser(resul);
+    getImageByID(resul.imageID);
+  };
+
+  const getImageByID = async (id) => {
+    if (id !== "") {
+      firebase
+        .storage()
+        .ref(`images/${id}.jpg`)
+        .getDownloadURL()
+        .then((resolve) => {
+          setImage({ uri: resolve });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setImage({ uri: "" });
+    }
+    setLoading(false);
+  };
+
+  const singout = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        // Sign-out successful.
+        alert("Saliste de tu cuenta");
+      })
+      .catch((error) => {
+        // An error happened.
+        alert(error);
+      });
+  };
+
+  if (loading) {
+    return <LoadScreen />;
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
         <View>
           <View style={styles.userInfoSection}>
             <View style={{ flexDirection: "row", marginTop: 15 }}>
-              <Avatar.Image
-                source={{
-                  uri:
-                    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-                }}
-                size={60}
-              />
+              <ProfilePicture user={user} image={image} />
               <View style={{ marginLeft: 10 }}>
-                <Title style={styles.title}>{props.userID}</Title>
-                <Caption style={styles.caption}>@username</Caption>
+                <Title style={styles.title}>{user.name}</Title>
+                <Caption style={styles.caption}>{user.username}</Caption>
               </View>
             </View>
 
