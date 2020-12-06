@@ -11,7 +11,7 @@ import {
   LoadScreen
 } from "./screens";
 import { firebase } from "./firebase/config";
-import { Sidebar } from "./SideBar/SideBar";
+import  Sidebar  from "./SideBar/SideBar";
 
 // Drawer Navigator que permite la navegación con un menú desplegable
 const Drawer = createDrawerNavigator();
