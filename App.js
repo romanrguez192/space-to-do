@@ -8,10 +8,10 @@ import {
   HomeScreen,
   RegistrationScreen,
   ListsScreen,
-  LoadScreen
+  LoadScreen,
 } from "./screens";
 import { firebase } from "./firebase/config";
-import  Sidebar  from "./SideBar/SideBar";
+import Sidebar from "./SideBar/SideBar";
 
 // Drawer Navigator que permite la navegación con un menú desplegable
 const Drawer = createDrawerNavigator();
@@ -19,11 +19,15 @@ const Drawer = createDrawerNavigator();
 // Stack Navigator que permite la navegación entre pantallas
 const Stack = createStackNavigator();
 
+// TODO: General, recordar colocar todos los catch con alertas de errores
+
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [userID, setUserID] = useState("");
 
-  useEffect(function connect(){
+  useEffect(() => {}, []);
+
+  const connect = async () => {
     const usersRef = firebase.firestore().collection("users");
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -35,27 +39,36 @@ export default function App() {
             setLoading(false);
           })
           .catch((error) => {
-            Alert.alert("Error de conexión", "Se produjo un error al conectarse, inténtalo de nuevo, por favor.");
-            connect();
+            Alert.alert("Error de conexión", "Se produjo un error al establecer la conexión, ¿deseas volverlo a intentar?", [
+              {text: 'Sí', onPress: () => connect()},
+              {text: 'No'}
+          ])
           });
       } else {
         setUserID("");
         setLoading(false);
       }
     });
-  }, []);
+  };
 
   if (loading) {
-    return <LoadScreen/>
+    return <LoadScreen />;
   }
 
   const DrawerNavigator = () => {
     return (
-    <Drawer.Navigator initialRouteName="Nombre del Home" drawerContent={props => <Sidebar {...props} userID={userID} />}>
-        <Drawer.Screen name="Nombre del Home" options={{headerShown: true}}>
+      <Drawer.Navigator
+        initialRouteName="Nombre del Home"
+        drawerContent={(props) => <Sidebar {...props} userID={userID} />}
+      >
+        <Drawer.Screen name="Nombre del Home" options={{ headerShown: true }}>
           {(props) => <HomeScreen {...props} extraData={userID} />}
         </Drawer.Screen>
-        <Drawer.Screen name="Listas de Tareas" component={ListsScreen} options={{headerShown: true}}/>
+        <Drawer.Screen
+          name="Listas de Tareas"
+          component={ListsScreen}
+          options={{ headerShown: true }}
+        />
       </Drawer.Navigator>
     );
   };

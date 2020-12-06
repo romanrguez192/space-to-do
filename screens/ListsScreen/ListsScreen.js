@@ -3,12 +3,51 @@ import { Text, FlatList, View, TouchableOpacity, Alert } from "react-native";
 import { Input, Icon, ListItem, Avatar, Overlay } from "react-native-elements";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
+import ContentLoader, {
+  FacebookLoader,
+  InstagramLoader,
+} from "react-native-easy-content-loader";
 
 const ListsScreen = (props) => {
-  const [visible, setVisible] = useState(false);
+  const [visibleOverlay, setVisibleOverlay] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [lists, setLists] = useState(null);
+
+  useEffect(() => {
+    getLists(props.route.params.userID);
+  }, []);
+
+  const getLists = (userID) => {
+    const listsRef = firebase.firestore().collection("lists");
+    listsRef
+      .where("createdBy", "==", userID)
+      //.orderBy("createdAt", "desc")
+      .onSnapshot((snapshot) => {
+        const data = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setLists(data);
+        setLoading(false);
+      });
+  };
+
+  if (loading) {
+    return (
+      <ContentLoader
+        active
+        loading={loading}
+        avatarStyles={{ display: "none" }}
+        listSize={5}
+        tHeight={20}
+        tWidth={150}
+        sTWidth={200}
+      ></ContentLoader>
+    );
+  }
 
   const toggleOverlay = () => {
-    setVisible(!visible);
+    setVisibleOverlay(!visibleOverlay);
   };
 
   // TODO: Mover a otro archivo
@@ -30,17 +69,24 @@ const ListsScreen = (props) => {
 
       //TODO: Verificar selección de tema
 
-      // firebase
-      //   .firestore()
-      //   .collection("lists")
-      //   .add({
-      //     ...list,
-      //     createdBy:
-      //   })
-      //   .then((ref) => {
-      //     console.log("Added doc with ID: ", ref.id);
-      //     // Added doc with ID:  ZzhIgLqELaoE3eSsOazu
-      //   });
+      firebase
+        .firestore()
+        .collection("lists")
+        .add({
+          ...list,
+          createdBy: props.route.params.userID,
+        })
+        .then((ref) => {
+          Alert.alert(
+            "Lista creado",
+            "¡Tu lista ha sido creada correctamente! Vamos a verla."
+          );
+          // TODO: Colocar navegación hacia la nueva lista
+        })
+        .catch((error) => {
+          // TODO: Alertas de errores...
+          console.error("Error ", error);
+        });
     };
 
     return (
@@ -48,7 +94,7 @@ const ListsScreen = (props) => {
         <Input
           placeholder="Ej: Trabajo"
           label="Nombre de la Lista"
-          onChangeText={(value) => handleChangeText("title", value)}
+          onChangeText={(value) => handleChangeText("name", value)}
         />
         <Input
           placeholder="Solo una prueba"
@@ -62,89 +108,90 @@ const ListsScreen = (props) => {
     );
   };
 
-  const lists = [
-    {
-      id: "1",
-      name: props.route.params.userID,
-      theme: "blue",
-    },
-    {
-      id: "2",
-      name: "Casa",
-      theme: "yellow",
-    },
-    {
-      id: "3",
-      name: "Colegio",
-      theme: "green",
-    },
-    {
-      id: "35",
-      name: "Colegio",
-      theme: "green",
-    },
-    {
-      id: "32",
-      name: "Colegio",
-      theme: "green",
-    },
-    {
-      id: "322",
-      name: "Colegio",
-      theme: "green",
-    },
-    {
-      id: "31",
-      name: "Colegio",
-      theme: "green",
-    },
-    {
-      id: "311",
-      name: "Colegio",
-      theme: "green",
-    },
-    {
-      id: "3111",
-      name: "Colegio",
-      theme: "green",
-    },
-    {
-      id: "3b",
-      name: "Colegio",
-      theme: "green",
-    },
-    {
-      id: "3bb",
-      name: "Colegio",
-      theme: "green",
-    },
-    {
-      id: "3sg",
-      name: "Colegio",
-      theme: "green",
-    },
-    {
-      id: "3gas",
-      name: "Colegio",
-      theme: "green",
-    },
-    {
-      id: "3fdsa",
-      name: "Colegio",
-      theme: "green",
-    },
-    {
-      id: "3asd",
-      name: "Colegio",
-      theme: "green",
-    },
-  ];
+  // const listss = [
+  //   {
+  //     id: "1",
+  //     name: "AAA",
+  //     theme: "blue",
+  //   },
+  //   {
+  //     id: "2",
+  //     name: "Casa",
+  //     theme: "yellow",
+  //   },
+  //   {
+  //     id: "3",
+  //     name: "Colegio",
+  //     theme: "green",
+  //   },
+  //   {
+  //     id: "35",
+  //     name: "Colegio",
+  //     theme: "green",
+  //   },
+  //   {
+  //     id: "32",
+  //     name: "Colegio",
+  //     theme: "green",
+  //   },
+  //   {
+  //     id: "322",
+  //     name: "Colegio",
+  //     theme: "green",
+  //   },
+  //   {
+  //     id: "31",
+  //     name: "Colegio",
+  //     theme: "green",
+  //   },
+  //   {
+  //     id: "311",
+  //     name: "Colegio",
+  //     theme: "green",
+  //   },
+  //   {
+  //     id: "3111",
+  //     name: "Colegio",
+  //     theme: "green",
+  //   },
+  //   {
+  //     id: "3b",
+  //     name: "Colegio",
+  //     theme: "green",
+  //   },
+  //   {
+  //     id: "3bb",
+  //     name: "Colegio",
+  //     theme: "green",
+  //   },
+  //   {
+  //     id: "3sg",
+  //     name: "Colegio",
+  //     theme: "green",
+  //   },
+  //   {
+  //     id: "3gas",
+  //     name: "Colegio",
+  //     theme: "green",
+  //   },
+  //   {
+  //     id: "3fdsa",
+  //     name: "Colegio",
+  //     theme: "green",
+  //   },
+  //   {
+  //     id: "3asd",
+  //     name: "Colegio",
+  //     theme: "green",
+  //   },
+  // ];
 
   const renderList = ({ item }) => {
     return (
       <ListItem bottomDivider>
         <ListItem.Content>
           <ListItem.Title>{item.name}</ListItem.Title>
+          <ListItem.Subtitle>{item.theme}</ListItem.Subtitle>
         </ListItem.Content>
         <ListItem.Chevron />
       </ListItem>
@@ -152,7 +199,7 @@ const ListsScreen = (props) => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <TouchableOpacity
         style={styles.buttonAddStyle}
         onPress={() => toggleOverlay()}
@@ -167,11 +214,11 @@ const ListsScreen = (props) => {
           style={styles.iconStyle}
         />
       </TouchableOpacity>
-      <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+      <Overlay isVisible={visibleOverlay} onBackdropPress={toggleOverlay}>
         <CreateList />
       </Overlay>
       <FlatList
-        style={{flex: 1, marginBottom: 50}}
+        style={{ flex: 1, marginBottom: 50 }}
         data={lists}
         renderItem={renderList}
         keyExtractor={(item) => item.id}
