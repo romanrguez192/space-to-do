@@ -25,7 +25,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [userID, setUserID] = useState("");
 
-  useEffect(() => {}, []);
+  useEffect(() => { connect() }, []);
 
   const connect = async () => {
     const usersRef = firebase.firestore().collection("users");
