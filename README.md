@@ -23,3 +23,6 @@ expo install expo-permissions
 expo install expo-image-picker
 
 npm install react-native-paper
+
+npm install react-native-easy-content-loader
+```
