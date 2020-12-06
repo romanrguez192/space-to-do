@@ -29,4 +29,53 @@ export default StyleSheet.create({
     fontSize: 20,
     color: "#fff",
   },
+  areaview: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  keyboardstyle: {
+    flexGrow: 1,
+  },
+  container: {
+    backgroundColor: "#fff",
+    paddingLeft: 25,
+    paddingRight: 25,
+    paddingBottom: 25,
+  },
+  messageStyle: {
+    color: "#2d3f50",
+    fontSize:20,
+    textAlign:"center", 
+    marginTop: 20, 
+    marginBottom: 50,
+    fontWeight: "500",
+  },
+  nameList: {
+    fontSize: 20,
+    color: "#2d3f50",
+    marginLeft: 10,
+    fontWeight: "400",
+  },
+  buttonList: {
+    flexDirection: 'row',
+    marginLeft: 20,
+    marginTop: 10,
+    marginRight: 20,
+    height: 40,
+    alignItems: "center",
+  },
+  shadow: {
+    marginTop: 20,
+    marginLeft: 20,
+    marginRight: 20,
+    backgroundColor:"#fff",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
+  },
 });

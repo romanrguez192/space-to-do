@@ -65,7 +65,7 @@ export default function App() {
           {(props) => <HomeScreen {...props} extraData={userID} />}
         </Drawer.Screen>
         <Drawer.Screen
-          name="Listas de Tareas"
+          name="Mis Listas"
           component={ListsScreen}
           options={{ headerShown: true }}
         />

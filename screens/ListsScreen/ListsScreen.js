@@ -188,13 +188,13 @@ const ListsScreen = (props) => {
 
   const renderList = ({ item }) => {
     return (
-      <ListItem bottomDivider>
-        <ListItem.Content>
-          <ListItem.Title>{item.name}</ListItem.Title>
-          <ListItem.Subtitle>{item.theme}</ListItem.Subtitle>
-        </ListItem.Content>
-        <ListItem.Chevron />
-      </ListItem>
+      <View style={styles.shadow}>
+           <TouchableOpacity style={styles.buttonList}>
+              <Icon flexDirection='row' type= "font-awesome" name= "list-ul" color= "#3b99d8"/>
+              <Text style={styles.nameList}>{item.name}</Text>
+           </TouchableOpacity>
+           <Text style={{marginLeft: 55, color: "#808080", marginBottom: 10}}>5 Tareas pendientes</Text>
+      </View>
     );
   };
 
