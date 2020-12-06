@@ -11,6 +11,7 @@ import {
   LoadScreen
 } from "./screens";
 import { firebase } from "./firebase/config";
+import { Sidebar } from "./SideBar/SideBar";
 
 // Drawer Navigator que permite la navegación con un menú desplegable
 const Drawer = createDrawerNavigator();
@@ -50,8 +51,8 @@ export default function App() {
 
   const DrawerNavigator = () => {
     return (
-      <Drawer.Navigator initialRouteName="Nombre del Home">
-        <Drawer.Screen name="Nombre del Home">
+    <Drawer.Navigator initialRouteName="Nombre del Home" drawerContent={props => <Sidebar {...props}/>}>
+        <Drawer.Screen name="Nombre del Home" options={{headerShown: true}}>
           {(props) => <HomeScreen {...props} extraData={userID} />}
         </Drawer.Screen>
         <Drawer.Screen name="Listas de Tareas" component={ListsScreen} options={{headerShown: true}}/>
