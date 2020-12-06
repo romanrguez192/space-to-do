@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ActivityIndicator, View, Text, Button } from "react-native";
+import { ActivityIndicator, View, Text, Button, Alert } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -23,7 +23,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [userID, setUserID] = useState("");
 
-  useEffect(() => {
+  useEffect(function connect(){
     const usersRef = firebase.firestore().collection("users");
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -35,8 +35,8 @@ export default function App() {
             setLoading(false);
           })
           .catch((error) => {
-            alert(error);
-            setLoading(false);
+            Alert.alert("Error de conexión", "Se produjo un error al conectarse, inténtalo de nuevo, por favor.");
+            connect();
           });
       } else {
         setUserID("");

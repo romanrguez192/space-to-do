@@ -4,7 +4,7 @@ import { Input, Icon, ListItem, Avatar, Overlay } from "react-native-elements";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
 
-const ListsScreen = () => {
+const ListsScreen = (props) => {
   const [visible, setVisible] = useState(false);
 
   const toggleOverlay = () => {
@@ -65,7 +65,7 @@ const ListsScreen = () => {
   const lists = [
     {
       id: "1",
-      name: "Trabajo",
+      name: props.route.params.userID,
       theme: "blue",
     },
     {

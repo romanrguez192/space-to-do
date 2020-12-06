@@ -99,7 +99,7 @@ function Sidebar({ ...props }) {
                 )}
                 label="Tus Listas"
                 labelStyle={{ fontSize: 20, color: "#2d3f50" }}
-                onPress={() => props.navigation.navigate("Listas de Tareas")}
+                onPress={() => props.navigation.navigate("Listas de Tareas", {userID: props.userID})}
               />
               <DrawerItem
                 icon={({ color, size }) => (
