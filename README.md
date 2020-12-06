@@ -21,4 +21,5 @@ npm install react-native-uuid
 expo install expo-permissions
 
 expo install expo-image-picker
-```
+
+npm install react-native-paper
