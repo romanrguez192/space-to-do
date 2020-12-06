@@ -51,7 +51,7 @@ export default function App() {
 
   const DrawerNavigator = () => {
     return (
-    <Drawer.Navigator initialRouteName="Nombre del Home" drawerContent={props => <Sidebar {...props}/>}>
+    <Drawer.Navigator initialRouteName="Nombre del Home" drawerContent={props => <Sidebar {...props} userID={userID} />}>
         <Drawer.Screen name="Nombre del Home" options={{headerShown: true}}>
           {(props) => <HomeScreen {...props} extraData={userID} />}
         </Drawer.Screen>
