@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Text, FlatList, View, TouchableOpacity, Alert } from "react-native";
+import { Text, FlatList, View, TouchableOpacity, ScrollView, Alert } from "react-native";
 import { Input, Icon, ListItem, Avatar, Overlay } from "react-native-elements";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
@@ -199,31 +199,31 @@ const ListsScreen = (props) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <TouchableOpacity
-        style={styles.buttonAddStyle}
-        onPress={() => toggleOverlay()}
-      >
-        <Icon
-          type="font-awesome"
-          name="plus"
-          size={30}
-          color="#FF8C00"
-          backgroundColor="#FF8C0050"
-          alignItems="center"
-          style={styles.iconStyle}
+      <View style={styles.vista}>
+        <TouchableOpacity
+          style={styles.buttonAddStyle}
+          onPress={() => toggleOverlay()}
+        >
+          <Icon
+            type="font-awesome"
+            name="plus"
+            size={30}
+            color="#FF8C00"
+            backgroundColor="#FF8C0050"
+            alignItems="center"
+            style={styles.iconStyle}
+          />
+        </TouchableOpacity>
+        <Overlay isVisible={visibleOverlay} onBackdropPress={toggleOverlay}>
+          <CreateList />
+        </Overlay>
+        <FlatList
+          style={{ flex: 1, marginBottom: 50 }}
+          data={lists}
+          renderItem={renderList}
+          keyExtractor={(item) => item.id}
         />
-      </TouchableOpacity>
-      <Overlay isVisible={visibleOverlay} onBackdropPress={toggleOverlay}>
-        <CreateList />
-      </Overlay>
-      <FlatList
-        style={{ flex: 1, marginBottom: 50 }}
-        data={lists}
-        renderItem={renderList}
-        keyExtractor={(item) => item.id}
-      />
-    </View>
+      </View>
   );
 };
 

@@ -13,10 +13,19 @@ export default StyleSheet.create({
     borderRadius: 5,
     marginBottom: 20,
   },
+  areaview: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  vista: {
+    flex: 1,
+    height: windowHeight * 1.3,
+  },
   buttonAddStyle: {
     position: "absolute",
     marginTop: windowHeight * 0.8,
     marginLeft: windowWidth * 0.75,
+    zIndex: 100,
   },
   iconStyle: {
     width: 50,
