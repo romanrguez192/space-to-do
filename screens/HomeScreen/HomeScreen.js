@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import {
   ScrollView,
   TouchableOpacity,
@@ -19,12 +19,39 @@ import uuid4 from "uuid/v4";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import LoadScreen from "../LoadScreen/LoadScreen";
-import ContentLoader,{ FacebookLoader, InstagramLoader } from "react-native-easy-content-loader";
+import ContentLoader, {
+  FacebookLoader,
+  InstagramLoader,
+} from "react-native-easy-content-loader";
 import ProfilePicture from "../../components/ProfilePicture";
-import { Searchbar, Avatar } from 'react-native-paper';
+import { Searchbar, Avatar } from "react-native-paper";
+import { Appbar, DefaultTheme } from "react-native-paper";
 
 // Pantalla de Inicio de Sesión
 const HomeScreen = (props) => {
+  const CustomHeader = () => {
+    return (
+      <Appbar.Header
+        theme={{
+          ...DefaultTheme,
+          roundness: 2,
+          colors: {
+            ...DefaultTheme.colors,
+            primary: "#e54e42",
+          },
+        }}
+      >
+        <Appbar.Action icon="menu" onPress={() => props.navigation.toggleDrawer()} />
+        <Appbar.Content title="Inicio" />
+      </Appbar.Header>
+    );
+  };
+
+  useLayoutEffect(() => {
+    props.navigation.setOptions({
+      header: () => <CustomHeader />,
+    });
+  }, [props.navigation]);
 
   useEffect(() => {
     getUserByID(props.extraData);
@@ -85,8 +112,7 @@ const HomeScreen = (props) => {
   };
 
   const pickImage = async () => {
-    if(user.imageID)
-      deleteImage()
+    if (user.imageID) deleteImage();
 
     const permission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (permission.granted) {
@@ -98,7 +124,7 @@ const HomeScreen = (props) => {
       });
 
       if (!resulImage.cancelled) {
-        setLoading(true)
+        setLoading(true);
         const uuid = uuid4();
         setUser({ ...user, imageID: uuid });
         uploadImage(resulImage.uri)
@@ -136,10 +162,8 @@ const HomeScreen = (props) => {
     } else {
       setImage({ uri: "" });
     }
-    setLoading(false)
+    setLoading(false);
   };
-
-  
 
   // if (loading) {
   //   return <LoadScreen />;
@@ -166,7 +190,7 @@ const HomeScreen = (props) => {
       <ContentLoader
         active
         loading={loading}
-        avatarStyles={{display:'none'}}
+        avatarStyles={{ display: "none" }}
         listSize={5}
         tHeight={20}
         tWidth={150}
@@ -182,7 +206,7 @@ const HomeScreen = (props) => {
             <View style={styles.shadow}>
               <Text style={styles.messageStyle}>Miguel....</Text>
             </View>
-            
+
             <View
               style={{
                 borderBottomColor: "#bbb",

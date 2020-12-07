@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import {
   ScrollView,
   TouchableOpacity,
@@ -14,6 +14,7 @@ import { Input, Icon, Overlay } from "react-native-elements";
 import logo from "../../assets/logo.png";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
+import { Appbar, DefaultTheme } from "react-native-paper";
 
 // Pantalla de Inicio de Sesión
 const LoginScreen = (props) => {
@@ -25,6 +26,29 @@ const LoginScreen = (props) => {
     email: "",
     password: "",
   });
+
+  const CustomHeader = () => {
+    return (
+      <Appbar.Header
+        theme={{
+          ...DefaultTheme,
+          roundness: 2,
+          colors: {
+            ...DefaultTheme.colors,
+            primary: "#e54e42",
+          },
+        }}
+      >
+        <Appbar.Content title="Iniciar Sesión"/>
+      </Appbar.Header>
+    );
+  };
+
+  useLayoutEffect(() => {
+    props.navigation.setOptions({
+      header: () => <CustomHeader />,
+    });
+  }, [props.navigation]);
 
   // Función para crear el icono del ojo con o sin slash ("eye" o "eye-slash" como parámetro)
   const createEyeIcon = (name) => {

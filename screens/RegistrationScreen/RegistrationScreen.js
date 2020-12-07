@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import {
   ScrollView,
   TouchableOpacity,
@@ -13,6 +13,7 @@ import { Input, Icon, Overlay } from "react-native-elements";
 import RadioForm from "react-native-simple-radio-button";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
+import { Appbar, DefaultTheme } from "react-native-paper";
 
 // Pantalla de Registro
 const RegistrationScreen = (props) => {
@@ -35,6 +36,30 @@ const RegistrationScreen = (props) => {
     { label: "Masculino   ", value: 0 },
     { label: "Femenino", value: 1 },
   ];
+
+  const CustomHeader = () => {
+    return (
+      <Appbar.Header
+        theme={{
+          ...DefaultTheme,
+          roundness: 2,
+          colors: {
+            ...DefaultTheme.colors,
+            primary: "#e54e42",
+          },
+        }}
+      >
+        <Appbar.BackAction onPress={() => props.navigation.navigate("Iniciar Sesión")} />
+        <Appbar.Content title="Registrarse"/>
+      </Appbar.Header>
+    );
+  };
+
+  useLayoutEffect(() => {
+    props.navigation.setOptions({
+      header: () => <CustomHeader />,
+    });
+  }, [props.navigation]);
 
   // Función para crear el icono del ojo con o sin slash ("eye" o "eye-slash" como parámetro)
   const createEyeIcon = (name) => {

@@ -13,6 +13,7 @@ import {
 import { firebase } from "./firebase/config";
 import Sidebar from "./SideBar/SideBar";
 
+
 // Drawer Navigator que permite la navegación con un menú desplegable
 const Drawer = createDrawerNavigator();
 
@@ -67,7 +68,7 @@ export default function App() {
         <Drawer.Screen
           name="Mis Listas"
           component={ListsScreen}
-          options={{ headerShown: true }}
+          options={{ headerShown: false }}
         />
       </Drawer.Navigator>
     );
@@ -84,19 +85,11 @@ export default function App() {
             <Stack.Screen
               name="Iniciar Sesión"
               component={LoginScreen}
-              options={{
-                title: "Iniciar Sesión",
-                headerTitleStyle: { color: "#2d3f50" },
-              }}
             />
             {/* Pantalla de Registro */}
             <Stack.Screen
               name="Registrarse"
               component={RegistrationScreen}
-              options={{
-                title: "Registrarse",
-                headerTitleStyle: { color: "#2d3f50" },
-              }}
             />
           </Stack.Navigator>
         </>
