@@ -52,6 +52,7 @@ const ListsScreen = (props) => {
 
   // TODO: Mover a otro archivo
   const CreateList = () => {
+
     const [list, setList] = useState({
       name: "",
       theme: "",
@@ -94,13 +95,31 @@ const ListsScreen = (props) => {
         <Input
           placeholder="Ej: Trabajo"
           label="Nombre de la Lista"
+          labelStyle={{fontSize:18, color:"#2d3f50"}}
           onChangeText={(value) => handleChangeText("name", value)}
         />
-        <Input
-          placeholder="Solo una prueba"
-          label="Tema"
-          onChangeText={(value) => handleChangeText("theme", value)}
-        />
+            <Text style={{fontSize:18, color:"#2d3f50", fontWeight:"bold",paddingLeft:10,paddingBottom:10}}>Color de la Lista</Text>
+            <View style={{flexDirection: 'row', justifyContent: "center", alignItems: "center", paddingBottom: 20,paddingLeft:10}}>
+              <TouchableOpacity style={{paddingRight: 5}}>
+               <Icon type= "font-awesome" name= "circle" color= "#3b99d8" size={40}/>
+              </TouchableOpacity>
+              <TouchableOpacity style={{paddingRight: 5}}> 
+               <Icon type= "font-awesome" name= "circle" color= "#e54e42" size={40}/>
+              </TouchableOpacity>
+              <TouchableOpacity style={{paddingRight: 5}}> 
+               <Icon type= "font-awesome" name= "circle" color= "#7b1fa2" size={40}/>
+              </TouchableOpacity>
+              <TouchableOpacity style={{paddingRight: 5}}> 
+               <Icon type= "font-awesome" name= "circle" color= "#43a047" size={40}/>
+              </TouchableOpacity>
+              <TouchableOpacity style={{paddingRight: 5}}> 
+               <Icon type= "font-awesome" name= "circle" color= "#ffea00" size={40}/>
+              </TouchableOpacity>
+              <TouchableOpacity style={{paddingRight: 5}}> 
+               <Icon type= "font-awesome" name= "circle" color= "#ec407a" size={40}/>
+              </TouchableOpacity>
+       
+            </View>
         <TouchableOpacity style={styles.button} onPress={() => createList()}>
           <Text style={styles.buttonText}>Crear lista</Text>
         </TouchableOpacity>
@@ -208,8 +227,8 @@ const ListsScreen = (props) => {
             type="font-awesome"
             name="plus"
             size={30}
-            color="#FF8C00"
-            backgroundColor="#FF8C0050"
+            color="#ffffff"
+            backgroundColor="#e54e42"
             alignItems="center"
             style={styles.iconStyle}
           />

@@ -91,7 +91,7 @@ function Sidebar({ ...props }) {
                 )}
                 label="Inicio"
                 labelStyle={{ fontSize: 20, color: "#2d3f50" }}
-                onPress={() => props.navigation.navigate("Nombre del Home")}
+                onPress={() => props.navigation.navigate("Inicio")}
               />
               <DrawerItem
                 icon={({ color, size }) => (
@@ -115,7 +115,6 @@ function Sidebar({ ...props }) {
                 )}
                 label="Buscar"
                 labelStyle={{ fontSize: 20, color: "#2d3f50" }}
-                /* onPress={} */
               />
               <DrawerItem
                 icon={({ color, size }) => (

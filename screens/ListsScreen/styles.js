@@ -19,7 +19,6 @@ export default StyleSheet.create({
   },
   vista: {
     flex: 1,
-    height: windowHeight * 1.3,
   },
   buttonAddStyle: {
     position: "absolute",
@@ -74,7 +73,8 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   shadow: {
-    marginTop: 20,
+    marginTop: 10,
+    marginBottom: 10,
     marginLeft: 20,
     marginRight: 20,
     backgroundColor:"#fff",
