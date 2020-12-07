@@ -40,6 +40,10 @@ const ListsScreen = (props) => {
         <Appbar.Content title="Mis listas" />
         <Appbar.Action
           icon="dots-vertical"
+          onPress={() => {if (!loading) toggleOverlay()}}
+        />
+        <Appbar.Action
+          icon="dots-vertical"
           onPress={() => props.navigation.toggleDrawer()}
         />
       </Appbar.Header>
@@ -257,10 +261,14 @@ const ListsScreen = (props) => {
   //   },
   // ];
 
+  function nav(){
+    props.navigation.navigate("Tareas");
+  }
+
   const renderList = ({ item }) => {
     return (
       <View style={styles.shadow}>
-        <TouchableOpacity style={styles.buttonList}>
+        <TouchableOpacity style={styles.buttonList} onPress={() => nav()}>
           <Icon
             flexDirection="row"
             type="font-awesome"

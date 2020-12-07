@@ -9,6 +9,8 @@ import {
   RegistrationScreen,
   ListsScreen,
   LoadScreen,
+  TasksScreen,
+  CalendarScreen,
 } from "./screens";
 import { firebase } from "./firebase/config";
 import Sidebar from "./SideBar/SideBar";
@@ -68,6 +70,16 @@ export default function App() {
         <Drawer.Screen
           name="Mis Listas"
           component={ListsScreen}
+          options={{ headerShown: false }}
+        />
+        <Drawer.Screen
+          name="Tareas"
+          component={TasksScreen}
+          options={{ headerShown: false }}
+        />
+        <Drawer.Screen
+          name="Calendario"
+          component={CalendarScreen}
           options={{ headerShown: false }}
         />
       </Drawer.Navigator>
