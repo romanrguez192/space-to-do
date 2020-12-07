@@ -180,7 +180,7 @@ const HomeScreen = (props) => {
         >
           <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.shadow}>
-              <Text style={styles.messageStyle}>{user.name}</Text>
+              <Text style={styles.messageStyle}>Miguel....</Text>
             </View>
             
             <View
