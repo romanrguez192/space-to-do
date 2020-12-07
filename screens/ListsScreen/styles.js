@@ -25,6 +25,7 @@ export default StyleSheet.create({
     marginTop: windowHeight * 0.8,
     marginLeft: windowWidth * 0.75,
     zIndex: 100,
+    elevation: 3,
   },
   iconStyle: {
     width: 50,
