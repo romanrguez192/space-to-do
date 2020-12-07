@@ -111,6 +111,14 @@ function Sidebar({ ...props }) {
               />
               <DrawerItem
                 icon={({ color, size }) => (
+                  <Icon type="font-awesome" name="star" color="#3b99d8" />
+                )}
+                label="Calendarios"
+                labelStyle={{ fontSize: 20, color: "#2d3f50" }}
+                onPress={() => props.navigation.navigate("Calendario")} 
+              />
+              <DrawerItem
+                icon={({ color, size }) => (
                   <Icon type="font-awesome" name="search" color="#3b99d8" />
                 )}
                 label="Buscar"
