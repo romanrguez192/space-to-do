@@ -39,7 +39,7 @@ const ListsScreen = (props) => {
         />
         <Appbar.Content title="Mis listas" />
         <Appbar.Action
-          icon="dots-vertical"
+          icon="plus"
           onPress={() => {if (!loading) toggleOverlay()}}
         />
         <Appbar.Action
@@ -287,7 +287,7 @@ const ListsScreen = (props) => {
   return (
     <View style={styles.vista}>
       <CustomHeader/>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.buttonAddStyle}
         onPress={() => toggleOverlay()}
       >
@@ -300,7 +300,7 @@ const ListsScreen = (props) => {
           alignItems="center"
           style={styles.iconStyle}
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <Overlay isVisible={visibleOverlay} onBackdropPress={toggleOverlay}>
         <CreateList />
       </Overlay>

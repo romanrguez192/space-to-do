@@ -111,7 +111,7 @@ function Sidebar({ ...props }) {
               />
               <DrawerItem
                 icon={({ color, size }) => (
-                  <Icon type="font-awesome" name="star" color="#3b99d8" />
+                  <Icon type="font-awesome" name="calendar" color="#3b99d8" />
                 )}
                 label="Calendarios"
                 labelStyle={{ fontSize: 20, color: "#2d3f50" }}
