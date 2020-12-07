@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import styles from "./styles";
 import {
   Avatar,
@@ -76,13 +76,18 @@ function Sidebar({ ...props }) {
       <DrawerContentScrollView {...props}>
         <View>
           <View style={styles.userInfoSection}>
-            <View style={{ flexDirection: "row", marginTop: 15 }}>
+            <TouchableOpacity
+              onPress={() =>
+                props.navigation.navigate("Perfil", { userID: props.userID })
+              }
+              style={{ flexDirection: "row", marginTop: 15 }}
+            >
               <ProfilePicture user={user} image={image} />
               <View style={{ marginLeft: 10 }}>
                 <Title style={styles.title}>{user.name}</Title>
                 <Caption style={styles.caption}>{user.username}</Caption>
               </View>
-            </View>
+            </TouchableOpacity>
 
             <Drawer.Section style={styles.drawerSection}>
               <DrawerItem
@@ -99,7 +104,11 @@ function Sidebar({ ...props }) {
                 )}
                 label="Mis Listas"
                 labelStyle={{ fontSize: 20, color: "#2d3f50" }}
-                onPress={() => props.navigation.navigate("Mis Listas", {userID: props.userID})}
+                onPress={() =>
+                  props.navigation.navigate("Mis Listas", {
+                    userID: props.userID,
+                  })
+                }
               />
               <DrawerItem
                 icon={({ color, size }) => (
@@ -115,7 +124,7 @@ function Sidebar({ ...props }) {
                 )}
                 label="Calendarios"
                 labelStyle={{ fontSize: 20, color: "#2d3f50" }}
-                onPress={() => props.navigation.navigate("Calendario")} 
+                onPress={() => props.navigation.navigate("Calendario")}
               />
               <DrawerItem
                 icon={({ color, size }) => (

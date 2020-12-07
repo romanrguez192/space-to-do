@@ -40,23 +40,24 @@ const ListsScreen = (props) => {
         <Appbar.Content title="Mis listas" />
         <Appbar.Action
           icon="plus"
-          onPress={() => {if (!loading) toggleOverlay()}}
+          onPress={() => {
+            if (!loading) toggleOverlay();
+          }}
         />
-        <Appbar.Action
-          icon="dots-vertical"
-          onPress={() => props.navigation.toggleDrawer()}
-        />
+        <Appbar.Action icon="dots-vertical" />
       </Appbar.Header>
     );
   };
 
   useEffect(() => {
-    getLists(props.route.params.userID);
+    const unsubscribe = getLists(props.route.params.userID);
+
+    return unsubscribe;
   }, []);
 
   const getLists = (userID) => {
     const listsRef = firebase.firestore().collection("lists");
-    listsRef
+    return listsRef
       .where("createdBy", "==", userID)
       //.orderBy("createdAt", "desc")
       .onSnapshot((snapshot) => {
@@ -72,7 +73,7 @@ const ListsScreen = (props) => {
   if (loading) {
     return (
       <View>
-        <CustomHeader/>
+        <CustomHeader />
         <ContentLoader
           active
           loading={loading}
@@ -88,6 +89,10 @@ const ListsScreen = (props) => {
 
   const toggleOverlay = () => {
     setVisibleOverlay(!visibleOverlay);
+  };
+
+  const openList = (list) => {
+    props.navigation.navigate("Tareas", { list });
   };
 
   // TODO: Mover a otro archivo
@@ -109,19 +114,19 @@ const ListsScreen = (props) => {
 
       //TODO: Verificar selección de tema
 
+      const listObj = { ...list, createdBy: props.route.params.userID };
+
       firebase
         .firestore()
         .collection("lists")
-        .add({
-          ...list,
-          createdBy: props.route.params.userID,
-        })
+        .add(listObj)
         .then((ref) => {
+          toggleOverlay();
           Alert.alert(
             "Lista creado",
             "¡Tu lista ha sido creada correctamente! Vamos a verla."
           );
-          // TODO: Colocar navegación hacia la nueva lista
+          openList({ ...listObj, id: ref });
         })
         .catch((error) => {
           // TODO: Alertas de errores...
@@ -183,92 +188,13 @@ const ListsScreen = (props) => {
     );
   };
 
-  // const listss = [
-  //   {
-  //     id: "1",
-  //     name: "AAA",
-  //     theme: "blue",
-  //   },
-  //   {
-  //     id: "2",
-  //     name: "Casa",
-  //     theme: "yellow",
-  //   },
-  //   {
-  //     id: "3",
-  //     name: "Colegio",
-  //     theme: "green",
-  //   },
-  //   {
-  //     id: "35",
-  //     name: "Colegio",
-  //     theme: "green",
-  //   },
-  //   {
-  //     id: "32",
-  //     name: "Colegio",
-  //     theme: "green",
-  //   },
-  //   {
-  //     id: "322",
-  //     name: "Colegio",
-  //     theme: "green",
-  //   },
-  //   {
-  //     id: "31",
-  //     name: "Colegio",
-  //     theme: "green",
-  //   },
-  //   {
-  //     id: "311",
-  //     name: "Colegio",
-  //     theme: "green",
-  //   },
-  //   {
-  //     id: "3111",
-  //     name: "Colegio",
-  //     theme: "green",
-  //   },
-  //   {
-  //     id: "3b",
-  //     name: "Colegio",
-  //     theme: "green",
-  //   },
-  //   {
-  //     id: "3bb",
-  //     name: "Colegio",
-  //     theme: "green",
-  //   },
-  //   {
-  //     id: "3sg",
-  //     name: "Colegio",
-  //     theme: "green",
-  //   },
-  //   {
-  //     id: "3gas",
-  //     name: "Colegio",
-  //     theme: "green",
-  //   },
-  //   {
-  //     id: "3fdsa",
-  //     name: "Colegio",
-  //     theme: "green",
-  //   },
-  //   {
-  //     id: "3asd",
-  //     name: "Colegio",
-  //     theme: "green",
-  //   },
-  // ];
-
-  function nav(){
-    props.navigation.navigate("Tareas");
-  }
-
   const renderList = ({ item }) => {
     return (
       <View style={styles.shadow}>
-        <TouchableOpacity style={styles.buttonList} onPress={() => nav()}>
+        <TouchableOpacity
+          style={styles.buttonList}
+          onPress={() => openList(item)}
+        >
           <Icon
             flexDirection="row"
             type="font-awesome"
@@ -286,7 +212,7 @@ const ListsScreen = (props) => {
 
   return (
     <View style={styles.vista}>
-      <CustomHeader/>
+      <CustomHeader />
       {/* <TouchableOpacity
         style={styles.buttonAddStyle}
         onPress={() => toggleOverlay()}

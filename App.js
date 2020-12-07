@@ -11,10 +11,10 @@ import {
   LoadScreen,
   TasksScreen,
   CalendarScreen,
+  UserScreen,
 } from "./screens";
 import { firebase } from "./firebase/config";
 import Sidebar from "./SideBar/SideBar";
-
 
 // Drawer Navigator que permite la navegación con un menú desplegable
 const Drawer = createDrawerNavigator();
@@ -28,7 +28,9 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [userID, setUserID] = useState("");
 
-  useEffect(() => { connect() }, []);
+  useEffect(() => {
+    connect();
+  }, []);
 
   const connect = async () => {
     const usersRef = firebase.firestore().collection("users");
@@ -42,10 +44,11 @@ export default function App() {
             setLoading(false);
           })
           .catch((error) => {
-            Alert.alert("Error de conexión", "Se produjo un error al establecer la conexión, ¿deseas volverlo a intentar?", [
-              {text: 'Sí', onPress: () => connect()},
-              {text: 'No'}
-          ])
+            Alert.alert(
+              "Error de conexión",
+              "Se produjo un error al establecer la conexión, ¿deseas volverlo a intentar?",
+              [{ text: "Sí", onPress: () => connect() }, { text: "No" }]
+            );
           });
       } else {
         setUserID("");
@@ -82,6 +85,11 @@ export default function App() {
           component={CalendarScreen}
           options={{ headerShown: false }}
         />
+        <Drawer.Screen
+          name="Perfil"
+          component={UserScreen}
+          options={{ headerShown: false }}
+        />
       </Drawer.Navigator>
     );
   };
@@ -94,15 +102,9 @@ export default function App() {
         <>
           <Stack.Navigator>
             {/* Pantalla de Inicio de Sesión */}
-            <Stack.Screen
-              name="Iniciar Sesión"
-              component={LoginScreen}
-            />
+            <Stack.Screen name="Iniciar Sesión" component={LoginScreen} />
             {/* Pantalla de Registro */}
-            <Stack.Screen
-              name="Registrarse"
-              component={RegistrationScreen}
-            />
+            <Stack.Screen name="Registrarse" component={RegistrationScreen} />
           </Stack.Navigator>
         </>
       )}
