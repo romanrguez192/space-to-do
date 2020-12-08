@@ -1,6 +1,7 @@
 # Space To Do
 
 ## Installed dependencies
+
 ```
 npm install @react-navigation/native
 
@@ -25,4 +26,6 @@ expo install expo-image-picker
 npm install react-native-paper
 
 npm install react-native-easy-content-loader
+
+ npm install react-native-calendars
 ```
