@@ -104,7 +104,7 @@ function Sidebar({ ...props }) {
                   <Icon type="font-awesome" name="home" color="#2d3f50" />
                 )}
                 label="Inicio"
-                labelStyle={{ fontSize: 20, color: "#2d3f50" }}
+                labelStyle={{ fontSize: 17, color: "#2d3f50" }}
                 onPress={() => props.navigation.navigate("Inicio")}
               />
               <DrawerItem
@@ -112,7 +112,7 @@ function Sidebar({ ...props }) {
                   <Icon type="font-awesome" name="tasks" color="#2d3f50" />
                 )}
                 label="Mis Listas"
-                labelStyle={{ fontSize: 20, color: "#2d3f50" }}
+                labelStyle={{ fontSize: 17, color: "#2d3f50" }}
                 onPress={() =>
                   props.navigation.navigate("Mis Listas", {
                     userID: props.userID,
@@ -124,7 +124,7 @@ function Sidebar({ ...props }) {
                   <Icon type="font-awesome" name="star" color="#2d3f50" />
                 )}
                 label="Importantes"
-                labelStyle={{ fontSize: 20, color: "#2d3f50" }}
+                labelStyle={{ fontSize: 17, color: "#2d3f50" }}
                 /* onPress={} */
               />  
               <DrawerItem
@@ -132,7 +132,7 @@ function Sidebar({ ...props }) {
                   <Icon type="font-awesome" name="calendar" color="#2d3f50" />
                 )}
                 label="Calendarios"
-                labelStyle={{ fontSize: 20, color: "#2d3f50" }}
+                labelStyle={{ fontSize: 17, color: "#2d3f50" }}
                 onPress={() => props.navigation.navigate("Calendario")}
               />
               <DrawerItem
@@ -140,7 +140,7 @@ function Sidebar({ ...props }) {
                   <Icon type="font-awesome" name="search" color="#2d3f50" />
                 )}
                 label="Buscar"
-                labelStyle={{ fontSize: 20, color: "#2d3f50" }}
+                labelStyle={{ fontSize: 17, color: "#2d3f50" }}
               />
             </Drawer.Section>
           </View>
@@ -152,7 +152,7 @@ function Sidebar({ ...props }) {
             <Icon type="font-awesome" name="sign-out" color="#e54e42" />
           )}
           label="Salir"
-          labelStyle={{ fontSize: 20, color: "#2d3f50" }}
+          labelStyle={{ fontSize: 17, color: "#2d3f50" }}
           onPress={() => singout()}
         />
       </Drawer.Section>
