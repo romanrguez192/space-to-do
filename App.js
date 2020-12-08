@@ -12,6 +12,7 @@ import {
   TasksScreen,
   CalendarScreen,
   UserScreen,
+  CreateTaskScreen,
 } from "./screens";
 import { firebase } from "./firebase/config";
 import Sidebar from "./SideBar/SideBar";
@@ -26,7 +27,7 @@ const Stack = createStackNavigator();
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [userID, setUserID] = useState("")
+  const [userID, setUserID] = useState("");
 
   useEffect(() => {
     connect();
@@ -39,8 +40,8 @@ export default function App() {
         usersRef
           .doc(user.uid)
           .get()
-          .then(async(document) => {
-            setUserID(document.id)
+          .then(async (document) => {
+            setUserID(document.id);
             setLoading(false);
           })
           .catch((error) => {
@@ -79,18 +80,21 @@ export default function App() {
         <Drawer.Screen
           name="Tareas"
           component={TasksScreen}
-          options={{ headerShown: false }} />
-          
+          options={{ headerShown: false }}
+        />
+        <Drawer.Screen
+          name="Crear Tarea"
+          component={CreateTaskScreen}
+          options={{ headerShown: false }}
+        />
         <Drawer.Screen
           name="Calendario"
           component={CalendarScreen}
           options={{ headerShown: false }}
           userID={userID}
         />
-        <Drawer.Screen
-          name="Perfil"
-          options={{ headerShown: true }}>
-          {(props) => <UserScreen {...props} userID={userID}/>}
+        <Drawer.Screen name="Perfil" options={{ headerShown: true }}>
+          {(props) => <UserScreen {...props} userID={userID} />}
         </Drawer.Screen>
       </Drawer.Navigator>
     );
