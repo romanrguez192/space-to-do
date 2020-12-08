@@ -12,6 +12,7 @@ export default StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 5,
     marginBottom: 20,
+    alignItems: 'center',
   },
   areaview: {
     flex: 1,
@@ -87,5 +88,9 @@ export default StyleSheet.create({
     shadowOpacity: 0.32,
     shadowRadius: 5.46,
     elevation: 9,
+  },
+  scrollContainer: {
+    height: 50,
+    width: windowWidth * 0.7,
   },
 });

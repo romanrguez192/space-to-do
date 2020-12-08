@@ -146,6 +146,28 @@ const ListsScreen = (props) => {
       "#43a047",
       "#ffea00",
       "#ec407a",
+      "#F50057",
+      "#E54E42",
+      "#EC407A",
+      "#880E4F",
+      "#43A047",
+      "#FF4081",
+      "#4A148C",
+      "#D500F9",
+      "#4527A0",
+      "#1B5E20",
+      "#00695C",
+      "#00BFA5",
+      "#00C853",
+      "#C0CA33",
+      "#64DD17",
+      "#EEFF41",
+      "#F57F17",
+      "#FFCA28",
+      "#FF5722",
+      "#DD2C00",
+      "#546E7A",
+      "#3712F1",
     ];
 
     return (
@@ -167,31 +189,34 @@ const ListsScreen = (props) => {
         >
           Color de la Lista
         </Text>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            paddingBottom: 20,
-            paddingLeft: 10,
-          }}
-        >
-          {colors.map((color) => {
-            return (
-              <TouchableOpacity
-                key={color}
-                onPress={() => setList({ ...list, theme: color })}
-                style={{ paddingRight: 5 }}
-              >
-                <Icon
-                  type="font-awesome"
-                  name={color == list.theme ? "check-circle" : "circle"}
-                  color={color}
-                  size={40}
-                />
-              </TouchableOpacity>
-            );
-          })}
+        <View style={styles.scrollContainer}>
+          <ScrollView
+            horizontal={true}
+              style={{
+              flexDirection: "row",
+              paddingBottom: 20,
+              marginLeft: 10,
+              marginRight: 10,
+              height: 40,
+            }}
+          >
+              {colors.map((color) => {
+                return (
+                  <TouchableOpacity
+                    key={color}
+                    onPress={() => setList({ ...list, theme: color })}
+                    style={{ paddingRight: 5, height: 40 }}
+                  >
+                    <Icon
+                      type="font-awesome"
+                      name={color == list.theme ? "check-circle" : "circle"}
+                      color={color}
+                      size={40}
+                    />
+                  </TouchableOpacity>
+                );
+              })}
+          </ScrollView>
         </View>
         <TouchableOpacity style={styles.button} onPress={() => createList()}>
           <Text style={styles.buttonText}>Crear lista</Text>
