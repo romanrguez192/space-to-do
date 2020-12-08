@@ -33,8 +33,8 @@ export default StyleSheet.create({
     zIndex: 100,
     width: 50,
     height: 50,
-    left: windowWidth * 0.75,
-    top: -80,
+    left: windowWidth * 0.65,
+    top: -70,
     borderRadius: 50,
     backgroundColor:"#e54e42",
     shadowColor: "#000",
@@ -55,7 +55,7 @@ export default StyleSheet.create({
   },
   informationContainer: {
     backgroundColor: "#fff",
-    top: -75,
+    top: -120,
   },
   titleInformation: {
     fontSize: 18,
@@ -63,6 +63,7 @@ export default StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 5,
     marginLeft: 25,
+    marginRight: 20,
   },
   subtitleInformation: {
     fontSize: 18,
@@ -77,5 +78,38 @@ export default StyleSheet.create({
     fontSize: 40,
     color: "#fff",
     fontWeight: "bold",
-  }
+  },
+  inputStyle: {
+    marginLeft: 15,
+  },
+  iconStyle2: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  deleteButton: {
+    zIndex: 100,
+    width: 50,
+    height: 50,
+    left: windowWidth * 0.82,
+    top: -120,
+    borderRadius: 50,
+    backgroundColor:"#e54e42",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
+  },
+  deleteAccount: {
+    width: windowWidth * 0.45,
+    justifyContent: 'center',
+    alignSelf: 'center',
+    alignItems: 'center',
+  },
 });

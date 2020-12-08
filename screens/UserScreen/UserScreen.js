@@ -21,6 +21,7 @@ import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import { v4 as uuidv4 } from "uuid";
 import { Appbar, DefaultTheme } from "react-native-paper";
+import { color } from "react-native-reanimated";
 
 const UserScreen = (props) => {
   const CustomHeader = () => {
@@ -229,7 +230,7 @@ const UserScreen = (props) => {
             <TouchableOpacity style={styles.editButton} onPress={pickImage}>
               <Icon
                 type="font-awesome"
-                name="pencil"
+                name="camera"
                 size={20}
                 color="#ffffff"
                 backgroundColor="#e54e42"
@@ -237,19 +238,31 @@ const UserScreen = (props) => {
                 style={styles.iconStyle}
               />
             </TouchableOpacity>
+            <TouchableOpacity style={styles.deleteButton} onPress={pickImage}>
+              <Icon
+                type="font-awesome"
+                name="trash"
+                size={20}
+                color="#ffffff"
+                backgroundColor="#e54e42"
+                alignItems="center"
+                style={styles.iconStyle2}
+              />
+            </TouchableOpacity>
             <View style={styles.informationContainer}>
               <View style={styles.shadow}>
-                {/* TURKO CAMBIA ESTO................................................ */}
-                <Text style={styles.titleInformation}>Nombre</Text>
-                <Icon type="font-awesome" name={icon} size={20} 
-                color="#2c3e50" 
-                onPress={handlerIconPress}
+                <View style={{flexDirection: 'row', marginTop: 20}}>
+                  <Text style={styles.titleInformation}>Nombre</Text>
+                  <Icon type="font-awesome" name={icon} size={20} 
+                  color="#2c3e50" 
+                  onPress={handlerIconPress}
+                  />
+                </View>
 
-                />
                 {
                   (changing)
                   ? 
-                    <Input placeholder="Nombre Completo" value={changeName} 
+                    <Input style={styles.inputStyle} placeholder="Nombre Completo" value={changeName} 
                     onChangeText={(value) => setChangeName(value)}/>                    
                   :
                     <Text style={styles.subtitleInformation}>{user.name}</Text>
@@ -265,6 +278,9 @@ const UserScreen = (props) => {
                   {user.gender === "M" ? "Masculino" : "Femenino"}
                 </Text>
               </View>
+              <TouchableOpacity style={styles.deleteAccount}>
+                <Text style={{color: "#e54e42", fontSize: 15, fontWeight: "bold"}}>ELIMINAR CUENTA</Text>
+              </TouchableOpacity>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>

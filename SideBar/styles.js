@@ -19,6 +19,7 @@ export default StyleSheet.create({
   },
   drawerSection: {
     marginTop: 15,
+    left: -15,
   },
   paragraph: {
     fontWeight: 'bold',

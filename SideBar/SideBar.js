@@ -94,14 +94,14 @@ function Sidebar({ ...props }) {
               <ProfilePicture style={{zIndex: 1}} name={user.name} color={user.avatarColor} image={global.image}/>
               <View style={{ marginLeft: 10 }}>
                 <Title style={styles.title}>{user.name}</Title>
-                <Caption style={styles.caption}>{user.username}</Caption>
+                <Caption style={styles.caption}>@{user.username}</Caption>
               </View>
             </TouchableOpacity>
 
             <Drawer.Section style={styles.drawerSection}>
               <DrawerItem
                 icon={({ color, size }) => (
-                  <Icon type="font-awesome" name="home" color="#3b99d8" />
+                  <Icon type="font-awesome" name="home" color="#2d3f50" />
                 )}
                 label="Inicio"
                 labelStyle={{ fontSize: 20, color: "#2d3f50" }}
@@ -109,7 +109,7 @@ function Sidebar({ ...props }) {
               />
               <DrawerItem
                 icon={({ color, size }) => (
-                  <Icon type="font-awesome" name="tasks" color="#3b99d8" />
+                  <Icon type="font-awesome" name="tasks" color="#2d3f50" />
                 )}
                 label="Mis Listas"
                 labelStyle={{ fontSize: 20, color: "#2d3f50" }}
@@ -121,15 +121,15 @@ function Sidebar({ ...props }) {
               />
               <DrawerItem
                 icon={({ color, size }) => (
-                  <Icon type="font-awesome" name="star" color="#3b99d8" />
+                  <Icon type="font-awesome" name="star" color="#2d3f50" />
                 )}
                 label="Importantes"
                 labelStyle={{ fontSize: 20, color: "#2d3f50" }}
                 /* onPress={} */
-              />
+              />  
               <DrawerItem
                 icon={({ color, size }) => (
-                  <Icon type="font-awesome" name="calendar" color="#3b99d8" />
+                  <Icon type="font-awesome" name="calendar" color="#2d3f50" />
                 )}
                 label="Calendarios"
                 labelStyle={{ fontSize: 20, color: "#2d3f50" }}
@@ -137,7 +137,7 @@ function Sidebar({ ...props }) {
               />
               <DrawerItem
                 icon={({ color, size }) => (
-                  <Icon type="font-awesome" name="search" color="#3b99d8" />
+                  <Icon type="font-awesome" name="search" color="#2d3f50" />
                 )}
                 label="Buscar"
                 labelStyle={{ fontSize: 20, color: "#2d3f50" }}
