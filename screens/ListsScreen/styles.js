@@ -75,6 +75,7 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   shadow: {
+    borderRadius: 10,
     marginTop: 10,
     marginBottom: 10,
     marginLeft: 20,
@@ -90,7 +91,7 @@ export default StyleSheet.create({
     elevation: 9,
   },
   scrollContainer: {
-    height: 50,
+    height: 60,
     width: windowWidth * 0.7,
   },
 });

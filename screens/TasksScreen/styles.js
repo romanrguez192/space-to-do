@@ -13,6 +13,7 @@ export default StyleSheet.create({
         fontWeight: "400",
       },
       shadow: {
+        borderRadius: 10,
         marginTop: 10,
         marginBottom: 10,
         marginLeft: 20,

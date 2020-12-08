@@ -193,11 +193,12 @@ const ListsScreen = (props) => {
           <ScrollView
             horizontal={true}
               style={{
-              flexDirection: "row",
-              paddingBottom: 20,
-              marginLeft: 10,
-              marginRight: 10,
-              height: 40,
+                alignContent: 'center',
+                flexDirection: "row",
+                paddingBottom: 20,
+                marginLeft: 10,
+                marginRight: 10,
+                height: 40,
             }}
           >
               {colors.map((color) => {
