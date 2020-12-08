@@ -17,15 +17,19 @@ import { firebase } from "../firebase/config";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import ProfilePicture from "../components/ProfilePicture";
 import { LoadScreen } from "../screens";
+import "../global"
 
 function Sidebar({ ...props }) {
-  const [user, setUser] = useState(null);
-  const [image, setImage] = useState("");
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    gender: "",
+    imageID: "",
+    username: "",
+    avatarColor: "",
+    id:"",
+  });
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    getUserByID(props.userID);
-  }, []);
 
   const getUserByID = async (id) => {
     const dbRef = firebase.firestore().collection("users").doc(id);
@@ -33,6 +37,7 @@ function Sidebar({ ...props }) {
     const resul = doc.data();
     setUser(resul);
     getImageByID(resul.imageID);
+    setLoading(false)
   };
 
   const getImageByID = async (id) => {
@@ -42,16 +47,20 @@ function Sidebar({ ...props }) {
         .ref(`images/${id}.jpg`)
         .getDownloadURL()
         .then((resolve) => {
-          setImage({ uri: resolve });
+          global.image = resolve
         })
         .catch((err) => {
           console.log(err);
         });
     } else {
-      setImage({ uri: "" });
+      global.image = ""
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    getUserByID(props.userID);
+  }, []);
 
   const singout = () => {
     firebase
@@ -82,7 +91,7 @@ function Sidebar({ ...props }) {
               }
               style={{ flexDirection: "row", marginTop: 15 }}
             >
-              <ProfilePicture user={user} image={image} />
+              <ProfilePicture style={{zIndex: 1}} image={global.image}/>
               <View style={{ marginLeft: 10 }}>
                 <Title style={styles.title}>{user.name}</Title>
                 <Caption style={styles.caption}>{user.username}</Caption>
@@ -132,14 +141,6 @@ function Sidebar({ ...props }) {
                 )}
                 label="Buscar"
                 labelStyle={{ fontSize: 20, color: "#2d3f50" }}
-              />
-              <DrawerItem
-                icon={({ color, size }) => (
-                  <Icon type="font-awesome" name="cog" color="#3b99d8" />
-                )}
-                label="Ajustes"
-                labelStyle={{ fontSize: 20, color: "#2d3f50" }}
-                /* onPress={} */
               />
             </Drawer.Section>
           </View>

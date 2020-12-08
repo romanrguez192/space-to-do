@@ -1,15 +1,151 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Text, View } from "react-native";
+import { Text, View, TouchableOpacity, SafeAreaView, KeyboardAvoidingView, ScrollView } from "react-native";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
 import ContentLoader, {
   FacebookLoader,
   InstagramLoader,
 } from "react-native-easy-content-loader";
+import ProfilePicture from "../../components/ProfilePicture";
+import "../../global"
+import { Icon } from "react-native-elements";
 
-const UserScreen = () => {
 
-  
+const UserScreen = (props) => {
+  useEffect(() => {
+    getUserByID(props.userID)
+  }, [])
+
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    gender: "",
+    imageID: "",
+    username: "",
+    avatarColor: "",
+    id:"",
+  });
+  const [loading, setLoading] = useState(true);
+  const [image, setImage] = useState("");
+
+  const getUserByID = async (id) => {
+    const dbRef = firebase.firestore().collection("users").doc(id);
+    const doc = await dbRef.get();
+    const resul = doc.data();
+    setUser(resul);
+    getImageByID(resul.imageID);
+    setLoading(false);
+  };
+
+  const singout = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        // Sign-out successful.
+        alert("Saliste de tu cuenta");
+      })
+      .catch((error) => {
+        // An error happened.
+        alert(error);
+      });
+  };
+
+  const updateUser = async (key, value) => {
+    const dbRef = firebase.firestore().collection("users").doc(props.extraData);
+    await dbRef.set({ ...user, [key]:value });
+    if(key === "imageID")
+      getImageByID(value);
+  };
+
+  const pickImage = async () => {
+    if (user.imageID) deleteImage();
+
+    const permission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (permission.granted) {
+        const resulImage = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        aspect: [3, 3],
+        quality: 1,
+      });
+
+      if (!resulImage.cancelled) {
+        setLoading(true);
+        const uuid = uuid4();
+        setUser({ ...user, imageID: uuid });
+        uploadImage(resulImage.uri)
+          .then((resolve) => {
+            const ref = firebase.storage().ref().child(`images/${uuid}.jpg`);
+            ref
+              .put(resolve)
+              .then((resolve) => {
+                updateUser("imageID", uuid);
+                Alert.alert("Imagen subida correctamente");
+              })
+              .catch((err) => {
+                Alert.alert("No se pudo cargar la imagen intente de nuevo");
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }
+  };
+
+  const getImageByID = async (id) => {
+    if (id !== "") {
+      firebase
+        .storage()
+        .ref(`images/${id}.jpg`)
+        .getDownloadURL()
+        .then((resolve) => {
+          setImage(resolve);
+          global.image = resolve
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setImage("");
+      global.image = ""
+    }
+    
+  };
+
+  const deleteImage = () => {
+    if (!(user.imageID === "")) {
+      const imageRef = firebase.default
+        .storage()
+        .ref(`images/${user.imageID}.jpg`);
+      imageRef
+        .delete()
+        .then(() => {
+          console.log("Deleted");
+          setUser({ ...user, imageID: "" });
+          updateUser("imageID", "");
+          setImage("")
+          global.image = ""
+        })
+        .catch((err) => console.log("Cannot be deleted: " + err));
+    }
+  };
+
+  const uploadImage = (uri) => {
+    return new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest();
+      xhr.onerror = reject;
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          resolve(xhr.response);
+        }
+      };
+      xhr.open("GET", uri);
+      xhr.responseType = "blob";
+      xhr.send();
+    });
+  };
 
   return (
     <SafeAreaView style={styles.areaview}>
@@ -29,10 +165,9 @@ const UserScreen = () => {
           keyboardVerticalOffset="100"
         >
           <ScrollView contentContainerStyle={styles.container}>
-            <Avatar containerStyle={styles.imgProfile} title="CD" source={image}/>
-            <Text style={styles.userStyle}>{user.name}</Text>
-            <TouchableOpacity style={styles.editButton}
-            >
+            <ProfilePicture image={image} styleContainer={styles.imgProfile} />
+            <Text style={styles.userStyle}>{user.username}</Text>
+            <TouchableOpacity style={styles.editButton} onPress={pickImage}>
               <Icon
                 type="font-awesome"
                 name="pencil"
@@ -46,15 +181,17 @@ const UserScreen = () => {
             <View style={styles.informationContainer}>
               <View style={styles.shadow}>
                 <Text style={styles.titleInformation}>Nombre</Text>
-                <Text style={styles.subtitleInformation}>José Saad</Text>
+                <Text style={styles.subtitleInformation}>{user.name}</Text>
               </View>
               <View style={styles.shadow}>
                 <Text style={styles.titleInformation}>Correo Electrónico</Text>
-                <Text style={styles.subtitleInformation}>tugatitasalvaje@gmail.com</Text>
+                <Text style={styles.subtitleInformation}>{user.email}</Text>
               </View>
               <View style={styles.shadow}>
                 <Text style={styles.titleInformation}>Género</Text>
-                <Text style={styles.subtitleInformation}>Masculino</Text>
+                <Text style={styles.subtitleInformation}> 
+                  {(user.gender === 'M')? "Masculino" : "Femenino" } 
+                </Text>
               </View>
             </View>
           </ScrollView>

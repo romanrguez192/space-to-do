@@ -26,7 +26,7 @@ const Stack = createStackNavigator();
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [userID, setUserID] = useState("");
+  const [userID, setUserID] = useState("")
 
   useEffect(() => {
     connect();
@@ -39,8 +39,8 @@ export default function App() {
         usersRef
           .doc(user.uid)
           .get()
-          .then((document) => {
-            setUserID(document.id);
+          .then(async(document) => {
+            setUserID(document.id)
             setLoading(false);
           })
           .catch((error) => {
@@ -68,28 +68,30 @@ export default function App() {
         drawerContent={(props) => <Sidebar {...props} userID={userID} />}
       >
         <Drawer.Screen name="Inicio" options={{ headerShown: true }}>
-          {(props) => <HomeScreen {...props} extraData={userID} />}
+          {(props) => <HomeScreen {...props} userID={userID} />}
         </Drawer.Screen>
         <Drawer.Screen
           name="Mis Listas"
           component={ListsScreen}
           options={{ headerShown: false }}
+          userID={userID}
         />
         <Drawer.Screen
           name="Tareas"
           component={TasksScreen}
-          options={{ headerShown: false }}
-        />
+          options={{ headerShown: false }} />
+          
         <Drawer.Screen
           name="Calendario"
           component={CalendarScreen}
           options={{ headerShown: false }}
+          userID={userID}
         />
         <Drawer.Screen
           name="Perfil"
-          component={UserScreen}
-          options={{ headerShown: false }}
-        />
+          options={{ headerShown: false }}>
+          {(props) => <UserScreen {...props} userID={userID}/>}
+        </Drawer.Screen>
       </Drawer.Navigator>
     );
   };
