@@ -80,7 +80,7 @@ const CalendarScreen = (props) => {
   };
 
   return (
-    <View>
+    <ScrollView>
       <CustomHeader />
       <Calendar
         enableSwipeMonths={true}
@@ -196,7 +196,7 @@ const CalendarScreen = (props) => {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
