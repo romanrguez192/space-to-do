@@ -225,20 +225,6 @@ const ListsScreen = (props) => {
   return (
     <View style={styles.vista}>
       <CustomHeader />
-      {/* <TouchableOpacity
-        style={styles.buttonAddStyle}
-        onPress={() => toggleOverlay()}
-      >
-        <Icon
-          type="font-awesome"
-          name="plus"
-          size={30}
-          color="#ffffff"
-          backgroundColor="#e54e42"
-          alignItems="center"
-          style={styles.iconStyle}
-        />
-      </TouchableOpacity> */}
       <Overlay isVisible={visibleOverlay} onBackdropPress={toggleOverlay}>
         <CreateList />
       </Overlay>
