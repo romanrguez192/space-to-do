@@ -89,7 +89,7 @@ export default function App() {
         />
         <Drawer.Screen
           name="Perfil"
-          options={{ headerShown: false }}>
+          options={{ headerShown: true }}>
           {(props) => <UserScreen {...props} userID={userID}/>}
         </Drawer.Screen>
       </Drawer.Navigator>

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import {
   Text,
   View,
@@ -43,6 +43,12 @@ const UserScreen = (props) => {
       </Appbar.Header>
     );
   };
+
+  useLayoutEffect(() => {
+    props.navigation.setOptions({
+      header: () => <CustomHeader />,
+    });
+  }, [props.navigation]);
 
   useEffect(() => {
     getUserByID(props.userID);
@@ -180,7 +186,6 @@ const UserScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.areaview}>
-       <CustomHeader />
       <ContentLoader
         active
         loading={loading}
