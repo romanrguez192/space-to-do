@@ -69,4 +69,13 @@ export default StyleSheet.create({
     color: "#bbb",
     marginLeft: 25,
   },
+  areaview: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  picName: {
+    fontSize: 40,
+    color: "#fff",
+    fontWeight: "bold",
+  }
 });

@@ -207,7 +207,7 @@ const UserScreen = (props) => {
               name={user.name}
               color={user.avatarColor}
               style={styles.imgProfile}
-              styleTitle={styles.userStyle}
+              styleTitle={styles.picName}
             />
             <Text style={styles.userStyle}>{user.username}</Text>
             <TouchableOpacity style={styles.editButton} onPress={pickImage}>
