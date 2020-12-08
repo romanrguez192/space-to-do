@@ -57,17 +57,19 @@ const ListsScreen = (props) => {
 
   const getLists = (userID) => {
     const listsRef = firebase.firestore().collection("lists");
-    return listsRef
-      .where("createdBy", "==", userID)
-      //.orderBy("createdAt", "desc")
-      .onSnapshot((snapshot) => {
-        const data = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setLists(data);
-        setLoading(false);
-      });
+    return (
+      listsRef
+        .where("createdBy", "==", userID)
+        //.orderBy("createdAt", "desc")
+        .onSnapshot((snapshot) => {
+          const data = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setLists(data);
+          setLoading(false);
+        })
+    );
   };
 
   if (loading) {
@@ -107,8 +109,11 @@ const ListsScreen = (props) => {
     };
 
     const createList = () => {
-      if (list.name.trim() === "") {
-        Alert.alert("Error", "Ingresa un nombre para tu lista, por favor.");
+      if (list.name.trim() === "" || list.theme === "") {
+        Alert.alert(
+          "Error",
+          "Ingresa un nombre y un color para tu lista, por favor."
+        );
         return;
       }
 
@@ -133,6 +138,15 @@ const ListsScreen = (props) => {
           console.error("Error ", error);
         });
     };
+
+    const colors = [
+      "#3b99d8",
+      "#e54e42",
+      "#7b1fa2",
+      "#43a047",
+      "#ffea00",
+      "#ec407a",
+    ];
 
     return (
       <View>
@@ -162,24 +176,22 @@ const ListsScreen = (props) => {
             paddingLeft: 10,
           }}
         >
-          <TouchableOpacity style={{ paddingRight: 5 }}>
-            <Icon type="font-awesome" name="circle" color="#3b99d8" size={40} />
-          </TouchableOpacity>
-          <TouchableOpacity style={{ paddingRight: 5 }}>
-            <Icon type="font-awesome" name="circle" color="#e54e42" size={40} />
-          </TouchableOpacity>
-          <TouchableOpacity style={{ paddingRight: 5 }}>
-            <Icon type="font-awesome" name="circle" color="#7b1fa2" size={40} />
-          </TouchableOpacity>
-          <TouchableOpacity style={{ paddingRight: 5 }}>
-            <Icon type="font-awesome" name="circle" color="#43a047" size={40} />
-          </TouchableOpacity>
-          <TouchableOpacity style={{ paddingRight: 5 }}>
-            <Icon type="font-awesome" name="circle" color="#ffea00" size={40} />
-          </TouchableOpacity>
-          <TouchableOpacity style={{ paddingRight: 5 }}>
-            <Icon type="font-awesome" name="circle" color="#ec407a" size={40} />
-          </TouchableOpacity>
+          {colors.map((color) => {
+            return (
+              <TouchableOpacity
+                key={color}
+                onPress={() => setList({ ...list, theme: color })}
+                style={{ paddingRight: 5 }}
+              >
+                <Icon
+                  type="font-awesome"
+                  name={color == list.theme ? "check-circle" : "circle"}
+                  color={color}
+                  size={40}
+                />
+              </TouchableOpacity>
+            );
+          })}
         </View>
         <TouchableOpacity style={styles.button} onPress={() => createList()}>
           <Text style={styles.buttonText}>Crear lista</Text>
@@ -199,7 +211,7 @@ const ListsScreen = (props) => {
             flexDirection="row"
             type="font-awesome"
             name="list-ul"
-            color="#3b99d8"
+            color={item.theme ? item.theme : "black"}
           />
           <Text style={styles.nameList}>{item.name}</Text>
         </TouchableOpacity>

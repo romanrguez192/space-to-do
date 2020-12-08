@@ -20,7 +20,7 @@ const TasksScreen = (props) => {
           roundness: 2,
           colors: {
             ...DefaultTheme.colors,
-            primary: "#e54e42",
+            primary: props.route.params.list.theme,
           },
         }}
       >
