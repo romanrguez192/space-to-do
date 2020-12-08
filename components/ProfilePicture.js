@@ -20,7 +20,7 @@ const ProfilePicture = (props) => {
     return resul.concat(name.toUpperCase().charAt(name.indexOf(" ") + 1));
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     getUserByID(props.userID)
   },[])
 
@@ -30,14 +30,16 @@ const ProfilePicture = (props) => {
     const resul = doc.data();
     setUser(resul);
   };
-
+  
   return (
     <View>
       {props.image === "" ? (
         <Avatar
           size="medium"
-          title={getTitleByName(user.name)}
-          containerStyle={{ backgroundColor: user.avatarColor }, props.style}
+          title={getTitleByName(props.name)}
+          overlayContainerStyle={{backgroundColor: props.color}}
+          containerStyle={props.style}
+          titleStyle={props.styleTitle}
         />
       ) : (
         <Avatar 

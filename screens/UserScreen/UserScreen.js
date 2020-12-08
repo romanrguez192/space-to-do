@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Text, View, TouchableOpacity, SafeAreaView, KeyboardAvoidingView, ScrollView } from "react-native";
+import { Text, View, TouchableOpacity, SafeAreaView, KeyboardAvoidingView, ScrollView, Alert } from "react-native";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
 import ContentLoader, {
@@ -9,7 +9,9 @@ import ContentLoader, {
 import ProfilePicture from "../../components/ProfilePicture";
 import "../../global"
 import { Icon } from "react-native-elements";
-
+import * as Permissions from "expo-permissions";
+import * as ImagePicker from "expo-image-picker";
+import { v4 as uuidv4 } from 'uuid'
 
 const UserScreen = (props) => {
   useEffect(() => {
@@ -51,28 +53,27 @@ const UserScreen = (props) => {
       });
   };
 
-  const updateUser = async (key, value) => {
-    const dbRef = firebase.firestore().collection("users").doc(props.extraData);
-    await dbRef.set({ ...user, [key]:value });
-    if(key === "imageID")
-      getImageByID(value);
+  const updateImage = async (value) => {
+    const dbRef = firebase.firestore().collection("users").doc(props.userID);
+    await dbRef.set({ ...user,  imageID:value });
+    getImageByID(value);
   };
 
   const pickImage = async () => {
     if (user.imageID) deleteImage();
-
+    
     const permission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (permission.granted) {
-        const resulImage = await ImagePicker.launchImageLibraryAsync({
-        allowsEditing: true,
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        aspect: [3, 3],
-        quality: 1,
-      });
+    if (permission.granted) {
+      const resulImage = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      aspect: [3, 3],
+      quality: 1,
+    });
 
       if (!resulImage.cancelled) {
         setLoading(true);
-        const uuid = uuid4();
+        const uuid = uuidv4()
         setUser({ ...user, imageID: uuid });
         uploadImage(resulImage.uri)
           .then((resolve) => {
@@ -80,7 +81,7 @@ const UserScreen = (props) => {
             ref
               .put(resolve)
               .then((resolve) => {
-                updateUser("imageID", uuid);
+                updateImage(uuid);
                 Alert.alert("Imagen subida correctamente");
               })
               .catch((err) => {
@@ -111,7 +112,7 @@ const UserScreen = (props) => {
       setImage("");
       global.image = ""
     }
-    
+    setLoading(false);
   };
 
   const deleteImage = () => {
@@ -165,9 +166,10 @@ const UserScreen = (props) => {
           keyboardVerticalOffset="100"
         >
           <ScrollView contentContainerStyle={styles.container}>
-            <ProfilePicture image={image} styleContainer={styles.imgProfile} />
+            <ProfilePicture image={image} name={user.name} color={user.avatarColor} style={styles.imgProfile} 
+            styleTitle={styles.userStyle}/>
             <Text style={styles.userStyle}>{user.username}</Text>
-            <TouchableOpacity style={styles.editButton} onPress={pickImage}>
+            <TouchableOpacity style={styles.editButton} onPress= {pickImage}>
               <Icon
                 type="font-awesome"
                 name="pencil"
