@@ -16,7 +16,7 @@ import ContentLoader, {
 } from "react-native-easy-content-loader";
 import ProfilePicture from "../../components/ProfilePicture";
 import "../../global";
-import { Icon } from "react-native-elements";
+import { Icon, Input } from "react-native-elements";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import { v4 as uuidv4 } from "uuid";
@@ -65,6 +65,9 @@ const UserScreen = (props) => {
   });
   const [loading, setLoading] = useState(true);
   const [image, setImage] = useState("");
+  const [changing, setChanging] = useState(false)
+  const [icon, setIcon] = useState("pencil")
+  const [changeName, setChangeName] = useState(null)
 
   const getUserByID = async (id) => {
     const dbRef = firebase.firestore().collection("users").doc(id);
@@ -89,10 +92,10 @@ const UserScreen = (props) => {
       });
   };
 
-  const updateImage = async (value) => {
+  const updateUser = async (key ,value) => {
     const dbRef = firebase.firestore().collection("users").doc(props.userID);
-    await dbRef.set({ ...user, imageID: value });
-    getImageByID(value);
+    await dbRef.set({ ...user, [key]: value });
+    if(key === "imageID") getImageByID(value);
   };
 
   const pickImage = async () => {
@@ -117,7 +120,7 @@ const UserScreen = (props) => {
             ref
               .put(resolve)
               .then((resolve) => {
-                updateImage(uuid);
+                updateUser("imageID", uuid);
                 Alert.alert("Imagen subida correctamente");
               })
               .catch((err) => {
@@ -184,6 +187,19 @@ const UserScreen = (props) => {
     });
   };
 
+  const handlerIconPress = () => {
+    if(icon === "pencil"){
+      setIcon("check")
+      setChangeName(user.name)
+      setChanging(true) 
+    }else{
+      setIcon("pencil")
+      setUser({...user, name: changeName})
+      updateUser("name", changeName)
+      setChanging(false)
+    }
+  }
+
   return (
     <SafeAreaView style={styles.areaview}>
       <ContentLoader
@@ -223,8 +239,21 @@ const UserScreen = (props) => {
             </TouchableOpacity>
             <View style={styles.informationContainer}>
               <View style={styles.shadow}>
+                {/* TURKO CAMBIA ESTO................................................ */}
                 <Text style={styles.titleInformation}>Nombre</Text>
-                <Text style={styles.subtitleInformation}>{user.name}</Text>
+                <Icon type="font-awesome" name={icon} size={20} 
+                color="#2c3e50" 
+                onPress={handlerIconPress}
+
+                />
+                {
+                  (changing)
+                  ? 
+                    <Input placeholder="Nombre Completo" value={changeName} 
+                    onChangeText={(value) => setChangeName(value)}/>                    
+                  :
+                    <Text style={styles.subtitleInformation}>{user.name}</Text>
+                }
               </View>
               <View style={styles.shadow}>
                 <Text style={styles.titleInformation}>Correo Electrónico</Text>
