@@ -6,3 +6,4 @@ export { default as LoadScreen } from "./LoadScreen/LoadScreen";
 export { default as TasksScreen } from "./TasksScreen/TasksScreen";
 export { default as CalendarScreen } from "./CalendarScreen/CalendarScreen";
 export { default as UserScreen } from "./UserScreen/UserScreen";
+export { default as CreateTaskScreen } from "./CreateTaskScreen/CreateTaskScreen";
