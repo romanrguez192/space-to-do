@@ -85,7 +85,7 @@ export default function App() {
         <Drawer.Screen
           name="Crear Tarea"
           component={CreateTaskScreen}
-          options={{ headerShown: false }}
+          options={{ headerShown: true }}
         />
         <Drawer.Screen
           name="Calendario"

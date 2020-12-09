@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { Input, Icon, ListItem, Avatar, Overlay } from "react-native-elements";
 import styles from "./styles";
@@ -19,6 +20,7 @@ import { Appbar, DefaultTheme } from "react-native-paper";
 const ListsScreen = (props) => {
   const [visibleOverlay, setVisibleOverlay] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [creatingList, setCreatingList] = useState(false);
   const [lists, setLists] = useState(null);
 
   const CustomHeader = () => {
@@ -90,7 +92,7 @@ const ListsScreen = (props) => {
   }
 
   const toggleOverlay = () => {
-    setVisibleOverlay(!visibleOverlay);
+    if (!creatingList) setVisibleOverlay(!visibleOverlay);
   };
 
   const openList = (list) => {
@@ -108,7 +110,7 @@ const ListsScreen = (props) => {
       setList({ ...list, [name]: value });
     };
 
-    const createList = () => {
+    const createList = async () => {
       if (list.name.trim() === "" || list.theme === "") {
         Alert.alert(
           "Error",
@@ -121,7 +123,9 @@ const ListsScreen = (props) => {
 
       const listObj = { ...list, createdBy: props.route.params.userID };
 
-      firebase
+      setCreatingList(true);
+
+      await firebase
         .firestore()
         .collection("lists")
         .add(listObj)
@@ -129,14 +133,16 @@ const ListsScreen = (props) => {
           toggleOverlay();
           Alert.alert(
             "Lista creado",
-            "¡Tu lista ha sido creada correctamente! Vamos a verla."
+            "¡Tu lista ha sido creada correctamente!"
           );
-          openList({ ...listObj, id: ref });
+          openList({ ...listObj, id: String(ref) });
         })
         .catch((error) => {
           // TODO: Alertas de errores...
           console.error("Error ", error);
         });
+
+      setCreatingList(false);
     };
 
     const colors = [
@@ -192,31 +198,31 @@ const ListsScreen = (props) => {
         <View style={styles.scrollContainer}>
           <ScrollView
             horizontal={true}
-              style={{
-                alignContent: 'center',
-                flexDirection: "row",
-                paddingBottom: 20,
-                marginLeft: 10,
-                marginRight: 10,
-                height: 40,
+            style={{
+              alignContent: "center",
+              flexDirection: "row",
+              paddingBottom: 20,
+              marginLeft: 10,
+              marginRight: 10,
+              height: 40,
             }}
           >
-              {colors.map((color) => {
-                return (
-                  <TouchableOpacity
-                    key={color}
-                    onPress={() => setList({ ...list, theme: color })}
-                    style={{ paddingRight: 5, height: 40 }}
-                  >
-                    <Icon
-                      type="font-awesome"
-                      name={color == list.theme ? "check-circle" : "circle"}
-                      color={color}
-                      size={40}
-                    />
-                  </TouchableOpacity>
-                );
-              })}
+            {colors.map((color) => {
+              return (
+                <TouchableOpacity
+                  key={color}
+                  onPress={() => setList({ ...list, theme: color })}
+                  style={{ paddingRight: 5, height: 40 }}
+                >
+                  <Icon
+                    type="font-awesome"
+                    name={color == list.theme ? "check-circle" : "circle"}
+                    color={color}
+                    size={40}
+                  />
+                </TouchableOpacity>
+              );
+            })}
           </ScrollView>
         </View>
         <TouchableOpacity style={styles.button} onPress={() => createList()}>
@@ -252,7 +258,15 @@ const ListsScreen = (props) => {
     <View style={styles.vista}>
       <CustomHeader />
       <Overlay isVisible={visibleOverlay} onBackdropPress={toggleOverlay}>
-        <CreateList />
+        {creatingList ? (
+          <ActivityIndicator
+            size="large"
+            color="#9e9e9e"
+            style={{ margin: 50 }}
+          />
+        ) : (
+          <CreateList />
+        )}
       </Overlay>
       <FlatList
         data={lists}

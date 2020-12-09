@@ -40,7 +40,7 @@ const TasksScreen = (props) => {
         <Appbar.Content title={props.route.params.list.name} />
         <Appbar.Action
           icon="plus"
-          onPress={() => props.navigation.navigate("Crear Tarea")}
+          onPress={() => props.navigation.navigate("Crear Tarea", {list: props.route.params.list})}
         />
         <Appbar.Action icon="dots-vertical" />
       </Appbar.Header>

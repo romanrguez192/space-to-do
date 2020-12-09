@@ -27,5 +27,7 @@ npm install react-native-paper
 
 npm install react-native-easy-content-loader
 
- npm install react-native-calendars
+npm install react-native-calendars
+
+expo install @react-native-community/datetimepicker
 ```
