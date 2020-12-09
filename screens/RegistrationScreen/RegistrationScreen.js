@@ -135,7 +135,10 @@ const RegistrationScreen = (props) => {
     }
 
     const colorHEX = () => {
-      const colores = ["#e67e22", "#8e44ad", "#1abc9c", "#e74c3c", "#16a085"];
+      const colores = [
+        "#e67e22", "#8e44ad", "#1abc9c", "#16a085", "#0097e6", "#273c75", "#487eb0",
+        "#fbc531", "#f53b57", "#3c40c6", "#ff5e57", "#485460", "#00d8d6", "#574b90",
+                      ];
       return colores[(Math.random() * (colores.length - 1)).toFixed()];
     };
 

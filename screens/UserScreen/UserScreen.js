@@ -185,28 +185,6 @@ const UserScreen = (props) => {
       })
   }
 
-
-  const deleteAccount = () => {
-    const credential = firebase.default.auth.EmailAuthProvider.credential(user.email, pass)
-    const userRef = firebase.default.auth().currentUser
-    userRef.reauthenticateWithCredential(credential).then(() => {
-      deleteListsAndTasks()
-
-      if(user.imageID) deleteImage(user.imageID)
-
-      const docUserRef = firebase.default.firestore().collection('users').doc(user.id).delete().then(() => {
-        Alert.alert("Se elimino su cuenta satisfactoriamente.")
-      })
-
-      userRef.delete().catch(() => {
-        Alert.alert("Ocurrió un error al intentar eliminar la cuenta.")
-      })
-
-    }).catch(() => {
-      Alert.alert("Ocurrió un error al intentar eliminar la cuenta.")
-    })
-  }
-
   const deleteImage = () => {
     if (!(user.imageID === "")) {
       const imageRef = firebase.default
@@ -224,6 +202,35 @@ const UserScreen = (props) => {
         .catch((err) => console.log("Cannot be deleted: " + err));
     }
   };
+
+  const deleteAccount = () => {
+    firebase.default.firestore().collection('users').doc(props.userID).delete().catch(() => {
+      Alert.alert("Ocurrió un error al intentar eliminar la cuenta.")
+      return
+    })
+    const credential = firebase.auth.EmailAuthProvider.credential(user.email, pass)
+    const userRef = firebase.auth().currentUser
+    userRef.reauthenticateWithCredential(credential).then(() => {
+      deleteListsAndTasks()
+
+      if(user.imageID) {
+        const imageRef = firebase.storage().ref(`images/${user.imageID}.jpg`);
+        imageRef.delete().catch((err) => {
+          console.log("No se pudo eliminar la imagen: " + err)
+        })
+      }
+
+      userRef.delete().then(() => {
+        Alert.alert("Cuenta eliminada satisfactoriamente")
+      })
+      .catch(() => {
+        Alert.alert("Ocurrió un error al intentar eliminar la cuenta.")
+      })
+
+    }).catch(() => {
+      Alert.alert("Ocurrió un error al intentar eliminar la cuenta.")
+    })
+  }
 
   const uploadImage = (uri) => {
     return new Promise((resolve, reject) => {
