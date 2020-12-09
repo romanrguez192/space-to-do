@@ -246,11 +246,6 @@ const UserScreen = (props) => {
       setChangeName(user.name)
       setChanging(true) 
     }else{
-      if(changeName.trim().indexOf(" ") != -1){
-        Alert.alert("El nombre de usuario no puede contener espacios.")
-      }else if(changeName.length < 4){
-        Alert.alert("El nombre de usuario tiene que tener mas de 3 caracteres.")
-      }else{
         if(changeName !== user.name){
           global.name = changeName
           setUser({...user, name: changeName})
@@ -258,7 +253,6 @@ const UserScreen = (props) => {
         }
         setIcon("pencil")
         setChanging(false)
-      }
       
     }
   }
@@ -315,10 +309,11 @@ const UserScreen = (props) => {
               <View style={styles.shadow}>
                 <View style={{flexDirection: 'row', marginTop: 20}}>
                   <Text style={styles.titleInformation}>Nombre</Text>
-                  <Icon type="font-awesome" name={icon} size={20} 
-                  color="#2c3e50" 
-                  onPress={handlerIconPress}
-                  />
+                  <TouchableOpacity onPress={handlerIconPress} style={{width: 40}}>
+                    <Icon type="font-awesome" name={icon} size={20} 
+                    color="#2c3e50" 
+                    />
+                  </TouchableOpacity>
                 </View>
 
                 {

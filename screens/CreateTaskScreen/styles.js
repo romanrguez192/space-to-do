@@ -20,9 +20,6 @@ export default StyleSheet.create({
     paddingRight: 25,
     paddingBottom: 25,
   },
-  inputText: {
-    color: "#2d3f50",
-  },
   button: {
     marginTop: 20,
     paddingHorizontal: 80,
@@ -33,5 +30,20 @@ export default StyleSheet.create({
   buttonText: {
     fontSize: 20,
     color: "#fff",
+  },
+  shadow: {
+    marginTop: 25,
+    marginBottom: 25,
+    borderRadius: 10,
+    width: windowWidth * 0.8,
+    backgroundColor:"#fff",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
   },
 });

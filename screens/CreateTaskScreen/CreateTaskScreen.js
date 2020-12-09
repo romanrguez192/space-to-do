@@ -90,18 +90,19 @@ const CreateTaskScreen = (props) => {
         keyboardVerticalOffset="100"
       >
         <ScrollView contentContainerStyle={styles.container}>
-          <Input
-            labelStyle={styles.inputText}
-            placeholder="Un placeholder útil? O no"
-            label="Título"
-            onChangeText={(value) => handleChangeText("title", value)}
-          />
-          <Input
-            labelStyle={styles.inputText}
-            label="Descripción"
-            onChangeText={(value) => handleChangeText("description", value)}
-            multiline={true}
-          />
+          <View style={styles.shadow}>
+            <Input
+              labelStyle={{marginTop: 20, color: "#2d3f50"}}
+              label="Título"
+              onChangeText={(value) => handleChangeText("title", value)}
+            />
+            <Input
+              labelStyle={{color: "#2d3f50"}}
+              label="Descripción"
+              onChangeText={(value) => handleChangeText("description", value)}
+              multiline={true}
+            />
+          </View>
           <Text>{date.toString()}</Text>
           <Button onPress={showDatepicker} title="Show date picker!" />
 
