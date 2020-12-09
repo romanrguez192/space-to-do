@@ -333,16 +333,16 @@ const UserScreen = (props) => {
                 }
               </View>
 
-              <Overlay isVisible={visibleOverlay} onBackdropPress={toggleOverlay}>
-                <View>
-                  <Text>
+              <Overlay contentContainerStyle={styles.overStyle} isVisible={visibleOverlay} onBackdropPress={toggleOverlay}>
+                <View style={styles.overStyle}>
+                  <Text style={{fontWeight: 'bold', textAlign: 'center', fontSize: 17, marginTop: 15}}>
                     Para poder proceder a la eliminación de su cuenta, necesitamos asegurarnos que se trata del usuario de la cuenta, a continuación ingrese su contraseña:
                   </Text>
                   <Input onChangeText={(value) => pass=value}/>
-                  <Button onPress={deleteAccount}>Delete</Button>
+                  <Button onPress={deleteAccount}>ELIMINAR</Button>
                 </View>
-
               </Overlay>
+
               <View style={styles.shadow}>
                 <Text style={styles.titleInformation}>Correo Electrónico</Text> 
                 <Text style={styles.subtitleInformation}>{user.email}</Text>

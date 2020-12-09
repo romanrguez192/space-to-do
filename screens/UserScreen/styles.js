@@ -112,4 +112,9 @@ export default StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
   },
+  overStyle: {
+    borderRadius: 10,
+    width: windowWidth * 0.7,
+    alignItems: 'center',
+  },
 });
