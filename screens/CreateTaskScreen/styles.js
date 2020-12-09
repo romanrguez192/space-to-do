@@ -46,4 +46,8 @@ export default StyleSheet.create({
     shadowRadius: 5.46,
     elevation: 9,
   },
+  pickerStyle: {
+    backgroundColor: "#fff",
+    width: windowWidth * 0.7,
+  }
 });

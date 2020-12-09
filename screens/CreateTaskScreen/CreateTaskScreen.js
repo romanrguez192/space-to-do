@@ -111,6 +111,7 @@ const CreateTaskScreen = (props) => {
           {show && (
             <DateTimePicker
               value={date}
+              style={styles.pickerStyle}
               mode={mode}
               is24Hour={true}
               display="default"
