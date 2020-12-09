@@ -16,11 +16,11 @@ import ContentLoader, {
 } from "react-native-easy-content-loader";
 import ProfilePicture from "../../components/ProfilePicture";
 import "../../global";
-import { Icon, Input } from "react-native-elements";
+import { Icon, Input, Overlay } from "react-native-elements";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import { v4 as uuidv4 } from "uuid";
-import { Appbar, DefaultTheme } from "react-native-paper";
+import { Appbar, Button, DefaultTheme } from "react-native-paper";
 import { color } from "react-native-reanimated";
 
 const UserScreen = (props) => {
@@ -64,11 +64,13 @@ const UserScreen = (props) => {
     avatarColor: "",
     id: "",
   });
+  let pass
   const [loading, setLoading] = useState(true);
   const [image, setImage] = useState("");
   const [changing, setChanging] = useState(false)
   const [icon, setIcon] = useState("pencil")
   const [changeName, setChangeName] = useState(null)
+  const [visibleOverlay, setVisibleOverlay] = useState(false);
 
   const getUserByID = async (id) => {
     const dbRef = firebase.firestore().collection("users").doc(id);
@@ -78,6 +80,11 @@ const UserScreen = (props) => {
     getImageByID(resul.imageID);
     setLoading(false);
   };
+
+  const toggleOverlay = () => {
+    setVisibleOverlay(!visibleOverlay);
+  };
+
 
   const singout = () => {
     firebase
@@ -155,6 +162,51 @@ const UserScreen = (props) => {
     setLoading(false);
   };
 
+  const deleteListsAndTasks = () => {
+    const listsRef = firebase.firestore().collection("lists");
+      listsRef.where("createdBy", "==", user.id)
+      .onSnapshot((snapshot) => {
+        snapshot.docs.forEach((doc) => {
+
+          const taskRef = firebase.firestore().collection('tasks')
+          taskRef.where("listID", "==" , doc.ref.id)
+          .onSnapshot((snapshot1) => {
+            snapshot1.docs.forEach((docc) => {
+              docc.ref.delete().catch(() => {
+                Alert.alert("Ocurrió un error al intentar eliminar la cuenta.")
+              })
+            })
+          })
+
+          doc.ref.delete().catch(() => {
+            Alert.alert("Ocurrió un error al intentar eliminar la cuenta.")
+          })
+        })
+      })
+  }
+
+
+  const deleteAccount = () => {
+    const credential = firebase.default.auth.EmailAuthProvider.credential(user.email, pass)
+    const userRef = firebase.default.auth().currentUser
+    userRef.reauthenticateWithCredential(credential).then(() => {
+      deleteListsAndTasks()
+
+      if(user.imageID) deleteImage(user.imageID)
+
+      const docUserRef = firebase.default.firestore().collection('users').doc(user.id).delete().then(() => {
+        Alert.alert("Se elimino su cuenta satisfactoriamente.")
+      })
+
+      userRef.delete().catch(() => {
+        Alert.alert("Ocurrió un error al intentar eliminar la cuenta.")
+      })
+
+    }).catch(() => {
+      Alert.alert("Ocurrió un error al intentar eliminar la cuenta.")
+    })
+  }
+
   const deleteImage = () => {
     if (!(user.imageID === "")) {
       const imageRef = firebase.default
@@ -194,10 +246,20 @@ const UserScreen = (props) => {
       setChangeName(user.name)
       setChanging(true) 
     }else{
-      setIcon("pencil")
-      setUser({...user, name: changeName})
-      updateUser("name", changeName)
-      setChanging(false)
+      if(changeName.trim().indexOf(" ") != -1){
+        Alert.alert("El nombre de usuario no puede contener espacios.")
+      }else if(changeName.length < 4){
+        Alert.alert("El nombre de usuario tiene que tener mas de 3 caracteres.")
+      }else{
+        if(changeName !== user.name){
+          global.name = changeName
+          setUser({...user, name: changeName})
+          updateUser("name", changeName)
+        }
+        setIcon("pencil")
+        setChanging(false)
+      }
+      
     }
   }
 
@@ -238,7 +300,7 @@ const UserScreen = (props) => {
                 style={styles.iconStyle}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.deleteButton} onPress={pickImage}>
+            <TouchableOpacity style={styles.deleteButton} onPress={deleteImage}>
               <Icon
                 type="font-awesome"
                 name="trash"
@@ -263,13 +325,24 @@ const UserScreen = (props) => {
                   (changing)
                   ? 
                     <Input style={styles.inputStyle} placeholder="Nombre Completo" value={changeName} 
-                    onChangeText={(value) => setChangeName(value)}/>                    
+                    onChangeText={(value) => setChangeName(value)} autoCapitalize="words"/>                    
                   :
                     <Text style={styles.subtitleInformation}>{user.name}</Text>
                 }
               </View>
+
+              <Overlay isVisible={visibleOverlay} onBackdropPress={toggleOverlay}>
+                <View>
+                  <Text>
+                    Para poder proceder a la eliminación de su cuenta, necesitamos asegurarnos que se trata del usuario de la cuenta, a continuación ingrese su contraseña:
+                  </Text>
+                  <Input onChangeText={(value) => pass=value}/>
+                  <Button onPress={deleteAccount}>Delete</Button>
+                </View>
+
+              </Overlay>
               <View style={styles.shadow}>
-                <Text style={styles.titleInformation}>Correo Electrónico</Text>
+                <Text style={styles.titleInformation}>Correo Electrónico</Text> 
                 <Text style={styles.subtitleInformation}>{user.email}</Text>
               </View>
               <View style={styles.shadow}>
@@ -278,7 +351,7 @@ const UserScreen = (props) => {
                   {user.gender === "M" ? "Masculino" : "Femenino"}
                 </Text>
               </View>
-              <TouchableOpacity style={styles.deleteAccount}>
+              <TouchableOpacity style={styles.deleteAccount} onPress={toggleOverlay}>
                 <Text style={{color: "#e54e42", fontSize: 15, fontWeight: "bold"}}>ELIMINAR CUENTA</Text>
               </TouchableOpacity>
             </View>

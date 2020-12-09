@@ -36,6 +36,7 @@ function Sidebar({ ...props }) {
     const doc = await dbRef.get();
     const resul = doc.data();
     setUser(resul);
+    global.name = resul.name
     getImageByID(resul.imageID);
     setLoading(false)
   };
@@ -91,9 +92,9 @@ function Sidebar({ ...props }) {
               }
               style={{ flexDirection: "row", marginTop: 15 }}
             >
-              <ProfilePicture style={{zIndex: 1}} name={user.name} color={user.avatarColor} image={global.image}/>
+              <ProfilePicture style={{zIndex: 1}} name={global.name} color={user.avatarColor} image={global.image}/>
               <View style={{ marginLeft: 10 }}>
-                <Title style={styles.title}>{user.name}</Title>
+                <Title style={styles.title}>{global.name}</Title>
                 <Caption style={styles.caption}>@{user.username}</Caption>
               </View>
             </TouchableOpacity>
