@@ -21,6 +21,8 @@ import { Input, Icon, ListItem, Avatar, Overlay } from "react-native-elements";
 const TasksScreen = (props) => {
   const [loading, setLoading] = useState(true);
   const [tasks, setTasks] = useState(null);
+  const description, title;
+
 
   const CustomHeader = () => {
     return (
@@ -85,10 +87,24 @@ const TasksScreen = (props) => {
 
   //Elimina una tarea a partir de su id
   const deleteTask = (taskID) => {
-    const taskRef = firebase.default.firestore().collection('tasks').doc(taskID)
+    const taskRef = firebase.firestore().collection('tasks').doc(taskID)
     taskRef.delete().catch(() => {
       Alert.alert("Hubo un error al intentar eliminar su tarea, revise su conexión a internet.")
     })
+  }
+
+  const addTask = () => {
+    const taskRef = firebase.default.firestore().collection('tasks')
+    taskRef.add({
+      title,
+      description,
+      listID: props.route.params.list.id
+    }).then(() => {
+      getTasks()
+    }).catch(() => {
+      Alert.alert("No se pudo agregar la tarea, revise su conexión a internet.")
+    })
+
   }
 
   const taskss = [
