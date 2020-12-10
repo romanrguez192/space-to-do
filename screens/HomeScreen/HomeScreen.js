@@ -88,17 +88,7 @@ const HomeScreen = (props) => {
           keyboardVerticalOffset="100"
         >
           <ScrollView contentContainerStyle={styles.container}>
-            <View style={styles.shadow}>
-              <Text style={styles.messageStyle}>Miguel....</Text>
-            </View>
-
-            <View
-              style={{
-                borderBottomColor: "#bbb",
-                borderBottomWidth: 1,
-              }}
-            />
-            <View>{/* TODO: AGREGAR LA LISTA DE TAREAS POR CULMINAR */}</View>
+            <Text style={styles.messageStyle}>TAREAS POR CULMINAR</Text>
           </ScrollView>
         </KeyboardAvoidingView>
       </ContentLoader>

@@ -80,123 +80,54 @@ const CalendarScreen = (props) => {
   };
 
   return (
-    <ScrollView>
-      <CustomHeader />
-      <Calendar
-        enableSwipeMonths={true}
-        onDayPress={onDayPress}
-        //estilo de la fecha seleccionada
-        markedDates={{
-          [selected]: {
-            selected: true,
-            disableTouchEvent: true,
-            selectedColor: "#3B99D8",
-            selectedTextColor: "white",
-          },
-        }}
-        style={styles.calendar}
-        theme={{
-          //Calendario
-          calendarBackground: "#E8E8F4",
-          //Mes
-          monthTextColor: "#ffffff",
-          textMonthFontSize: 22,
-          //Días
-          textDayFontSize: 16,
-          todayTextColor: "#3B99D8",
-          dayTextColor: "#000000",
-          //Flecha
-          arrowColor: "white",
-          "stylesheet.calendar.header": {
-            //mes header
-            header: {
-              borderRadius: 3,
-              flexDirection: "row",
-              backgroundColor: "#3B99D8",
-              justifyContent: "space-between",
+    <View>
+    <CustomHeader />
+     <ScrollView>
+        <Calendar
+          enableSwipeMonths={true}
+          onDayPress={onDayPress}
+          //estilo de la fecha seleccionada
+          markedDates={{
+            [selected]: {
+              selected: true,
+              disableTouchEvent: true,
+              selectedColor: "#3B99D8",
+              selectedTextColor: "white",
             },
-            //dias header
-            dayHeader: {
-              flexDirection: "row",
-              justifyContent: "space-between",
-              color: "#3B99D8",
-              fontWeight: "bold",
+          }}
+          style={styles.calendar}
+          theme={{
+            //Calendario
+            calendarBackground: "#E8E8F4",
+            //Mes
+            monthTextColor: "#ffffff",
+            textMonthFontSize: 22,
+            //Días
+            textDayFontSize: 16,
+            todayTextColor: "#3B99D8",
+            dayTextColor: "#000000",
+            //Flecha
+            arrowColor: "white",
+            "stylesheet.calendar.header": {
+              //mes header
+              header: {
+                borderRadius: 3,
+                flexDirection: "row",
+                backgroundColor: "#3B99D8",
+                justifyContent: "space-between",
+              },
+              //dias header
+              dayHeader: {
+                flexDirection: "row",
+                justifyContent: "space-between",
+                color: "#3B99D8",
+                fontWeight: "bold",
+              },
             },
-          },
-        }}
-      ></Calendar>
-
-      <View style={styles.shadow}>
-        <TouchableOpacity>
-          <Text
-            style={{
-              fontSize: 20,
-              color: "#2d3f50",
-              margin: 10,
-              fontWeight: "400",
-            }}
-          >
-            Tarea #1
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.shadow}>
-        <TouchableOpacity>
-          <Text
-            style={{
-              fontSize: 20,
-              color: "#2d3f50",
-              margin: 10,
-              fontWeight: "400",
-            }}
-          >
-            Tarea #2
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.shadow}>
-        <TouchableOpacity>
-          <Text
-            style={{
-              fontSize: 20,
-              color: "#2d3f50",
-              margin: 10,
-              fontWeight: "400",
-            }}
-          >
-            Tarea #3
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.shadow}>
-        <TouchableOpacity>
-          <Text
-            style={{
-              fontSize: 20,
-              color: "#2d3f50",
-              margin: 10,
-              fontWeight: "400",
-            }}
-          >
-            Tarea #4
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.shadow}>
-        <TouchableOpacity>
-          <Text
-            style={{
-              fontSize: 20,
-              color: "#2d3f50",
-              margin: 10,
-              fontWeight: "400",
-            }}
-          >
-            Tarea #5
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+          }}
+        ></Calendar>
+     </ScrollView>
+    </View>
   );
 };
 

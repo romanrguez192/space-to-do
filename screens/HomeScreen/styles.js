@@ -10,6 +10,7 @@ export default StyleSheet.create({
   areaview: {
     flex: 1,
     backgroundColor: "#fff",
+    
   },
   keyboardstyle: {
     flexGrow: 1,
@@ -50,38 +51,8 @@ export default StyleSheet.create({
     textAlign: "center",
     overflow: "hidden",
     paddingTop: 20,
-  },
-  pantContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
-  },
-  titleIMG:{
-    color: "#fff"
-  },
-  categoriesPhoto: {
-    width: windowWidth * 0.8,
-    height: windowHeight * 0.25,
-    borderRadius: 30,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 7,
-    },
-    shadowOpacity: 0.43,
-    shadowRadius: 9.51,
-    elevation: 15,
-  },
-  categoriesName: {
-    flex: 1,
-    fontSize: 20,
     fontWeight: 'bold',
-    textAlign: 'center',
-    marginTop: 8,
-    height: 12,
-    color: "#2d3f50"
+    fontFamily: 'Arial Rounded MT Bold',
   },
   categoriesItemContainer: {
     flex: 1,
