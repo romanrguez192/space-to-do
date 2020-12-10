@@ -91,6 +91,21 @@ const ListsScreen = (props) => {
     );
   }
 
+  //Elimina una lista y sus tareas, y recibe como parametro el id de la lista
+  const deleteList = (listID) => {
+    const listRef = firebase.default.firestore().collection("lists").doc(listID);
+    listRef.delete().then(() => {
+      const tasks = firebase.default.firestore().collection('tasks').where("listID", "==", listID)
+      tasks.onSnapshot(snapshot => {
+        snapshot.docs.forEach(doc => {
+          doc.ref.delete()
+        })
+      })
+    }).catch(() => {
+      Alert.alert("Ocurrio un error al eliminar esta lista, revise su conexión a internet.")
+    })
+  } 
+
   const toggleOverlay = () => {
     if (!creatingList) setVisibleOverlay(!visibleOverlay);
   };

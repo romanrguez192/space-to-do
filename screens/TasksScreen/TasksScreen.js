@@ -83,6 +83,14 @@ const TasksScreen = (props) => {
     }
   };
 
+  //Elimina una tarea a partir de su id
+  const deleteTask = (taskID) => {
+    const taskRef = firebase.default.firestore().collection('tasks').doc(taskID)
+    taskRef.delete().catch(() => {
+      Alert.alert("Hubo un error al intentar eliminar su tarea, revise su conexión a internet.")
+    })
+  }
+
   const taskss = [
     {
       id: "a",
