@@ -61,6 +61,21 @@ export default function App() {
   if (loading) {
     return <LoadScreen />;
   }
+  
+  const TasksStack = (props) => {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen name="Tareas" options={{ headerShown: false }}>
+          {(propsStack) => <TasksScreen {...propsStack} list={props.route.params.list} />}
+        </Stack.Screen>
+        <Stack.Screen
+          name="Crear Tarea"
+          component={CreateTaskScreen}
+          options={{ headerShown: true }}
+        />
+      </Stack.Navigator>
+    )
+  }
 
   const DrawerNavigator = () => {
     return (
@@ -79,13 +94,8 @@ export default function App() {
         />
         <Drawer.Screen
           name="Tareas"
-          component={TasksScreen}
+          component={TasksStack}
           options={{ headerShown: false }}
-        />
-        <Drawer.Screen
-          name="Crear Tarea"
-          component={CreateTaskScreen}
-          options={{ headerShown: true }}
         />
         <Drawer.Screen
           name="Calendario"

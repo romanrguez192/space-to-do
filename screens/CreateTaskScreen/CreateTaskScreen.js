@@ -25,16 +25,23 @@ const CreateTaskScreen = (props) => {
   const [task, setTask] = useState({
     title: "",
     description: "",
+    limit: new Date(),
   });
-  
+
+  useLayoutEffect(() => {
+    props.navigation.setOptions({
+      header: () => <CustomHeader />,
+    });
+  }, [props.navigation]);
+
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
 
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
+    const currentDate = selectedDate || task.limit;
     setShow(Platform.OS === "ios");
-    setDate(currentDate);
+    setTask({...task, limit: currentDate});
   };
 
   const showMode = (currentMode) => {
@@ -74,10 +81,6 @@ const CreateTaskScreen = (props) => {
     );
   };
 
-  props.navigation.setOptions({
-    header: () => <CustomHeader />,
-  });
-
   const handleChangeText = (name, value) => {
     setTask({ ...task, [name]: value });
   };
@@ -93,28 +96,27 @@ const CreateTaskScreen = (props) => {
         <ScrollView contentContainerStyle={styles.container}>
           <View style={styles.shadow}>
             <Input
-              labelStyle={{marginTop: 20, color: "#2d3f50"}}
+              labelStyle={{ marginTop: 20, color: "#2d3f50" }}
               label="Título"
               onChangeText={(value) => handleChangeText("title", value)}
             />
             <Input
-              labelStyle={{color: "#2d3f50"}}
+              labelStyle={{ color: "#2d3f50" }}
               label="Descripción"
               onChangeText={(value) => handleChangeText("description", value)}
               multiline={true}
             />
           </View>
-          <Text>{date.toString()}</Text>
+          <Text>{task.limit.toString()}</Text>
           <Button onPress={showDatepicker} title="Show date picker!" />
 
           <Button onPress={showTimepicker} title="Show time picker!" />
 
           {show && (
             <DateTimePicker
-              value={date}
+              value={task.limit}
               style={styles.pickerStyle}
               mode={mode}
-              is24Hour={true}
               display="default"
               onChange={onChange}
             />
