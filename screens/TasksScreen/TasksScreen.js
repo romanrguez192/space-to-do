@@ -21,7 +21,7 @@ import { Input, Icon, ListItem, Avatar, Overlay } from "react-native-elements";
 const TasksScreen = (props) => {
   const [loading, setLoading] = useState(true);
   const [tasks, setTasks] = useState(null);
-  const description, title;
+  let description, title;
 
 
   const CustomHeader = () => {
