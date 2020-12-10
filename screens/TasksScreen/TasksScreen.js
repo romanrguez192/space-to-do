@@ -30,17 +30,17 @@ const TasksScreen = (props) => {
           roundness: 2,
           colors: {
             ...DefaultTheme.colors,
-            primary: props.route.params.list.theme,
+            primary: props.list.theme,
           },
         }}
       >
         <Appbar.BackAction
           onPress={() => props.navigation.navigate("Mis Listas")}
         />
-        <Appbar.Content title={props.route.params.list.name} />
+        <Appbar.Content title={props.list.name} />
         <Appbar.Action
           icon="plus"
-          onPress={() => props.navigation.navigate("Crear Tarea", {list: props.route.params.list})}
+          onPress={() => props.navigation.push("Crear Tarea", {list: props.list})}
         />
         <Appbar.Action icon="dots-vertical" />
       </Appbar.Header>
@@ -48,13 +48,13 @@ const TasksScreen = (props) => {
   };
 
   useEffect(() => {
-    getTasks(props.route.params.list.id);
+    getTasks(props.list.id);
   }, []);
 
   const getTasks = () => {
     const tasksRef = firebase.firestore().collection("tasks");
     tasksRef
-      .where("listID", "==", props.route.params.list.id)
+      .where("listID", "==", props.list.id)
       //.orderBy("createdAt", "desc")
       .onSnapshot((snapshot) => {
         const data = snapshot.docs.map((doc) => ({
@@ -110,7 +110,7 @@ const TasksScreen = (props) => {
               flexDirection="row"
               type="font-awesome"
               name="thumb-tack"
-              color={props.route.params.list.theme}
+              color={props.list.theme}
             />
             <Text numberOfLines={1} style={styles.nameList}>
               {item.title}
