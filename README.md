@@ -30,4 +30,8 @@ npm install react-native-easy-content-loader
 npm install react-native-calendars
 
 expo install @react-native-community/datetimepicker
+
+npm install --save react-native-collapsible
+
+npm install react-native-animatable --save
 ```
