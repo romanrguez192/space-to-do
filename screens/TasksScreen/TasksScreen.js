@@ -197,30 +197,11 @@ const TasksScreen = (props) => {
       <CustomHeader />
       <SafeAreaView style={styles.areaview}>
         {
-          accord.map(item => {
-            // <FlatList
-            //   data={tasks}
-            //   renderItem={renderList(item)}
-            //   keyExtractor={(item) => item.id}
-            // />
-            <View style={styles.shadow}>
-              <Accordion
-                activeSections={config.activeS}
-                sections={[
-                  {
-                    title: 'Nombre de la tarea',
-                    content: 'Descripcion de la tarea',
-                  },
-                ]}
-                touchableComponent={TouchableOpacity}
-                expandMultiple={config.multipleSelect}
-                renderHeader={renderHeader}
-                renderContent={renderContent}
-                duration={400}
-                onChange={setSections}
-              />
-            </View>
-          })
+          <FlatList
+            data={tasks}
+            renderItem={() => renderList(accord)}
+            keyExtractor={(item) => item.id}
+          />
         }
       </SafeAreaView>
     </View>
