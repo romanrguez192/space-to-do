@@ -170,6 +170,7 @@ const TasksScreen = (props) => {
           renderContent={renderContent}
           duration={400}
           onChange={setSections}
+          sectionContainerStyle={{paddingBottom: 10, paddingTop: 10}}
         />
       </View>
     );
@@ -193,14 +194,16 @@ const TasksScreen = (props) => {
   }
 
   return (
-    <ScrollView>
+      <>
       <CustomHeader />
-      <SafeAreaView style={styles.areaview}>
-        {
-          renderList(accord)
-        }
-      </SafeAreaView>
-    </ScrollView>
+      <ScrollView style={{backgroundColor: '#fff'}}>
+        <SafeAreaView style={styles.areaview}>
+          {
+            renderList(accord)
+          }
+        </SafeAreaView>
+      </ScrollView>
+      </>
   );
 };
 

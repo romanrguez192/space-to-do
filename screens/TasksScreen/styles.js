@@ -14,7 +14,7 @@ export default StyleSheet.create({
       },
       shadow: {
         borderRadius: 10,
-        marginTop: 10,
+        marginTop: 20,
         marginBottom: 10,
         marginLeft: 20,
         marginRight: 20,
@@ -78,7 +78,7 @@ export default StyleSheet.create({
         backgroundColor: '#fff',
       },
       active: {
-        backgroundColor: 'rgba(255,255,255,1)',
+        backgroundColor: '#bbbbbb50',
       },
       inactive: {
         backgroundColor: '#fff',
@@ -109,5 +109,8 @@ export default StyleSheet.create({
       multipleToggle__title: {
         fontSize: 16,
         marginRight: 8,
+      },
+      areaview: {
+        backgroundColor: '#fff',
       },
 });
