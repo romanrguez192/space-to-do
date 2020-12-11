@@ -52,7 +52,6 @@ export default StyleSheet.create({
     overflow: "hidden",
     paddingTop: 20,
     fontWeight: 'bold',
-    fontFamily: 'Arial Rounded MT Bold',
   },
   categoriesItemContainer: {
     flex: 1,

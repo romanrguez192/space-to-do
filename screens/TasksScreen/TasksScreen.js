@@ -24,10 +24,15 @@ import {
 } from "react-native";
 import { Input, Icon, ListItem, Avatar, Overlay } from "react-native-elements";
 import { useFocusEffect } from "@react-navigation/native";
+import * as Animatable from 'react-native-animatable';
+import Collapsible from 'react-native-collapsible';
+import Accordion from 'react-native-collapsible/Accordion';
 
 const TasksScreen = (props) => {
   const [loading, setLoading] = useState(true);
   const [tasks, setTasks] = useState(null);
+
+  const [accord,setAccord] = useState([]);
 
   const CustomHeader = () => {
     return (
@@ -74,10 +79,23 @@ const TasksScreen = (props) => {
         .where("listID", "==", props.list.id)
         //.orderBy("createdAt", "desc")
         .onSnapshot((snapshot) => {
-          const data = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
+          // const data = snapshot.docs.map((doc) => ({
+          //   id: doc.id,
+          // ...doc.data(), 
+          // })); 
+
+          const data = [], aux = []
+          snapshot.docs.forEach(doc => {
+            data.push({
+              id: doc.id,
+              ...doc.data(), 
+            })
+            aux.push({
+              title: doc.data().title, 
+              content: doc.data().description,
+            })
+          })
+          setAccord(aux);
           setTasks(data);
           setLoading(false);
         })
@@ -94,25 +112,65 @@ const TasksScreen = (props) => {
     });
   };
 
-  const renderList = ({ item }) => {
+
+  const [config,setConfig] = useState({
+    activeS: [],
+    collapsed: true,
+    multipleSelect: false,
+  });
+
+
+  const toggleExpanded = () => {
+    setConfig({ ...config, collapsed: !config.collapsed });
+  };
+
+  const setSections = sections => {
+    setConfig({
+      ...config, activeS: sections.includes(undefined) ? [] : sections,
+    });
+  };
+
+  const renderContent = (section, _, isActive) => {
+    return (
+      <Animatable.View
+        duration={400}
+        style={[styles.content, isActive ? styles.active : styles.inactive]}
+        transition="backgroundColor"
+      >
+        <Animatable.Text duration={400} animation={isActive ? 'slideInDown' : undefined}>
+          {section.content}
+        </Animatable.Text>
+      </Animatable.View>
+    );
+  }
+
+  const renderHeader = (section, _, isActive) => {
+    return (
+      <Animatable.View
+        duration={400}
+        style={[styles.header, isActive ? styles.active : styles.inactive]}
+        transition="backgroundColor"
+      >
+        <Text style={styles.headerText}>{section.title}</Text>
+      </Animatable.View>
+    );
+  };
+
+
+
+  const renderList = (item) => {
     return (
       <View style={styles.shadow}>
-        <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity style={styles.buttonList}>
-            <Icon
-              flexDirection="row"
-              type="font-awesome"
-              name="thumb-tack"
-              color={props.list.theme}
-            />
-            <Text numberOfLines={1} style={styles.nameList}>
-              {item.title}
-            </Text>
-          </TouchableOpacity>
-          <View style={{ justifyContent: "flex-end", flex: 1 }}>
-            <Checkbox.Item status="indeterminate" style={{ right: 10 }} />
-          </View>
-        </View>
+        <Accordion
+          activeSections={config.activeS}
+          sections={item}
+          touchableComponent={TouchableOpacity}
+          expandMultiple={config.multipleSelect}
+          renderHeader={renderHeader}
+          renderContent={renderContent}
+          duration={400}
+          onChange={setSections}
+        />
       </View>
     );
   };
@@ -138,11 +196,32 @@ const TasksScreen = (props) => {
     <View>
       <CustomHeader />
       <SafeAreaView style={styles.areaview}>
-        <FlatList
-          data={tasks}
-          renderItem={renderList}
-          keyExtractor={(item) => item.id}
-        />
+        {
+          accord.map(item => {
+            // <FlatList
+            //   data={tasks}
+            //   renderItem={renderList(item)}
+            //   keyExtractor={(item) => item.id}
+            // />
+            <View style={styles.shadow}>
+              <Accordion
+                activeSections={config.activeS}
+                sections={[
+                  {
+                    title: 'Nombre de la tarea',
+                    content: 'Descripcion de la tarea',
+                  },
+                ]}
+                touchableComponent={TouchableOpacity}
+                expandMultiple={config.multipleSelect}
+                renderHeader={renderHeader}
+                renderContent={renderContent}
+                duration={400}
+                onChange={setSections}
+              />
+            </View>
+          })
+        }
       </SafeAreaView>
     </View>
   );
