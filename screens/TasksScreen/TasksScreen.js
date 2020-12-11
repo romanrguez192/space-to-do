@@ -165,7 +165,7 @@ const TasksScreen = (props) => {
           activeSections={config.activeS}
           sections={item}
           touchableComponent={TouchableOpacity}
-          expandMultiple={config.multipleSelect}
+          expandMultiple={false}
           renderHeader={renderHeader}
           renderContent={renderContent}
           duration={400}
@@ -193,18 +193,14 @@ const TasksScreen = (props) => {
   }
 
   return (
-    <View>
+    <ScrollView>
       <CustomHeader />
       <SafeAreaView style={styles.areaview}>
         {
-          <FlatList
-            data={tasks}
-            renderItem={() => renderList(accord)}
-            keyExtractor={(item) => item.id}
-          />
+          renderList(accord)
         }
       </SafeAreaView>
-    </View>
+    </ScrollView>
   );
 };
 
