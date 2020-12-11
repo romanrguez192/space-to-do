@@ -150,7 +150,7 @@ const ListsScreen = (props) => {
             "Lista creado",
             "¡Tu lista ha sido creada correctamente!"
           );
-          openList({ ...listObj, id: String(ref) });
+          openList({ ...listObj, id: ref.id });
         })
         .catch((error) => {
           // TODO: Alertas de errores...

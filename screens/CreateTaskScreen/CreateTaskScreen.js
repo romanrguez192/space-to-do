@@ -28,20 +28,19 @@ const CreateTaskScreen = (props) => {
     limit: new Date(),
   });
 
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+
   useLayoutEffect(() => {
     props.navigation.setOptions({
       header: () => <CustomHeader />,
     });
   }, [props.navigation]);
 
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState("date");
-  const [show, setShow] = useState(false);
-
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || task.limit;
     setShow(Platform.OS === "ios");
-    setTask({...task, limit: currentDate});
+    setTask({ ...task, limit: currentDate });
   };
 
   const showMode = (currentMode) => {
@@ -85,6 +84,29 @@ const CreateTaskScreen = (props) => {
     setTask({ ...task, [name]: value });
   };
 
+  const createTask = () => {
+    const taskRef = firebase.firestore().collection("tasks");
+    taskRef
+      .add({
+        ...task,
+        date: new Date(),
+        done: false,
+        listID: props.route.params.list.id,
+      })
+      .then(() => {
+        Alert.alert("Enhorabuena", "Tu tarea ha sido creada existosamente.");
+        props.navigation.navigate("Tareas", {
+          list: props.route.params.list,
+        })
+      })
+      .catch(() => {
+        Alert.alert(
+          "Error en la creación",
+          "No se pudo crear la tarea, revise su conexión a internet."
+        );
+      });
+  };
+
   return (
     <SafeAreaView style={styles.areaview}>
       <KeyboardAvoidingView
@@ -126,6 +148,7 @@ const CreateTaskScreen = (props) => {
               ...styles.button,
               backgroundColor: props.route.params.list.theme,
             }}
+            onPress={() => createTask()}
           >
             <Text style={styles.buttonText}>Crear Tarea</Text>
           </TouchableOpacity>
