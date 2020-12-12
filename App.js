@@ -61,12 +61,14 @@ export default function App() {
   if (loading) {
     return <LoadScreen />;
   }
-  
+
   const TasksStack = (props) => {
     return (
       <Stack.Navigator>
         <Stack.Screen name="Tareas" options={{ headerShown: false }}>
-          {(propsStack) => <TasksScreen {...propsStack} list={props.route.params.list} />}
+          {(propsStack) => (
+            <TasksScreen {...propsStack} list={props.route.params.list} />
+          )}
         </Stack.Screen>
         <Stack.Screen
           name="Crear Tarea"
@@ -74,8 +76,8 @@ export default function App() {
           options={{ headerShown: true }}
         />
       </Stack.Navigator>
-    )
-  }
+    );
+  };
 
   const DrawerNavigator = () => {
     return (

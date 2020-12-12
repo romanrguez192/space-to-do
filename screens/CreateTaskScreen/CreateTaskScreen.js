@@ -84,6 +84,14 @@ const CreateTaskScreen = (props) => {
   };
 
   const createTask = () => {
+    if (task.title === "") {
+      Alert.alert(
+        "Error en la creación",
+        "Ingresa un título para tu tarea, por favor."
+      );
+      return;
+    }
+
     const taskRef = firebase.firestore().collection("tasks");
     taskRef
       .add({
@@ -96,7 +104,7 @@ const CreateTaskScreen = (props) => {
         Alert.alert("Enhorabuena", "Tu tarea ha sido creada existosamente.");
         props.navigation.navigate("Tareas", {
           list: props.route.params.list,
-        })
+        });
       })
       .catch(() => {
         Alert.alert(
@@ -128,18 +136,36 @@ const CreateTaskScreen = (props) => {
               multiline={true}
             />
           </View>
-          {/* <Button onPress={showDatepicker} title="Show date picker!" />
 
-          <Button onPress={showTimepicker} title="Show time picker!" /> */}
-
-          <TouchableOpacity onPress={showDatepicker} style={{marginBottom: 15}}>
-            <Text style={{color: props.route.params.list.theme, fontSize: 17, fontWeight: "bold"}}>Selecciona una fecha límite.</Text>
+          <TouchableOpacity
+            onPress={showDatepicker}
+            style={{ marginBottom: 15 }}
+          >
+            <Text
+              style={{
+                color: props.route.params.list.theme,
+                fontSize: 17,
+                fontWeight: "bold",
+              }}
+            >
+              Selecciona una fecha límite.
+            </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={showTimepicker} style={{marginBottom: 15}}>
-          <Text style={{color: props.route.params.list.theme, fontSize: 17, fontWeight: "bold"}}>Selecciona una hora límite.</Text>
+          <TouchableOpacity
+            onPress={showTimepicker}
+            style={{ marginBottom: 15 }}
+          >
+            <Text
+              style={{
+                color: props.route.params.list.theme,
+                fontSize: 17,
+                fontWeight: "bold",
+              }}
+            >
+              Selecciona una hora límite.
+            </Text>
           </TouchableOpacity>
-
 
           {show && (
             <DateTimePicker
@@ -148,7 +174,6 @@ const CreateTaskScreen = (props) => {
               mode={mode}
               display="default"
               onChange={onChange}
-              
             />
           )}
           <TouchableOpacity
@@ -160,7 +185,7 @@ const CreateTaskScreen = (props) => {
           >
             <Text style={styles.buttonText}>Crear Tarea</Text>
           </TouchableOpacity>
-          <Text>{task.limit.toString()}</Text>
+          <Text>{`a`}</Text>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
