@@ -135,9 +135,9 @@ const TasksScreen = (props) => {
       <Animatable.View
         duration={400}
         style={[styles.content, isActive ? styles.active : styles.inactive]}
-        transition="backgroundColor"
+        transition="color"
       >
-        <Animatable.Text duration={400} animation={isActive ? 'slideInDown' : undefined}>
+        <Animatable.Text style={{marginLeft: 46, color: 'gray', fontSize:15}} duration={400} animation={isActive ? 'slideInDown' : undefined}>
           {section.content}
         </Animatable.Text>
       </Animatable.View>
@@ -151,6 +151,9 @@ const TasksScreen = (props) => {
         style={[styles.header, isActive ? styles.active : styles.inactive]}
         transition="backgroundColor"
       >
+        <Checkbox>
+          
+        </Checkbox>
         <Text style={styles.headerText}>{section.title}</Text>
       </Animatable.View>
     );
@@ -170,7 +173,8 @@ const TasksScreen = (props) => {
           renderContent={renderContent}
           duration={400}
           onChange={setSections}
-          sectionContainerStyle={{paddingBottom: 10, paddingTop: 10}}
+          sectionContainerStyle={{marginBottom: 20, marginTop: 20}}
+          
         />
       </View>
     );

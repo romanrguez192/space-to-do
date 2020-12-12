@@ -69,19 +69,23 @@ export default StyleSheet.create({
         padding: 10,
       },
       headerText: {
-        textAlign: 'center',
+        marginLeft: 20,
         fontSize: 16,
         fontWeight: '500',
+
       },
       content: {
         padding: 20,
         backgroundColor: '#fff',
       },
       active: {
-        backgroundColor: '#bbbbbb50',
+        backgroundColor: '#fff',
+        flexDirection: 'row',
       },
       inactive: {
         backgroundColor: '#fff',
+        borderBottomColor: '#bbb',
+        flexDirection: 'row',
       },
       selectors: {
         marginBottom: 10,
