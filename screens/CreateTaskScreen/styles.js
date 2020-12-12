@@ -48,6 +48,10 @@ export default StyleSheet.create({
   },
   pickerStyle: {
     backgroundColor: "#fff",
-    width: windowWidth * 0.7,
+    width: windowWidth * 0.25,
+    flex: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+
   }
 });

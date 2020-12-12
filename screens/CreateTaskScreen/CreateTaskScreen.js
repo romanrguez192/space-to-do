@@ -128,10 +128,18 @@ const CreateTaskScreen = (props) => {
               multiline={true}
             />
           </View>
-          <Text>{task.limit.toString()}</Text>
-          <Button onPress={showDatepicker} title="Show date picker!" />
+          {/* <Button onPress={showDatepicker} title="Show date picker!" />
 
-          <Button onPress={showTimepicker} title="Show time picker!" />
+          <Button onPress={showTimepicker} title="Show time picker!" /> */}
+
+          <TouchableOpacity onPress={showDatepicker} style={{marginBottom: 15}}>
+            <Text style={{color: props.route.params.list.theme, fontSize: 17, fontWeight: "bold"}}>Selecciona una fecha límite.</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={showTimepicker} style={{marginBottom: 15}}>
+          <Text style={{color: props.route.params.list.theme, fontSize: 17, fontWeight: "bold"}}>Selecciona una hora límite.</Text>
+          </TouchableOpacity>
+
 
           {show && (
             <DateTimePicker
@@ -140,6 +148,7 @@ const CreateTaskScreen = (props) => {
               mode={mode}
               display="default"
               onChange={onChange}
+              
             />
           )}
           <TouchableOpacity
@@ -151,6 +160,7 @@ const CreateTaskScreen = (props) => {
           >
             <Text style={styles.buttonText}>Crear Tarea</Text>
           </TouchableOpacity>
+          <Text>{task.limit.toString()}</Text>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
