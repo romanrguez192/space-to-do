@@ -134,7 +134,7 @@ function Sidebar({ ...props }) {
                 )}
                 label="Calendarios"
                 labelStyle={{ fontSize: 17, color: "#2d3f50" }}
-                onPress={() => props.navigation.navigate("Calendario")}
+                onPress={() => props.navigation.navigate("Calendario", {userID: props.userID})}
               />
               <DrawerItem
                 icon={({ color, size }) => (

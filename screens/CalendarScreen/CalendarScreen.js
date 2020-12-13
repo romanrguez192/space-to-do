@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, Alert } from "react-native";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
-import { Appbar, DefaultTheme } from "react-native-paper";
+import { ActivityIndicator, Appbar, DefaultTheme } from "react-native-paper";
 import { Calendar } from "react-native-calendars";
 import { LocaleConfig } from "react-native-calendars";
 import { ScrollView } from "react-native-gesture-handler";
@@ -72,29 +72,108 @@ const CalendarScreen = (props) => {
       </Appbar.Header>
     );
   };
+  useEffect(() => {
+    getLists(props.route.params.userID)
+  }, [])
 
   const [selected, setSelected] = useState("");
+  const [dates, setDates] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const onDayPress = (day) => {
     setSelected(day.dateString);
   };
 
+  const getLists = (userID) => {
+    const listsRef = firebase.default.firestore().collection("lists");
+    listsRef
+      .where("createdBy", "==", userID)
+      //.orderBy("createdAt", "desc")
+      .onSnapshot((snapshot) => {
+        const data = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+
+        }));
+        getDates(data)
+        
+      })
+  };
+
+  
+  
+  const getDates = (lists) => {
+    let date = null
+    if(lists){
+      lists.map((list) => {
+        const taskRef = firebase.default.firestore().collection('tasks');
+        taskRef.where("listID", "==", list.id)
+        .onSnapshot(snapshot => {
+          snapshot.docs.forEach(doc => {
+            const resul = new Date(doc.data().limit * 1000)
+            const str = ((resul.getFullYear() - 1969) + "-" + (resul.getMonth() + 1) + "-" + resul.getDate())
+            if(date){
+              let foundIt = false
+              const obj = {
+                key: doc.data().title,
+                color: list.theme,
+              }
+              Object.keys(date).forEach(item => {
+                if(item === str){
+                  foundIt = true
+                  return
+                }
+              })
+              
+              if(foundIt) {
+                date[str].dots.push(obj)
+                // Object.values(date[str])[0].push(obj)
+                
+              }else 
+                date[str] = {dots: [obj]}
+            }else{
+              date = {[str]:{dots: [{key: doc.data().title, color: list.theme}]}}
+            }
+            
+          })
+          setDates(date)
+        })
+        
+      })
+    }
+    setLoading(false)
+  }
+
+  if(loading){
+    return(
+      <View>
+        <ActivityIndicator size="large" />
+      </View>
+    )
+  }
+
+
+
   return (
-    <View>
+    <>
     <CustomHeader />
-     <ScrollView>
+      <ScrollView>
         <Calendar
+          markingType='multi-dot'
           enableSwipeMonths={true}
           onDayPress={onDayPress}
           //estilo de la fecha seleccionada
           markedDates={{
+            ...dates,
             [selected]: {
               selected: true,
               disableTouchEvent: true,
               selectedColor: "#3B99D8",
               selectedTextColor: "white",
+              
             },
           }}
+
           style={styles.calendar}
           theme={{
             //Calendario
@@ -125,9 +204,10 @@ const CalendarScreen = (props) => {
               },
             },
           }}
+          
         ></Calendar>
-     </ScrollView>
-    </View>
+      </ScrollView>
+    </>
   );
 };
 
