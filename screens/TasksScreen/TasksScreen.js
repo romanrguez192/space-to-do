@@ -25,14 +25,13 @@ import {
 } from "react-native";
 import { Input, Icon, ListItem, Avatar, Overlay } from "react-native-elements";
 import { useFocusEffect } from "@react-navigation/native";
-import * as Animatable from 'react-native-animatable';
-import Collapsible from 'react-native-collapsible';
-import Accordion from 'react-native-collapsible/Accordion';
+import * as Animatable from "react-native-animatable";
+import Collapsible from "react-native-collapsible";
+import Accordion from "react-native-collapsible/Accordion";
 
 const TasksScreen = (props) => {
   const [loading, setLoading] = useState(true);
   const [tasks, setTasks] = useState(null);
-
 
   const CustomHeader = () => {
     return (
@@ -81,18 +80,18 @@ const TasksScreen = (props) => {
         .onSnapshot((snapshot) => {
           // const data = snapshot.docs.map((doc) => ({
           //   id: doc.id,
-          // ...doc.data(), 
-          // })); 
+          // ...doc.data(),
+          // }));
 
           const data = [];
-          snapshot.docs.forEach(doc => {
+          snapshot.docs.forEach((doc) => {
             data.push({
               id: doc.id,
-              title: doc.data().title, 
+              title: doc.data().title,
               content: doc.data().description,
-            })
-          })
-          if(data.length === 0) setTasks(null) 
+            });
+          });
+          if (data.length === 0) setTasks(null);
           else setTasks(data);
           setLoading(false);
         })
@@ -109,21 +108,20 @@ const TasksScreen = (props) => {
     });
   };
 
-
-  const [config,setConfig] = useState({
+  const [config, setConfig] = useState({
     activeS: [],
     collapsed: true,
     multipleSelect: false,
   });
 
-
   const toggleExpanded = () => {
     setConfig({ ...config, collapsed: !config.collapsed });
   };
 
-  const setSections = sections => {
+  const setSections = (sections) => {
     setConfig({
-      ...config, activeS: sections.includes(undefined) ? [] : sections,
+      ...config,
+      activeS: sections.includes(undefined) ? [] : sections,
     });
   };
 
@@ -134,12 +132,16 @@ const TasksScreen = (props) => {
         style={[styles.content, isActive ? styles.active : styles.inactive]}
         transition="color"
       >
-        <Animatable.Text style={{marginLeft: 46, color: 'gray', fontSize:15}} duration={400} animation={isActive ? 'slideInDown' : undefined}>
+        <Animatable.Text
+          style={{ marginLeft: 46, color: "gray", fontSize: 15 }}
+          duration={400}
+          animation={isActive ? "slideInDown" : undefined}
+        >
           {section.content}
         </Animatable.Text>
       </Animatable.View>
     );
-  }
+  };
 
   const renderHeader = (section, _, isActive) => {
     return (
@@ -148,15 +150,11 @@ const TasksScreen = (props) => {
         style={[styles.header, isActive ? styles.active : styles.inactive]}
         transition="backgroundColor"
       >
-        <Checkbox>
-          
-        </Checkbox>
+        <Checkbox></Checkbox>
         <Text style={styles.headerText}>{section.title}</Text>
       </Animatable.View>
     );
   };
-
-
 
   const renderList = (item) => {
     return (
@@ -170,8 +168,7 @@ const TasksScreen = (props) => {
           renderContent={renderContent}
           duration={400}
           onChange={setSections}
-          sectionContainerStyle={{marginBottom: 20, marginTop: 20}}
-          
+          sectionContainerStyle={{ marginBottom: 20, marginTop: 20 }}
         />
       </View>
     );
@@ -195,20 +192,21 @@ const TasksScreen = (props) => {
   }
 
   return (
-      <>
+    <>
       <CustomHeader />
-      <ScrollView style={{backgroundColor: '#fff'}}>
+      <ScrollView style={{ backgroundColor: "#fff" }}>
         <SafeAreaView style={styles.areaview}>
-          {
-            tasks 
-            ?
+          {tasks ? (
             renderList(tasks)
-            :
-            <Image source={require('../../assets/fondotareas.png')} />
-          }
+          ) : (
+            <Image
+              source={require("../../assets/fondotareas.png")}
+              style={styles.fondo}
+            />
+          )}
         </SafeAreaView>
       </ScrollView>
-      </>
+    </>
   );
 };
 

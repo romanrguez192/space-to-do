@@ -68,11 +68,11 @@ const ListsScreen = (props) => {
           const data = [];
           snapshot.docs.map((doc) => {
             data.push({
-                id: doc.id,
+              id: doc.id,
               ...doc.data(),
-            })
+            });
           });
-          if(data.length === 0) setLists(null);
+          if (data.length === 0) setLists(null);
           else setLists(data);
           setLoading(false);
         })
@@ -99,17 +99,25 @@ const ListsScreen = (props) => {
   //Elimina una lista y sus tareas, y recibe como parametro el id de la lista
   const deleteList = (listID) => {
     const listRef = firebase.firestore().collection("lists").doc(listID);
-    listRef.delete().then(() => {
-      const tasks = firebase.firestore().collection('tasks').where("listID", "==", listID)
-      tasks.onSnapshot(snapshot => {
-        snapshot.docs.forEach(doc => {
-          doc.ref.delete()
-        })
+    listRef
+      .delete()
+      .then(() => {
+        const tasks = firebase
+          .firestore()
+          .collection("tasks")
+          .where("listID", "==", listID);
+        tasks.onSnapshot((snapshot) => {
+          snapshot.docs.forEach((doc) => {
+            doc.ref.delete();
+          });
+        });
       })
-    }).catch(() => {
-      Alert.alert("Ocurrio un error al eliminar esta lista, revise su conexión a internet.")
-    })
-  } 
+      .catch(() => {
+        Alert.alert(
+          "Ocurrio un error al eliminar esta lista, revise su conexión a internet."
+        );
+      });
+  };
 
   const toggleOverlay = () => {
     if (!creatingList) setVisibleOverlay(!visibleOverlay);
@@ -267,7 +275,7 @@ const ListsScreen = (props) => {
           />
           <Text style={styles.nameList}>{item.name}</Text>
         </TouchableOpacity>
-        <Text style={{ marginLeft: 55, color: "#808080", marginBottom: 10 }}>
+        <Text style={{ marginLeft: 58, color: "#808080", marginBottom: 10 }}>
           5 Tareas pendientes
         </Text>
       </View>
@@ -288,17 +296,18 @@ const ListsScreen = (props) => {
           <CreateList />
         )}
       </Overlay>
-      {
-        lists 
-        ?
+      {lists ? (
         <FlatList
           data={lists}
           renderItem={renderList}
           keyExtractor={(item) => item.id}
         />
-        :
-        <Image source={require('../../assets/fondolist.png')} />
-      }
+      ) : (
+        <Image
+          source={require("../../assets/fondolist.png")}
+          style={styles.fondo}
+        />
+      )}
     </View>
   );
 };

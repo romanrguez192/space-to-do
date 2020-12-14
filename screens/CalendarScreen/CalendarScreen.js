@@ -45,7 +45,7 @@ LocaleConfig.locales["es"] = {
     "Viernes",
     "Sábado",
   ],
-  dayNamesShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+  dayNamesShort: ["DOM", "LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB"],
   today: "Hoy",
 };
 LocaleConfig.defaultLocale = "es";
@@ -73,8 +73,8 @@ const CalendarScreen = (props) => {
     );
   };
   useEffect(() => {
-    getLists(props.route.params.userID)
-  }, [])
+    getLists(props.route.params.userID);
+  }, []);
 
   const [selected, setSelected] = useState("");
   const [dates, setDates] = useState(null);
@@ -82,10 +82,8 @@ const CalendarScreen = (props) => {
   const [markIt, setMarkIt] = useState(false);
 
   const onDayPress = (day) => {
-    if(Object.keys(dates).includes(day.dateString))
-      setMarkIt(true)
-    else
-      setMarkIt(false)
+    if (Object.keys(dates).includes(day.dateString)) setMarkIt(true);
+    else setMarkIt(false);
     setSelected(day.dateString);
   };
 
@@ -98,46 +96,50 @@ const CalendarScreen = (props) => {
         const data = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-
         }));
-        getDates(data)
-        
-      })
+        getDates(data);
+      });
   };
 
-  
-  
   const getDates = (lists) => {
-    let date = []
-    if(lists){
+    let date = [];
+    if (lists) {
       lists.map((list) => {
-        const taskRef = firebase.default.firestore().collection('tasks');
-        taskRef.where("listID", "==", list.id)
-        .onSnapshot(snapshot => {
-          snapshot.docs.forEach(doc => {
-            const resul = new Date(doc.data().limit * 1000)
-            const str = ((resul.getFullYear() - 1969) + "-" + (resul.getMonth() + 1) + "-" + resul.getDate())
-            date[str] = {dotColor: '#3B99D8', selectedColor: 'white', marked: true}
-          })
-          setDates(date)
-        })
-        
-      })
+        const taskRef = firebase.default.firestore().collection("tasks");
+        taskRef.where("listID", "==", list.id).onSnapshot((snapshot) => {
+          snapshot.docs.forEach((doc) => {
+            const resul = new Date(doc.data().limit * 1000);
+            const str =
+              resul.getFullYear() -
+              1969 +
+              "-" +
+              (resul.getMonth() + 1) +
+              "-" +
+              resul.getDate();
+            date[str] = {
+              dotColor: "#3B99D8",
+              selectedColor: "white",
+              marked: true,
+            };
+          });
+          setDates(date);
+        });
+      });
     }
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
-  if(loading){
-    return(
+  if (loading) {
+    return (
       <View>
         <ActivityIndicator size="large" />
       </View>
-    )
+    );
   }
 
   return (
     <>
-    <CustomHeader />
+      <CustomHeader />
       <ScrollView>
         <Calendar
           enableSwipeMonths={true}
@@ -150,30 +152,32 @@ const CalendarScreen = (props) => {
               disableTouchEvent: true,
               selectedColor: "#3B99D8",
               selectedTextColor: "white",
-              dotColor: 'white',
+              dotColor: "white",
               marked: markIt,
             },
           }}
-
           style={styles.calendar}
           theme={{
             //Calendario
             calendarBackground: "#E8E8F4",
             //Mes
-            monthTextColor: "#ffffff",
+            monthTextColor: "#63656A",
             textMonthFontSize: 22,
+            textMonthFontWeight: "bold",
             //Días
             textDayFontSize: 16,
+            textDayFontWeight: "bold",
             todayTextColor: "#3B99D8",
-            dayTextColor: "#000000",
+            dayTextColor: "#63656A",
             //Flecha
-            arrowColor: "white",
+            arrowColor: "#3B99D8",
             "stylesheet.calendar.header": {
               //mes header
               header: {
+                marginTop: 3,
                 borderRadius: 3,
                 flexDirection: "row",
-                backgroundColor: "#3B99D8",
+                backgroundColor: "#E8E8F4",
                 justifyContent: "space-between",
               },
               //dias header
@@ -185,7 +189,6 @@ const CalendarScreen = (props) => {
               },
             },
           }}
-          
         ></Calendar>
       </ScrollView>
     </>

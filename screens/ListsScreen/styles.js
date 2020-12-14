@@ -12,7 +12,7 @@ export default StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 5,
     marginBottom: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   areaview: {
     flex: 1,
@@ -54,20 +54,20 @@ export default StyleSheet.create({
   },
   messageStyle: {
     color: "#2d3f50",
-    fontSize:20,
-    textAlign:"center", 
-    marginTop: 20, 
+    fontSize: 20,
+    textAlign: "center",
+    marginTop: 20,
     marginBottom: 50,
     fontWeight: "500",
   },
   nameList: {
-    fontSize: 20,
+    fontSize: 18,
     color: "#2d3f50",
-    marginLeft: 10,
+    marginLeft: 14,
     fontWeight: "400",
   },
   buttonList: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginLeft: 20,
     marginTop: 10,
     marginRight: 20,
@@ -80,7 +80,7 @@ export default StyleSheet.create({
     marginBottom: 10,
     marginLeft: 20,
     marginRight: 20,
-    backgroundColor:"#fff",
+    backgroundColor: "#fff",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -93,5 +93,9 @@ export default StyleSheet.create({
   scrollContainer: {
     height: 60,
     width: windowWidth * 0.7,
+  },
+  fondo: {
+    width: windowWidth,
+    height: windowHeight * 0.9,
   },
 });
