@@ -79,8 +79,13 @@ const CalendarScreen = (props) => {
   const [selected, setSelected] = useState("");
   const [dates, setDates] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [markIt, setMarkIt] = useState(false);
 
   const onDayPress = (day) => {
+    if(Object.keys(dates).includes(day.dateString))
+      setMarkIt(true)
+    else
+      setMarkIt(false)
     setSelected(day.dateString);
   };
 
@@ -103,7 +108,7 @@ const CalendarScreen = (props) => {
   
   
   const getDates = (lists) => {
-    let date = null
+    let date = []
     if(lists){
       lists.map((list) => {
         const taskRef = firebase.default.firestore().collection('tasks');
@@ -112,29 +117,7 @@ const CalendarScreen = (props) => {
           snapshot.docs.forEach(doc => {
             const resul = new Date(doc.data().limit * 1000)
             const str = ((resul.getFullYear() - 1969) + "-" + (resul.getMonth() + 1) + "-" + resul.getDate())
-            if(date){
-              let foundIt = false
-              const obj = {
-                key: doc.data().title,
-                color: list.theme,
-              }
-              Object.keys(date).forEach(item => {
-                if(item === str){
-                  foundIt = true
-                  return
-                }
-              })
-              
-              if(foundIt) {
-                date[str].dots.push(obj)
-                // Object.values(date[str])[0].push(obj)
-                
-              }else 
-                date[str] = {dots: [obj]}
-            }else{
-              date = {[str]:{dots: [{key: doc.data().title, color: list.theme}]}}
-            }
-            
+            date[str] = {dotColor: '#3B99D8', selectedColor: 'white', marked: true}
           })
           setDates(date)
         })
@@ -152,14 +135,11 @@ const CalendarScreen = (props) => {
     )
   }
 
-
-
   return (
     <>
     <CustomHeader />
       <ScrollView>
         <Calendar
-          markingType='multi-dot'
           enableSwipeMonths={true}
           onDayPress={onDayPress}
           //estilo de la fecha seleccionada
@@ -170,7 +150,8 @@ const CalendarScreen = (props) => {
               disableTouchEvent: true,
               selectedColor: "#3B99D8",
               selectedTextColor: "white",
-              
+              dotColor: 'white',
+              marked: markIt,
             },
           }}
 

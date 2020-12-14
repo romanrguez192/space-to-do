@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import {
   Text,
+  Image,
   FlatList,
   View,
   TouchableOpacity,
@@ -64,11 +65,15 @@ const ListsScreen = (props) => {
         .where("createdBy", "==", userID)
         //.orderBy("createdAt", "desc")
         .onSnapshot((snapshot) => {
-          const data = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          setLists(data);
+          const data = [];
+          snapshot.docs.map((doc) => {
+            data.push({
+                id: doc.id,
+              ...doc.data(),
+            })
+          });
+          if(data.length === 0) setLists(null);
+          else setLists(data);
           setLoading(false);
         })
     );
@@ -283,11 +288,17 @@ const ListsScreen = (props) => {
           <CreateList />
         )}
       </Overlay>
-      <FlatList
-        data={lists}
-        renderItem={renderList}
-        keyExtractor={(item) => item.id}
-      />
+      {
+        lists 
+        ?
+        <FlatList
+          data={lists}
+          renderItem={renderList}
+          keyExtractor={(item) => item.id}
+        />
+        :
+        <Image source={require('../../assets/fondolist.png')} />
+      }
     </View>
   );
 };

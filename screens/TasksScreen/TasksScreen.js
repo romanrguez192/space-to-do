@@ -21,6 +21,7 @@ import {
   Alert,
   SafeAreaView,
   KeyboardAvoidingView,
+  Image,
 } from "react-native";
 import { Input, Icon, ListItem, Avatar, Overlay } from "react-native-elements";
 import { useFocusEffect } from "@react-navigation/native";
@@ -32,7 +33,6 @@ const TasksScreen = (props) => {
   const [loading, setLoading] = useState(true);
   const [tasks, setTasks] = useState(null);
 
-  const [accord,setAccord] = useState([]);
 
   const CustomHeader = () => {
     return (
@@ -84,19 +84,16 @@ const TasksScreen = (props) => {
           // ...doc.data(), 
           // })); 
 
-          const data = [], aux = []
+          const data = [];
           snapshot.docs.forEach(doc => {
             data.push({
               id: doc.id,
-              ...doc.data(), 
-            })
-            aux.push({
               title: doc.data().title, 
               content: doc.data().description,
             })
           })
-          setAccord(aux);
-          setTasks(data);
+          if(data.length === 0) setTasks(null) 
+          else setTasks(data);
           setLoading(false);
         })
     );
@@ -203,7 +200,11 @@ const TasksScreen = (props) => {
       <ScrollView style={{backgroundColor: '#fff'}}>
         <SafeAreaView style={styles.areaview}>
           {
-            renderList(accord)
+            tasks 
+            ?
+            renderList(tasks)
+            :
+            <Image source={require('../../assets/fondotareas.png')} />
           }
         </SafeAreaView>
       </ScrollView>
