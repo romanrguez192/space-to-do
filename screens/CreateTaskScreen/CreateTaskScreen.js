@@ -96,7 +96,8 @@ const CreateTaskScreen = (props) => {
     taskRef
       .add({
         ...task,
-        date: new Date(),
+        date: (new Date().getTime() / 1000).toFixed(0) ,
+        limit: (task.limit.getTime() / 1000).toFixed(0),
         done: false,
         listID: props.route.params.list.id,
       })

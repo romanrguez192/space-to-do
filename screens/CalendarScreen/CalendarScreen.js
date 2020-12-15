@@ -110,8 +110,7 @@ const CalendarScreen = (props) => {
           snapshot.docs.forEach((doc) => {
             const resul = new Date(doc.data().limit * 1000);
             const str =
-              resul.getFullYear() -
-              1969 +
+              resul.getFullYear() +
               "-" +
               (resul.getMonth() + 1) +
               "-" +

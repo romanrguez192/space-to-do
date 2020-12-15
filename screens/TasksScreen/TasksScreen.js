@@ -73,17 +73,16 @@ const TasksScreen = (props) => {
   );
 
   const getTasks = () => {
-    const tasksRef = firebase.firestore().collection("tasks");
+    const tasksRef = firebase.default.firestore().collection("tasks");
     return (
       tasksRef
         .where("listID", "==", props.list.id)
-        //.orderBy("createdAt", "desc")
+        .orderBy("limit", "asc")
         .onSnapshot((snapshot) => {
           // const data = snapshot.docs.map((doc) => ({
           //   id: doc.id,
           // ...doc.data(),
           // }));
-
           const data = [];
           snapshot.docs.forEach((doc) => {
             data.push({
@@ -108,46 +107,6 @@ const TasksScreen = (props) => {
     });
   };
 
-  // const [config, setConfig] = useState({
-  //   activeS: [],
-  //   collapsed: true,
-  //   multipleSelect: false,
-  // });
-
-  // const toggleExpanded = () => {
-  //   setConfig({ ...config, collapsed: !config.collapsed });
-  // };
-
-  // const setSections = (sections) => {
-  //   setConfig({
-  //     ...config,
-  //     activeS: sections.includes(undefined) ? [] : sections,
-  //   });
-  // };
-
-  // const renderContent = (section, _, isActive) => {
-  //   return (
-  //     <Animatable.View
-  //       duration={400}
-  //       style={[styles.content, isActive ? styles.active : styles.inactive]}
-  //       transition="color"
-  //     >
-  //       <Animatable.Text
-  //         style={{ marginLeft: 46, color: "gray", fontSize: 15 }}
-  //         duration={400}
-  //         animation={isActive ? "slideInDown" : undefined}
-  //       >
-  //         {section.content}
-  //       </Animatable.Text>
-  //     </Animatable.View>
-  //   );
-  // };
-
-  const [titleStyles, setTitleStyles] = useState({textDecorationLine:'line-through'})
-
-  // const titleStyles = (done) => {
-  //   return (done)? {textDecorationLine:"line-through"} : undefined
-  // }
 
   const setDone = async(item) => {
     const dbRef = firebase.default.firestore().collection('tasks').doc(item.id)
@@ -159,7 +118,7 @@ const TasksScreen = (props) => {
 
   const getDateFromString = (limit) => {
     const resul= new Date(limit * 1000);
-    return resul.getDate()  + "/" + (resul.getMonth() + 1) + "/" +  (resul.getFullYear() - 1969 );
+    return resul.getDate()  + "/" + (resul.getMonth() + 1) + "/" +  resul.getFullYear();
   }
 
   const renderList = (items) => {
@@ -179,6 +138,7 @@ const TasksScreen = (props) => {
                 <View style={{flex:.9}}>
                   <List.Accordion
                     title={item.title}
+                    description={getDateFromString(item.limit)}
                     titleStyle={{fontWeight:'bold'},(item.done)? {textDecorationLine:'line-through'} : undefined}
                     style={{paddingBottom:0}}
                     theme={Theme}
@@ -188,8 +148,7 @@ const TasksScreen = (props) => {
                         style={{paddingTop:0}}
                         description={item.description}
                         descriptionStyle={(item.done)? {textDecorationLine:'line-through'} : undefined}
-                        title={getDateFromString(item.limit)}
-                        titleStyle={{fontSize:12}}
+                        titleStyle={{display:'none'}}
                       />
                     </TouchableOpacity>
                   </List.Accordion>
