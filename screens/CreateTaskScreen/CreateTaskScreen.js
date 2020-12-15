@@ -55,6 +55,35 @@ const CreateTaskScreen = (props) => {
     showMode("time");
   };
 
+  const showDate = (date) => {
+    const dias = [
+      "Lunes",
+      "Martes",
+      "Miércoles",
+      "Jueves",
+      "Viernes",
+      "Sábado",
+      "Domingo",
+    ];
+
+    const meses = [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
+    ];
+
+    return `${dias[date.getDay()]} ${date.getDate()} de ${meses[date.getMonth()]} de ${date.getFullYear()}`
+  };
+
   const CustomHeader = () => {
     return (
       <Appbar.Header
@@ -96,7 +125,7 @@ const CreateTaskScreen = (props) => {
     taskRef
       .add({
         ...task,
-        date: (new Date().getTime() / 1000).toFixed(0) ,
+        date: (new Date().getTime() / 1000).toFixed(0),
         limit: (task.limit.getTime() / 1000).toFixed(0),
         done: false,
         listID: props.route.params.list.id,
@@ -186,7 +215,7 @@ const CreateTaskScreen = (props) => {
           >
             <Text style={styles.buttonText}>Crear Tarea</Text>
           </TouchableOpacity>
-          <Text>{`a`}</Text>
+          <Text>{showDate(task.limit)}</Text>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
