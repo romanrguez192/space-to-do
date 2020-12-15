@@ -172,6 +172,11 @@ const TasksScreen = (props) => {
                       ? { textDecorationLine: "line-through" }
                       : undefined)
                   }
+                  descriptionStyle={
+                    new Date(item.limit * 1000) < new Date()
+                      ? { color: "red" }
+                      : undefined
+                  }
                   style={{ paddingBottom: 0 }}
                   theme={Theme}
                 >
