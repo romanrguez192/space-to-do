@@ -81,7 +81,19 @@ const CreateTaskScreen = (props) => {
       "Diciembre",
     ];
 
-    return `${dias[date.getDay()]} ${date.getDate()} de ${meses[date.getMonth()]} de ${date.getFullYear()}`
+    const getTime = (date) => {
+      let hours = date.getHours() % 12;
+      let minutes = date.getMinutes();
+
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+
+      return hours + ":" + minutes + " " + (date.getHours() < 12 ? "AM" : "PM");
+    };
+
+    return `${dias[date.getDay()]} ${date.getDate()} de ${
+      meses[date.getMonth()]
+    } de ${date.getFullYear()} ${getTime(date)}`;
   };
 
   const CustomHeader = () => {
