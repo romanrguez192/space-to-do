@@ -63,7 +63,7 @@ const ListsScreen = (props) => {
     return (
       listsRef
         .where("createdBy", "==", userID)
-        //.orderBy("createdAt", "desc")
+        .orderBy("name", "asc")
         .onSnapshot((snapshot) => {
           const data = [];
           snapshot.docs.map((doc) => {
