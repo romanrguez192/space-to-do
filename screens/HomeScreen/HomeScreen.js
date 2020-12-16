@@ -142,6 +142,7 @@ const HomeScreen = (props) => {
     return (
       <List.Section title="Tareas por culminar">
         {items.map((item) => {
+          if (!item.done)
           return (
             <View key={item.id} style={{ flex: 1, flexDirection: "row" }}>
               <View

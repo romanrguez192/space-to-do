@@ -43,6 +43,7 @@ const TasksScreen = (props) => {
   const [loading, setLoading] = useState(true);
   const [tasks, setTasks] = useState(null);
   const [visibleMenu, setVisibleMenu] = useState(false);
+  const [showCompleted, setShowCompleted] = useState(true);
 
   const theme = {
     ...DefaultTheme,
@@ -165,57 +166,59 @@ const TasksScreen = (props) => {
     return (
       <List.Section title="Tareas">
         {items.map((item) => {
-          return (
-            <View key={item.id} style={{ flex: 1, flexDirection: "row" }}>
-              <View
-                style={{
-                  flex: 0.15,
-                  alignItems: "center",
-                  padding: 0,
-                  margin: 0,
-                }}
-              >
-                <Checkbox.Item
-                  status={item.done ? "checked" : "unchecked"}
-                  onPress={() => setDone(item)}
-                  color={props.list.theme}
-                  style={{ padding: 0, margin: 0 }}
-                />
-              </View>
-              <View style={{ flex: 0.9 }}>
-                <List.Accordion
-                  title={item.title}
-                  description={getDateFromString(item.limit)}
-                  titleStyle={
-                    ({ fontWeight: "bold" },
-                    item.done
-                      ? { textDecorationLine: "line-through" }
-                      : undefined)
-                  }
-                  descriptionStyle={
-                    new Date(item.limit * 1000) < new Date()
-                      ? { color: "red" }
-                      : undefined
-                  }
-                  style={{ paddingBottom: 0 }}
-                  theme={theme}
+          if (showCompleted || !item.done) {
+            return (
+              <View key={item.id} style={{ flex: 1, flexDirection: "row" }}>
+                <View
+                  style={{
+                    flex: 0.15,
+                    alignItems: "center",
+                    padding: 0,
+                    margin: 0,
+                  }}
                 >
-                  <TouchableOpacity activeOpacity={0.7} /*onLongPress={}*/>
-                    <List.Item
-                      style={{ paddingTop: 0 }}
-                      description={item.description}
-                      descriptionStyle={
-                        item.done
-                          ? { textDecorationLine: "line-through" }
-                          : undefined
-                      }
-                      titleStyle={{ display: "none" }}
-                    />
-                  </TouchableOpacity>
-                </List.Accordion>
+                  <Checkbox.Item
+                    status={item.done ? "checked" : "unchecked"}
+                    onPress={() => setDone(item)}
+                    color={props.list.theme}
+                    style={{ padding: 0, margin: 0 }}
+                  />
+                </View>
+                <View style={{ flex: 0.9 }}>
+                  <List.Accordion
+                    title={item.title}
+                    description={getDateFromString(item.limit)}
+                    titleStyle={
+                      ({ fontWeight: "bold" },
+                      item.done
+                        ? { textDecorationLine: "line-through" }
+                        : undefined)
+                    }
+                    descriptionStyle={
+                      new Date(item.limit * 1000) < new Date()
+                        ? { color: "red" }
+                        : undefined
+                    }
+                    style={{ paddingBottom: 0 }}
+                    theme={theme}
+                  >
+                    <TouchableOpacity activeOpacity={0.7} /*onLongPress={}*/>
+                      <List.Item
+                        style={{ paddingTop: 0 }}
+                        description={item.description}
+                        descriptionStyle={
+                          item.done
+                            ? { textDecorationLine: "line-through" }
+                            : undefined
+                        }
+                        titleStyle={{ display: "none" }}
+                      />
+                    </TouchableOpacity>
+                  </List.Accordion>
+                </View>
               </View>
-            </View>
-          );
+            );
+          }
         })}
       </List.Section>
     );
@@ -238,6 +241,11 @@ const TasksScreen = (props) => {
     );
   }
 
+  const onPressShowCompleted = () => {
+    closeMenu();
+    setShowCompleted(!showCompleted);
+  };
+
   return (
     <>
       <CustomHeader />
@@ -246,10 +254,10 @@ const TasksScreen = (props) => {
         onDismiss={closeMenu}
         anchor={{ x: Dimensions.get("window").width, y: 60 }}
       >
-        <Menu.Item onPress={() => {}} title="Item 1" />
-        <Menu.Item onPress={() => {}} title="Item 2" />
-        <Divider />
-        <Menu.Item onPress={() => {}} title="Item 3" />
+        <Menu.Item
+          onPress={() => onPressShowCompleted()}
+          title={(showCompleted ? "Ocultar" : "Mostrar") + " completadas"}
+        />
       </Menu>
       <ScrollView style={{ backgroundColor: "#fff" }}>
         <SafeAreaView style={styles.areaview}>
