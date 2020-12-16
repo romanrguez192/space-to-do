@@ -107,7 +107,7 @@ const UserScreen = (props) => {
   };
 
   const pickImage = async () => {
-    if (user.imageID) deleteImage();
+    
 
     const permission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (permission.granted) {
@@ -119,6 +119,7 @@ const UserScreen = (props) => {
       });
 
       if (!resulImage.cancelled) {
+        if (user.imageID) deleteImage();
         setLoading(true);
         const uuid = uuidv4();
         setUser({ ...user, imageID: uuid });
