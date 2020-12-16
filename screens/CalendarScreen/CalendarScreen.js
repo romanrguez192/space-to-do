@@ -87,13 +87,14 @@ const CalendarScreen = (props) => {
   const [dates, setDates] = useState(null);
   const [loading, setLoading] = useState(true);
   const [markIt, setMarkIt] = useState(false);
-  const [tasks, setTasks] = useState([]);
+  let [tasks, setTasks] = useState([]);
 
   const onDayPress = (day) => {
     if (Object.keys(dates).includes(day.dateString)) setMarkIt(true);
     else setMarkIt(false);
     setSelected(day.dateString);
   };
+  
 
   const getLists = (userID) => {
     setTasks([])
@@ -164,9 +165,13 @@ const CalendarScreen = (props) => {
   };
 
   const renderTasks = (items) => {
-    console.log("****************************")
-    console.log(tasks)
-    console.log("****************************")
+    const hash = {}
+    tasks = tasks.filter(current => {
+      const exist = !hash[current.id]
+      hash[current.id] = true
+      return exist
+    })
+    
     return(
       <List.Section title={selected}>
         {
