@@ -53,6 +53,14 @@ export default StyleSheet.create({
     paddingTop: 20,
     fontWeight: 'bold',
   },
+  fondo: {
+    resizeMode: 'contain',
+    width: windowWidth,
+    height: windowHeight *0.9,
+    left: -25,
+    top: -200,
+
+  },
   categoriesItemContainer: {
     flex: 1,
     margin: 10,

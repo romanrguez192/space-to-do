@@ -39,7 +39,6 @@ export default StyleSheet.create({
   },
   content: {
     padding: 20,
-    backgroundColor: "#fff",
   },
   active: {
     backgroundColor: "#fff",
@@ -76,9 +75,6 @@ export default StyleSheet.create({
   multipleToggle__title: {
     fontSize: 16,
     marginRight: 8,
-  },
-  areaview: {
-    backgroundColor: "#fff",
   },
   fondo: {
     width: windowWidth,

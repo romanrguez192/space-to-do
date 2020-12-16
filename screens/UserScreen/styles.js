@@ -27,7 +27,8 @@ export default StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     marginLeft: 30,
-    top: -70,
+    top: -60,
+    left: -5,
   },
   editButton: {
     zIndex: 100,
@@ -67,7 +68,7 @@ export default StyleSheet.create({
   },
   subtitleInformation: {
     fontSize: 18,
-    color: "#bbb",
+    color: "gray",
     marginLeft: 25,
   },
   areaview: {
