@@ -415,7 +415,13 @@ const ListsScreen = (props) => {
   return (
     <View style={styles.vista}>
       <CustomHeader />
-      <Overlay isVisible={visibleOverlay} onBackdropPress={toggleOverlay}>
+      <Overlay
+        isVisible={visibleOverlay}
+        onBackdropPress={() => {
+          setEditing(false);
+          toggleOverlay();
+        }}
+      >
         {creatingList ? (
           <ActivityIndicator
             size="large"
