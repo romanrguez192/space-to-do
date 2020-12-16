@@ -134,14 +134,6 @@ function Sidebar({ ...props }) {
               />
               <DrawerItem
                 icon={({ color, size }) => (
-                  <Icon type="font-awesome" name="star" color="#2d3f50" />
-                )}
-                label="Importantes"
-                labelStyle={{ fontSize: 17, color: "#2d3f50" }}
-                /* onPress={} */
-              />
-              <DrawerItem
-                icon={({ color, size }) => (
                   <Icon type="font-awesome" name="calendar" color="#2d3f50" />
                 )}
                 label="Calendario"
@@ -151,13 +143,6 @@ function Sidebar({ ...props }) {
                     userID: props.userID,
                   })
                 }
-              />
-              <DrawerItem
-                icon={({ color, size }) => (
-                  <Icon type="font-awesome" name="search" color="#2d3f50" />
-                )}
-                label="Buscar"
-                labelStyle={{ fontSize: 17, color: "#2d3f50" }}
               />
             </Drawer.Section>
           </View>

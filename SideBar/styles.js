@@ -18,7 +18,7 @@ export default StyleSheet.create({
     borderTopWidth: 1.
   },
   drawerSection: {
-    marginTop: 15,
+    marginTop: 25,
     left: -15,
   },
   paragraph: {

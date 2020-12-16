@@ -222,7 +222,7 @@ const TasksScreen = (props) => {
                     status={item.done ? "checked" : "unchecked"}
                     onPress={() => setDone(item)}
                     color={props.list.theme}
-                    style={{ padding: 0, margin: 0 }}
+                    style={{ paddingRight: 0, marginLeft: -10 }}
                   />
                 </View>
                 <View style={{ flex: 0.9 }}>
@@ -315,7 +315,7 @@ const TasksScreen = (props) => {
           title="Ordenar descendente"
         />
       </Menu>
-      <ScrollView style={{ backgroundColor: "#fff" }}>
+      <ScrollView>
         <SafeAreaView style={styles.areaview}>
           {tasks ? (
             renderList(tasks)
