@@ -10,6 +10,8 @@ import {
   Checkbox,
   List,
   IconButton,
+  Divider,
+  Menu,
 } from "react-native-paper";
 import React, {
   useState,
@@ -29,6 +31,7 @@ import {
   KeyboardAvoidingView,
   StyleSheet,
   Image,
+  Dimensions,
 } from "react-native";
 import { Input, Icon, ListItem, Avatar, Overlay } from "react-native-elements";
 import { useFocusEffect } from "@react-navigation/native";
@@ -39,7 +42,9 @@ import Accordion from "react-native-collapsible/Accordion";
 const TasksScreen = (props) => {
   const [loading, setLoading] = useState(true);
   const [tasks, setTasks] = useState(null);
-  const Theme = {
+  const [visibleMenu, setVisibleMenu] = useState(false);
+
+  const theme = {
     ...DefaultTheme,
     roundness: 2,
     colors: {
@@ -47,9 +52,10 @@ const TasksScreen = (props) => {
       primary: props.list.theme,
     },
   };
+
   const CustomHeader = () => {
     return (
-      <Appbar.Header theme={Theme}>
+      <Appbar.Header theme={theme}>
         <Appbar.BackAction
           onPress={() => props.navigation.navigate("Mis Listas")}
         />
@@ -60,7 +66,7 @@ const TasksScreen = (props) => {
             props.navigation.push("Crear Tarea", { list: props.list })
           }
         />
-        <Appbar.Action icon="dots-vertical" />
+        <Appbar.Action icon="dots-vertical" onPress={openMenu} />
       </Appbar.Header>
     );
   };
@@ -111,10 +117,20 @@ const TasksScreen = (props) => {
 
   const setDone = async (item) => {
     const dbRef = firebase.default.firestore().collection("tasks").doc(item.id);
-    await dbRef.set({
-      ...item,
-      done: !item.done,
-    });
+    await dbRef
+      .set({
+        ...item,
+        done: !item.done,
+      })
+      .then(async () => {
+        const listsRef = firebase.default
+          .firestore()
+          .collection("lists")
+          .doc(item.listID);
+        await listsRef.update({
+          count: firebase.firestore.FieldValue.increment(item.done ? 1 : -1),
+        });
+      });
   };
 
   const getDateFromString = (limit) => {
@@ -141,12 +157,16 @@ const TasksScreen = (props) => {
     );
   };
 
+  const openMenu = () => setVisibleMenu(true);
+
+  const closeMenu = () => setVisibleMenu(false);
+
   const renderList = (items) => {
     return (
       <List.Section title="Tareas">
         {items.map((item) => {
           return (
-            <View style={{ flex: 1, flexDirection: "row" }}>
+            <View key={item.id} style={{ flex: 1, flexDirection: "row" }}>
               <View
                 style={{
                   flex: 0.15,
@@ -178,7 +198,7 @@ const TasksScreen = (props) => {
                       : undefined
                   }
                   style={{ paddingBottom: 0 }}
-                  theme={Theme}
+                  theme={theme}
                 >
                   <TouchableOpacity activeOpacity={0.7} /*onLongPress={}*/>
                     <List.Item
@@ -221,6 +241,16 @@ const TasksScreen = (props) => {
   return (
     <>
       <CustomHeader />
+      <Menu
+        visible={visibleMenu}
+        onDismiss={closeMenu}
+        anchor={{ x: Dimensions.get("window").width, y: 60 }}
+      >
+        <Menu.Item onPress={() => {}} title="Item 1" />
+        <Menu.Item onPress={() => {}} title="Item 2" />
+        <Divider />
+        <Menu.Item onPress={() => {}} title="Item 3" />
+      </Menu>
       <ScrollView style={{ backgroundColor: "#fff" }}>
         <SafeAreaView style={styles.areaview}>
           {tasks ? (

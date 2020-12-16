@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import { Input, Icon, ListItem, Avatar, Overlay } from "react-native-elements";
 import styles from "./styles";
@@ -16,7 +17,7 @@ import ContentLoader, {
   FacebookLoader,
   InstagramLoader,
 } from "react-native-easy-content-loader";
-import { Appbar, DefaultTheme } from "react-native-paper";
+import { Appbar, DefaultTheme, Menu } from "react-native-paper";
 
 const ListsScreen = (props) => {
   const [visibleOverlay, setVisibleOverlay] = useState(false);
@@ -60,23 +61,21 @@ const ListsScreen = (props) => {
 
   const getLists = (userID) => {
     const listsRef = firebase.firestore().collection("lists");
-    return (
-      listsRef
-        .where("createdBy", "==", userID)
-        .orderBy("name", "asc")
-        .onSnapshot((snapshot) => {
-          const data = [];
-          snapshot.docs.map((doc) => {
-            data.push({
-              id: doc.id,
-              ...doc.data(),
-            });
+    return listsRef
+      .where("createdBy", "==", userID)
+      .orderBy("name", "asc")
+      .onSnapshot((snapshot) => {
+        const data = [];
+        snapshot.docs.map((doc) => {
+          data.push({
+            id: doc.id,
+            ...doc.data(),
           });
-          if (data.length === 0) setLists(null);
-          else setLists(data);
-          setLoading(false);
-        })
-    );
+        });
+        if (data.length === 0) setLists(null);
+        else setLists(data);
+        setLoading(false);
+      });
   };
 
   if (loading) {
@@ -149,7 +148,11 @@ const ListsScreen = (props) => {
 
       //TODO: Verificar selección de tema
 
-      const listObj = { ...list, createdBy: props.route.params.userID };
+      const listObj = {
+        ...list,
+        createdBy: props.route.params.userID,
+        count: 0,
+      };
 
       setCreatingList(true);
 
@@ -276,7 +279,11 @@ const ListsScreen = (props) => {
           <Text style={styles.nameList}>{item.name}</Text>
         </TouchableOpacity>
         <Text style={{ marginLeft: 58, color: "#808080", marginBottom: 10 }}>
-          5 Tareas pendientes
+          {(!item.count ? "No hay" : item.count) +
+            " tarea" +
+            (item.count == 1 ? "" : "s") +
+            " pendiente" +
+            (item.count == 1 ? "" : "s")}
         </Text>
       </View>
     );

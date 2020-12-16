@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity, Alert } from "react-native";
 import styles from "./styles";
 import {
   Avatar,
@@ -17,7 +17,7 @@ import { firebase } from "../firebase/config";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import ProfilePicture from "../components/ProfilePicture";
 import { LoadScreen } from "../screens";
-import "../global"
+import "../global";
 
 function Sidebar({ ...props }) {
   const [user, setUser] = useState({
@@ -27,7 +27,7 @@ function Sidebar({ ...props }) {
     imageID: "",
     username: "",
     avatarColor: "",
-    id:"",
+    id: "",
   });
   const [loading, setLoading] = useState(true);
 
@@ -36,9 +36,9 @@ function Sidebar({ ...props }) {
     const doc = await dbRef.get();
     const resul = doc.data();
     setUser(resul);
-    global.name = resul.name
+    global.name = resul.name;
     getImageByID(resul.imageID);
-    setLoading(false)
+    setLoading(false);
   };
 
   const getImageByID = async (id) => {
@@ -48,13 +48,13 @@ function Sidebar({ ...props }) {
         .ref(`images/${id}.jpg`)
         .getDownloadURL()
         .then((resolve) => {
-          global.image = resolve
+          global.image = resolve;
         })
         .catch((err) => {
           console.log(err);
         });
     } else {
-      global.image = ""
+      global.image = "";
     }
     setLoading(false);
   };
@@ -64,17 +64,24 @@ function Sidebar({ ...props }) {
   }, []);
 
   const singout = () => {
-    firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        // Sign-out successful.
-        alert("Saliste de tu cuenta");
-      })
-      .catch((error) => {
-        // An error happened.
-        alert(error);
-      });
+    Alert.alert("Cerrar Sesión", "¿Estás seguro de que deseas cerrar sesión?", [
+      { text: "No" },
+      {
+        text: "Sí",
+        onPress: () => {
+          firebase
+            .auth()
+            .signOut()
+            .then(() => {
+              // Sign-out successful.
+            })
+            .catch((error) => {
+              // An error happened.
+              alert(error);
+            });
+        },
+      },
+    ]);
   };
 
   if (loading) {
@@ -92,7 +99,12 @@ function Sidebar({ ...props }) {
               }
               style={{ flexDirection: "row", marginTop: 15 }}
             >
-              <ProfilePicture style={{zIndex: 1}} name={global.name} color={user.avatarColor} image={global.image}/>
+              <ProfilePicture
+                style={{ zIndex: 1 }}
+                name={global.name}
+                color={user.avatarColor}
+                image={global.image}
+              />
               <View style={{ marginLeft: 10 }}>
                 <Title style={styles.title}>{global.name}</Title>
                 <Caption style={styles.caption}>@{user.username}</Caption>
@@ -127,14 +139,18 @@ function Sidebar({ ...props }) {
                 label="Importantes"
                 labelStyle={{ fontSize: 17, color: "#2d3f50" }}
                 /* onPress={} */
-              />  
+              />
               <DrawerItem
                 icon={({ color, size }) => (
                   <Icon type="font-awesome" name="calendar" color="#2d3f50" />
                 )}
                 label="Calendarios"
                 labelStyle={{ fontSize: 17, color: "#2d3f50" }}
-                onPress={() => props.navigation.navigate("Calendario", {userID: props.userID})}
+                onPress={() =>
+                  props.navigation.navigate("Calendario", {
+                    userID: props.userID,
+                  })
+                }
               />
               <DrawerItem
                 icon={({ color, size }) => (

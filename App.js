@@ -16,6 +16,7 @@ import {
 } from "./screens";
 import { firebase } from "./firebase/config";
 import Sidebar from "./SideBar/SideBar";
+import { Provider } from "react-native-paper";
 
 // Drawer Navigator que permite la navegación con un menú desplegable
 const Drawer = createDrawerNavigator();
@@ -48,7 +49,7 @@ export default function App() {
             Alert.alert(
               "Error de conexión",
               "Se produjo un error al establecer la conexión, ¿deseas volverlo a intentar?",
-              [{ text: "Sí", onPress: () => connect() }, { text: "No" }]
+              [{ text: "No" }, { text: "Sí", onPress: () => connect() }]
             );
           });
       } else {
@@ -113,19 +114,21 @@ export default function App() {
   };
 
   return (
-    <NavigationContainer>
-      {userID ? (
-        <DrawerNavigator />
-      ) : (
-        <>
-          <Stack.Navigator>
-            {/* Pantalla de Inicio de Sesión */}
-            <Stack.Screen name="Iniciar Sesión" component={LoginScreen} />
-            {/* Pantalla de Registro */}
-            <Stack.Screen name="Registrarse" component={RegistrationScreen} />
-          </Stack.Navigator>
-        </>
-      )}
-    </NavigationContainer>
+    <Provider>
+      <NavigationContainer>
+        {userID ? (
+          <DrawerNavigator />
+        ) : (
+          <>
+            <Stack.Navigator>
+              {/* Pantalla de Inicio de Sesión */}
+              <Stack.Screen name="Iniciar Sesión" component={LoginScreen} />
+              {/* Pantalla de Registro */}
+              <Stack.Screen name="Registrarse" component={RegistrationScreen} />
+            </Stack.Navigator>
+          </>
+        )}
+      </NavigationContainer>
+    </Provider>
   );
 }

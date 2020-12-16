@@ -141,12 +141,26 @@ const CreateTaskScreen = (props) => {
         limit: (task.limit.getTime() / 1000).toFixed(0),
         done: false,
         listID: props.route.params.list.id,
+        userID: props.route.params.list.createdBy,
       })
-      .then(() => {
-        Alert.alert("Enhorabuena", "Tu tarea ha sido creada existosamente.");
-        props.navigation.navigate("Tareas", {
-          list: props.route.params.list,
-        });
+      .then(async () => {
+        const listsRef = firebase.default
+          .firestore()
+          .collection("lists")
+          .doc(props.route.params.list.id);
+        await listsRef
+          .update({
+            count: firebase.firestore.FieldValue.increment(1),
+          })
+          .then(() => {
+            Alert.alert(
+              "Enhorabuena",
+              "Tu tarea ha sido creada existosamente."
+            );
+            props.navigation.navigate("Tareas", {
+              list: props.route.params.list,
+            });
+          });
       })
       .catch(() => {
         Alert.alert(
