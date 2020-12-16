@@ -97,7 +97,6 @@ const CalendarScreen = (props) => {
   
 
   const getLists = (userID) => {
-    setTasks([])
     const listsRef = firebase.default.firestore().collection("lists");
     listsRef
       .where("createdBy", "==", userID)
@@ -120,7 +119,7 @@ const CalendarScreen = (props) => {
       .where("listID", "==", listID)
       .where("done", "==", false)
       .onSnapshot((snapshot) => {
-        const data = tasks
+        let data = tasks
         snapshot.docs.forEach((doc) => {
           data.push({
             id: doc.id,
@@ -171,7 +170,6 @@ const CalendarScreen = (props) => {
       hash[current.id] = true
       return exist
     })
-    
     return(
       <List.Section title={selected}>
         {
