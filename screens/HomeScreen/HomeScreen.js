@@ -29,7 +29,6 @@ import { Appbar, DefaultTheme, List, Checkbox } from "react-native-paper";
 
 // Pantalla de Inicio de Sesión
 const HomeScreen = (props) => {
-
   const theme = (color) => {
     return {
       ...DefaultTheme,
@@ -38,14 +37,12 @@ const HomeScreen = (props) => {
         ...DefaultTheme.colors,
         primary: color,
       },
-    }
-  }
+    };
+  };
 
   const CustomHeader = () => {
     return (
-      <Appbar.Header
-        theme={theme("#e54e42")}
-      >
+      <Appbar.Header theme={theme("#e54e42")}>
         <Appbar.Action
           icon="menu"
           onPress={() => props.navigation.toggleDrawer()}
@@ -143,57 +140,57 @@ const HomeScreen = (props) => {
       <List.Section title="Tareas por culminar">
         {items.map((item) => {
           if (!item.done)
-          return (
-            <View key={item.id} style={{ flex: 1, flexDirection: "row" }}>
-              <View
-                style={{
-                  flex: 0.15,
-                  alignItems: "center",
-                  padding: 0,
-                  margin: 0,
-                }}
-              >
-                <Checkbox.Item
-                  status={item.done ? "checked" : "unchecked"}
-                  onPress={() => setDone(item)}
-                  color={"dodgerblue"}
-                  style={{ padding: 0, margin: 0 }}
-                />
-              </View>
-              <View style={{ flex: 0.9 }}>
-                <List.Accordion
-                  title={item.title}
-                  description={getDateFromString(item.limit)}
-                  titleStyle={
-                    ({ fontWeight: "bold" },
-                    item.done
-                      ? { textDecorationLine: "line-through" }
-                      : undefined)
-                  }
-                  descriptionStyle={
-                    new Date(item.limit * 1000) < new Date()
-                      ? { color: "red" }
-                      : undefined
-                  }
-                  style={{ paddingBottom: 0 }}
-                  theme={theme("dodgerblue")}
+            return (
+              <View key={item.id} style={{ flex: 1, flexDirection: "row" }}>
+                <View
+                  style={{
+                    flex: 0.15,
+                    alignItems: "center",
+                    padding: 0,
+                    margin: 0,
+                  }}
                 >
-                  <TouchableOpacity activeOpacity={0.7} /*onLongPress={}*/>
-                    <List.Item
-                      style={{ paddingTop: 0 }}
-                      description={item.description}
-                      descriptionStyle={
-                        item.done
-                          ? { textDecorationLine: "line-through" }
-                          : undefined
-                      }
-                      titleStyle={{ display: "none" }}
-                    />
-                  </TouchableOpacity>
-                </List.Accordion>
+                  <Checkbox.Item
+                    status={item.done ? "checked" : "unchecked"}
+                    onPress={() => setDone(item)}
+                    color={"dodgerblue"}
+                    style={{ padding: 0, margin: 0 }}
+                  />
+                </View>
+                <View style={{ flex: 0.9 }}>
+                  <List.Accordion
+                    title={item.title}
+                    description={getDateFromString(item.limit)}
+                    titleStyle={
+                      ({ fontWeight: "bold" },
+                      item.done
+                        ? { textDecorationLine: "line-through" }
+                        : undefined)
+                    }
+                    descriptionStyle={
+                      new Date(item.limit * 1000) < new Date()
+                        ? { color: "red" }
+                        : undefined
+                    }
+                    style={{ paddingBottom: 0 }}
+                    theme={theme("dodgerblue")}
+                  >
+                    <TouchableOpacity activeOpacity={0.7} /*onLongPress={}*/>
+                      <List.Item
+                        style={{ paddingTop: 0 }}
+                        description={item.description}
+                        descriptionStyle={
+                          item.done
+                            ? { textDecorationLine: "line-through" }
+                            : undefined
+                        }
+                        titleStyle={{ display: "none" }}
+                      />
+                    </TouchableOpacity>
+                  </List.Accordion>
+                </View>
               </View>
-            </View>
-          );
+            );
         })}
       </List.Section>
     );
@@ -235,12 +232,11 @@ const HomeScreen = (props) => {
           keyboardVerticalOffset="100"
         >
           <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.messageStyle}>TAREAS POR CULMINAR</Text>
             {tasks ? (
               renderList(tasks)
             ) : (
               <Image
-                source={require("../../assets/fondotareas.png")}
+                source={require("../../assets/fondoinicio.png")}
                 style={styles.fondo}
               />
             )}

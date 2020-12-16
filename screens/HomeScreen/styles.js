@@ -10,33 +10,31 @@ export default StyleSheet.create({
   areaview: {
     flex: 1,
     backgroundColor: "#fff",
-    
   },
   keyboardstyle: {
     flexGrow: 1,
   },
   container: {
     backgroundColor: "#fff",
-    paddingLeft: 25,
     paddingRight: 25,
     paddingBottom: 25,
   },
   categoriesItemContainer: {
     flex: 1,
     margin: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     height: 215,
-    borderColor: '#cccccc',
+    borderColor: "#cccccc",
     borderWidth: 0.5,
     borderRadius: 20,
   },
-  
+
   buttonStyle: {
     paddingBottom: 15,
     paddingLeft: 20,
     paddingRight: 20,
-  },  
+  },
   iconStyle: {
     width: 50,
     height: 50,
@@ -51,23 +49,19 @@ export default StyleSheet.create({
     textAlign: "center",
     overflow: "hidden",
     paddingTop: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   fondo: {
-    resizeMode: 'contain',
     width: windowWidth,
-    height: windowHeight *0.9,
-    left: -25,
-    top: -200,
-
+    height: windowHeight * 0.9,
   },
   categoriesItemContainer: {
     flex: 1,
     margin: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: windowHeight * 0.10,
-    borderColor: '#cccccc',
+    justifyContent: "center",
+    alignItems: "center",
+    height: windowHeight * 0.1,
+    borderColor: "#cccccc",
     borderWidth: 0.5,
     borderRadius: 30,
   },
@@ -76,7 +70,7 @@ export default StyleSheet.create({
     marginBottom: 10,
     marginLeft: 20,
     marginRight: 20,
-    backgroundColor:"#fff",
+    backgroundColor: "#fff",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

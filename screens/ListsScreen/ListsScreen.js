@@ -353,8 +353,17 @@ const ListsScreen = (props) => {
   const Options = () => {
     return (
       <View>
-        <TouchableOpacity onPress={() => openList(selectedList)}>
-          <Text>Abrir lista</Text>
+        <TouchableOpacity
+          onPress={() => openList(selectedList)}
+          style={styles.buttonOptions}
+        >
+          <Icon
+            flexDirection="row"
+            type="font-awesome"
+            name="folder-open"
+            color="black"
+          />
+          <Text style={styles.options}>Abrir lista</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -362,8 +371,15 @@ const ListsScreen = (props) => {
             toggleOverlay();
             toggleOptions();
           }}
+          style={styles.buttonOptions}
         >
-          <Text>Editar lista</Text>
+          <Icon
+            flexDirection="row"
+            type="font-awesome"
+            name="edit"
+            color="black"
+          />
+          <Text style={styles.options}>Editar lista</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -382,8 +398,15 @@ const ListsScreen = (props) => {
               ]
             );
           }}
+          style={styles.buttonOptions}
         >
-          <Text>Eliminar lista</Text>
+          <Icon
+            flexDirection="row"
+            type="font-awesome"
+            name="trash"
+            color="black"
+          />
+          <Text style={styles.options}>Eliminar lista</Text>
         </TouchableOpacity>
       </View>
     );

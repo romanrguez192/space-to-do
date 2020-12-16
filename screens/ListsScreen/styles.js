@@ -21,13 +21,7 @@ export default StyleSheet.create({
   vista: {
     flex: 1,
   },
-  buttonAddStyle: {
-    position: "absolute",
-    marginTop: windowHeight * 0.8,
-    marginLeft: windowWidth * 0.75,
-    zIndex: 100,
-    elevation: 3,
-  },
+
   iconStyle: {
     width: 50,
     height: 50,
@@ -97,5 +91,20 @@ export default StyleSheet.create({
   fondo: {
     width: windowWidth,
     height: windowHeight * 0.9,
+  },
+  options: {
+    textAlign: "center",
+    fontSize: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingHorizontal: 20,
+  },
+  buttonOptions: {
+    flexDirection: "row",
+    height: 40,
+    alignItems: "center",
+    borderRadius: 5,
+    borderBottomWidth: 4,
+    borderBottomColor: "#FC3A2F",
   },
 });
