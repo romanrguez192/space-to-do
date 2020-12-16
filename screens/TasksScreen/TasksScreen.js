@@ -83,16 +83,57 @@ const TasksScreen = (props) => {
     }, [props.list.id])
   );
 
+  const changeOrder = (ord) => {
+    closeMenu();
+
+    if (!tasks) return;
+
+    var sortFunction;
+
+    if (ord == "asc") {
+      sortFunction = (a, b) => {
+        if (a.limit < b.limit) {
+          return -1;
+        }
+        if (a.limit > b.limit) {
+          return 1;
+        }
+        // a debe ser igual b
+        return 0;
+      };
+    } else if (ord == "desc") {
+      sortFunction = (a, b) => {
+        if (a.limit > b.limit) {
+          return -1;
+        }
+        if (a.limit < b.limit) {
+          return 1;
+        }
+        // a debe ser igual b
+        return 0;
+      };
+    } else if (ord == "alpha") {
+      sortFunction = (a, b) => {
+        if (a.title.toUpperCase() < b.title.toUpperCase()) {
+          return -1;
+        }
+        if (a.title.toUpperCase() > b.title.toUpperCase()) {
+          return 1;
+        }
+        // a debe ser igual b
+        return 0;
+      };
+    }
+
+    tasks.sort(sortFunction);
+  };
+
   const getTasks = () => {
     const tasksRef = firebase.default.firestore().collection("tasks");
     return tasksRef
       .where("listID", "==", props.list.id)
       .orderBy("limit", "asc")
       .onSnapshot((snapshot) => {
-        // const data = snapshot.docs.map((doc) => ({
-        //   id: doc.id,
-        // ...doc.data(),
-        // }));
         const data = [];
         snapshot.docs.forEach((doc) => {
           data.push({
@@ -257,6 +298,21 @@ const TasksScreen = (props) => {
         <Menu.Item
           onPress={() => onPressShowCompleted()}
           title={(showCompleted ? "Ocultar" : "Mostrar") + " completadas"}
+        />
+        <Divider />
+        <Menu.Item
+          onPress={() => changeOrder("alpha")}
+          title="Ordenar alfabéticamente"
+        />
+        <Menu.Item
+          icon="arrow-up"
+          onPress={() => changeOrder("asc")}
+          title="Ordenar ascendente"
+        />
+        <Menu.Item
+          icon="arrow-down"
+          onPress={() => changeOrder("desc")}
+          title="Ordenar descendente"
         />
       </Menu>
       <ScrollView style={{ backgroundColor: "#fff" }}>

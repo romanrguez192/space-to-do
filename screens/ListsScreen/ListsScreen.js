@@ -24,6 +24,9 @@ const ListsScreen = (props) => {
   const [loading, setLoading] = useState(true);
   const [creatingList, setCreatingList] = useState(false);
   const [lists, setLists] = useState(null);
+  const [visibleOptions, setVisibleOptions] = useState(false);
+  const [selectedList, setSelectedList] = useState(null);
+  const [editing, setEditing] = useState(false);
 
   const CustomHeader = () => {
     return (
@@ -113,7 +116,8 @@ const ListsScreen = (props) => {
       })
       .catch(() => {
         Alert.alert(
-          "Ocurrio un error al eliminar esta lista, revise su conexión a internet."
+          "Error",
+          "Ocurrió un error al eliminar esta lista, revise su conexión a internet."
         );
       });
   };
@@ -137,7 +141,7 @@ const ListsScreen = (props) => {
       setList({ ...list, [name]: value });
     };
 
-    const createList = async () => {
+    const editList = async () => {
       if (list.name.trim() === "" || list.theme === "") {
         Alert.alert(
           "Error",
@@ -146,7 +150,41 @@ const ListsScreen = (props) => {
         return;
       }
 
-      //TODO: Verificar selección de tema
+      setCreatingList(true);
+
+      await firebase
+        .firestore()
+        .collection("lists")
+        .doc(selectedList.id)
+        .update({
+          name: list.name,
+          theme: list.theme,
+        })
+        .then((ref) => {
+          setCreatingList(false);
+          toggleOverlay();
+          setEditing(false);
+          Alert.alert(
+            "Lista editada",
+            "¡Tu lista ha sido editada correctamente!"
+          );
+        })
+        .catch((error) => {
+          // TODO: Alertas de errores...
+          console.error("Error ", error);
+        });
+
+      setCreatingList(false);
+    };
+
+    const createList = async () => {
+      if (list.name.trim() === "" || list.theme === "") {
+        Alert.alert(
+          "Error",
+          "Ingresa un nombre y un color para tu lista, por favor."
+        );
+        return;
+      }
 
       const listObj = {
         ...list,
@@ -163,7 +201,7 @@ const ListsScreen = (props) => {
         .then((ref) => {
           toggleOverlay();
           Alert.alert(
-            "Lista creado",
+            "Lista creada",
             "¡Tu lista ha sido creada correctamente!"
           );
           openList({ ...listObj, id: ref.id });
@@ -256,11 +294,27 @@ const ListsScreen = (props) => {
             })}
           </ScrollView>
         </View>
-        <TouchableOpacity style={styles.button} onPress={() => createList()}>
-          <Text style={styles.buttonText}>Crear lista</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            if (editing) {
+              editList();
+            } else {
+              createList();
+            }
+          }}
+        >
+          <Text style={styles.buttonText}>
+            {(editing ? "Editar" : "Crear") + " lista"}
+          </Text>
         </TouchableOpacity>
       </View>
     );
+  };
+
+  const showOptions = (item) => {
+    setSelectedList(item);
+    toggleOptions();
   };
 
   const renderList = ({ item }) => {
@@ -269,6 +323,9 @@ const ListsScreen = (props) => {
         <TouchableOpacity
           style={styles.buttonList}
           onPress={() => openList(item)}
+          onLongPress={() => {
+            showOptions(item);
+          }}
         >
           <Icon
             flexDirection="row"
@@ -289,6 +346,49 @@ const ListsScreen = (props) => {
     );
   };
 
+  const toggleOptions = () => {
+    setVisibleOptions(!visibleOptions);
+  };
+
+  const Options = () => {
+    return (
+      <View>
+        <TouchableOpacity onPress={() => openList(selectedList)}>
+          <Text>Abrir lista</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setEditing(true);
+            toggleOverlay();
+            toggleOptions();
+          }}
+        >
+          <Text>Editar lista</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            Alert.alert(
+              "Eliminar Lista",
+              "¿Estás seguro de que deseas eliminar esta lista?",
+              [
+                { text: "No" },
+                {
+                  text: "Sí",
+                  onPress: () => {
+                    deleteList(selectedList.id);
+                    toggleOptions();
+                  },
+                },
+              ]
+            );
+          }}
+        >
+          <Text>Eliminar lista</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.vista}>
       <CustomHeader />
@@ -302,6 +402,9 @@ const ListsScreen = (props) => {
         ) : (
           <CreateList />
         )}
+      </Overlay>
+      <Overlay isVisible={visibleOptions} onBackdropPress={toggleOptions}>
+        <Options />
       </Overlay>
       {lists ? (
         <FlatList

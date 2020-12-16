@@ -144,7 +144,7 @@ function Sidebar({ ...props }) {
                 icon={({ color, size }) => (
                   <Icon type="font-awesome" name="calendar" color="#2d3f50" />
                 )}
-                label="Calendarios"
+                label="Calendario"
                 labelStyle={{ fontSize: 17, color: "#2d3f50" }}
                 onPress={() =>
                   props.navigation.navigate("Calendario", {
