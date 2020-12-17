@@ -57,13 +57,13 @@ const CreateTaskScreen = (props) => {
 
   const showDate = (date) => {
     const dias = [
+      "Domingo",
       "Lunes",
       "Martes",
       "Miércoles",
       "Jueves",
       "Viernes",
-      "Sábado",
-      "Domingo",
+      "Sabado",
     ];
 
     const meses = [
@@ -90,8 +90,8 @@ const CreateTaskScreen = (props) => {
 
       return hours + ":" + minutes + " " + (date.getHours() < 12 ? "AM" : "PM");
     };
-
-    return `${dias[date.getDay() - 1]} ${date.getDate()} de ${
+    console.log(date.getDay())
+    return `${dias[date.getDay()]} ${date.getDate()} de ${
       meses[date.getMonth()]
     } de ${date.getFullYear()} ${getTime(date)}`;
   };
