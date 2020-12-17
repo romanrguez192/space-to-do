@@ -188,6 +188,14 @@ const HomeScreen = (props) => {
                       />
                     </TouchableOpacity>
                   </List.Accordion>
+                  <View
+                        style={{
+                          borderBottomWidth: 1,
+                          borderBottomColor: '#bbb',
+                          marginLeft: 10,
+                          marginRight: 10,
+                        }}
+                    />
                 </View>
               </View>
             );

@@ -184,6 +184,14 @@ const CalendarScreen = (props) => {
             )
           })
         }
+        <View
+                        style={{
+                          borderBottomWidth: 1,
+                          borderBottomColor: '#bbb',
+                          marginLeft: 15,
+                          marginRight: 15,
+                        }}
+                    />
       </List.Section>
     )
   } 

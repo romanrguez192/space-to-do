@@ -35,7 +35,7 @@ export default StyleSheet.create({
     marginTop: 25,
     marginBottom: 25,
     borderRadius: 10,
-    width: windowWidth * 0.8,
+    width: windowWidth * 0.85,
     backgroundColor:"#fff",
     shadowColor: "#000",
     shadowOffset: {
