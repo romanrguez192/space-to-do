@@ -69,7 +69,6 @@ const CalendarScreen = (props) => {
           onPress={() => props.navigation.toggleDrawer()}
         />
         <Appbar.Content title="Calendario" />
-        <Appbar.Action icon="dots-vertical" />
       </Appbar.Header>
     );
   };

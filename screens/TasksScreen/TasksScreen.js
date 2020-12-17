@@ -301,18 +301,22 @@ const TasksScreen = (props) => {
         />
         <Divider />
         <Menu.Item
+          icon="alphabetical"
           onPress={() => changeOrder("alpha")}
           title="Ordenar alfabéticamente"
+          titleStyle={{left:-20}}
         />
         <Menu.Item
           icon="arrow-up"
           onPress={() => changeOrder("asc")}
           title="Ordenar ascendente"
+          titleStyle={{left:-20}}
         />
         <Menu.Item
           icon="arrow-down"
           onPress={() => changeOrder("desc")}
           title="Ordenar descendente"
+          titleStyle={{left:-20}}
         />
       </Menu>
       <ScrollView>

@@ -51,7 +51,6 @@ const ListsScreen = (props) => {
             if (!loading) toggleOverlay();
           }}
         />
-        <Appbar.Action icon="dots-vertical" />
       </Appbar.Header>
     );
   };
@@ -236,7 +235,6 @@ const ListsScreen = (props) => {
       "#00C853",
       "#C0CA33",
       "#64DD17",
-      "#EEFF41",
       "#F57F17",
       "#FFCA28",
       "#FF5722",

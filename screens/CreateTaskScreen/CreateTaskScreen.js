@@ -191,6 +191,8 @@ const CreateTaskScreen = (props) => {
               onChangeText={(value) => handleChangeText("description", value)}
               multiline={true}
             />
+            <Text style={{marginLeft:10, fontWeight:'bold', color:"#2d3f50", fontSize: 16}}>Fecha Límite</Text>
+            <Text style={{marginBottom: 30,marginTop: 20, marginLeft:10, marginRight: 10}}>{showDate(task.limit)}</Text>
           </View>
 
           <TouchableOpacity
@@ -241,7 +243,6 @@ const CreateTaskScreen = (props) => {
           >
             <Text style={styles.buttonText}>Crear Tarea</Text>
           </TouchableOpacity>
-          <Text>{showDate(task.limit)}</Text>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
