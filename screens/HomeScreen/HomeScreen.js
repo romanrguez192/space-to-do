@@ -154,7 +154,7 @@ const HomeScreen = (props) => {
                     status={item.done ? "checked" : "unchecked"}
                     onPress={() => setDone(item)}
                     color={"dodgerblue"}
-                    style={{ padding: 0, margin: 0 }}
+                    style={{ marginRight:-20,paddingRight:10, paddingLeft: 10, marginTop: 10, borderRadius:50, borderWidth: 2, borderColor: "#bbb",width: 55 }}
                   />
                 </View>
                 <View style={{ flex: 0.9 }}>

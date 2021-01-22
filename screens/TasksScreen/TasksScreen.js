@@ -222,7 +222,7 @@ const TasksScreen = (props) => {
                     status={item.done ? "checked" : "unchecked"}
                     onPress={() => setDone(item)}
                     color={props.list.theme}
-                    style={{ paddingRight: 0, marginLeft: -10 }}
+                    style={{ marginRight:-20,paddingRight:10, paddingLeft: 10, marginTop: 10, borderRadius:50, borderWidth: 2, borderColor: "#bbb",width: 55}}
                   />
                 </View>
                 <View style={{ flex: 0.9 }}>
