@@ -64,12 +64,12 @@ const UserScreen = (props) => {
     avatarColor: "",
     id: "",
   });
-  let pass
+  let pass;
   const [loading, setLoading] = useState(true);
   const [image, setImage] = useState("");
-  const [changing, setChanging] = useState(false)
-  const [icon, setIcon] = useState("pencil")
-  const [changeName, setChangeName] = useState(null)
+  const [changing, setChanging] = useState(false);
+  const [icon, setIcon] = useState("pencil");
+  const [changeName, setChangeName] = useState(null);
   const [visibleOverlay, setVisibleOverlay] = useState(false);
 
   const getUserByID = async (id) => {
@@ -85,7 +85,6 @@ const UserScreen = (props) => {
     setVisibleOverlay(!visibleOverlay);
   };
 
-
   const singout = () => {
     firebase
       .auth()
@@ -100,15 +99,13 @@ const UserScreen = (props) => {
       });
   };
 
-  const updateUser = async (key ,value) => {
+  const updateUser = async (key, value) => {
     const dbRef = firebase.firestore().collection("users").doc(props.userID);
     await dbRef.set({ ...user, [key]: value });
-    if(key === "imageID") getImageByID(value);
+    if (key === "imageID") getImageByID(value);
   };
 
   const pickImage = async () => {
-    
-
     const permission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (permission.granted) {
       const resulImage = await ImagePicker.launchImageLibraryAsync({
@@ -130,10 +127,13 @@ const UserScreen = (props) => {
               .put(resolve)
               .then((resolve) => {
                 updateUser("imageID", uuid);
-                Alert.alert("Imagen subida correctamente");
+                Alert.alert("Enhorabuena", "Imagen subida correctamente.");
               })
               .catch((err) => {
-                Alert.alert("No se pudo cargar la imagen intente de nuevo");
+                Alert.alert(
+                  "Error",
+                  "No se pudo cargar la imagen, intenta de nuevo."
+                );
               });
           })
           .catch((err) => {
@@ -165,26 +165,29 @@ const UserScreen = (props) => {
 
   const deleteListsAndTasks = () => {
     const listsRef = firebase.firestore().collection("lists");
-      listsRef.where("createdBy", "==", user.id)
-      .onSnapshot((snapshot) => {
-        snapshot.docs.forEach((doc) => {
+    listsRef.where("createdBy", "==", user.id).onSnapshot((snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        const taskRef = firebase.firestore().collection("tasks");
+        taskRef.where("listID", "==", doc.ref.id).onSnapshot((snapshot1) => {
+          snapshot1.docs.forEach((docc) => {
+            docc.ref.delete().catch(() => {
+              Alert.alert(
+                "Error",
+                "Ocurrió un error al intentar eliminar la cuenta."
+              );
+            });
+          });
+        });
 
-          const taskRef = firebase.firestore().collection('tasks')
-          taskRef.where("listID", "==" , doc.ref.id)
-          .onSnapshot((snapshot1) => {
-            snapshot1.docs.forEach((docc) => {
-              docc.ref.delete().catch(() => {
-                Alert.alert("Ocurrió un error al intentar eliminar la cuenta.")
-              })
-            })
-          })
-
-          doc.ref.delete().catch(() => {
-            Alert.alert("Ocurrió un error al intentar eliminar la cuenta.")
-          })
-        })
-      })
-  }
+        doc.ref.delete().catch(() => {
+          Alert.alert(
+            "Error",
+            "Ocurrió un error al intentar eliminar la cuenta."
+          );
+        });
+      });
+    });
+  };
 
   const deleteImage = () => {
     if (!(user.imageID === "")) {
@@ -200,38 +203,68 @@ const UserScreen = (props) => {
           setImage("");
           global.image = "";
         })
-        .catch((err) => console.log("Cannot be deleted: " + err));
+        .catch((err) => {
+          Alert.alert(
+            "Error",
+            "Ocurrió un error al intentar eliminar la cuenta."
+          );
+        });
     }
   };
 
   const deleteAccount = () => {
-    firebase.default.firestore().collection('users').doc(props.userID).delete().catch(() => {
-      Alert.alert("Ocurrió un error al intentar eliminar la cuenta.")
-      return
-    })
-    const credential = firebase.auth.EmailAuthProvider.credential(user.email, pass)
-    const userRef = firebase.auth().currentUser
-    userRef.reauthenticateWithCredential(credential).then(() => {
-      deleteListsAndTasks()
+    const credential = firebase.auth.EmailAuthProvider.credential(
+      user.email,
+      pass
+    );
+    const userRef = firebase.auth().currentUser;
+    userRef
+      .reauthenticateWithCredential(credential)
+      .then(() => {
+        firebase.default
+          .firestore()
+          .collection("users")
+          .doc(props.userID)
+          .delete()
+          .catch(() => {
+            Alert.alert(
+              "Error",
+              "Ocurrió un error al intentar eliminar la cuenta."
+            );
+            return;
+          });
 
-      if(user.imageID) {
-        const imageRef = firebase.storage().ref(`images/${user.imageID}.jpg`);
-        imageRef.delete().catch((err) => {
-          console.log("No se pudo eliminar la imagen: " + err)
-        })
-      }
+        deleteListsAndTasks();
 
-      userRef.delete().then(() => {
-        Alert.alert("Cuenta eliminada satisfactoriamente")
+        if (user.imageID) {
+          const imageRef = firebase.storage().ref(`images/${user.imageID}.jpg`);
+          imageRef.delete().catch((err) => {
+            Alert.alert(
+              "Error",
+              "Ocurrió un error al intentar eliminar la cuenta."
+            );
+          });
+        }
+
+        userRef
+          .delete()
+          .then(() => {
+            Alert.alert("Enhorabuena", "Cuenta eliminada satisfactoriamente");
+          })
+          .catch(() => {
+            Alert.alert(
+              "Error",
+              "Ocurrió un error al intentar eliminar la cuenta."
+            );
+          });
       })
       .catch(() => {
-        Alert.alert("Ocurrió un error al intentar eliminar la cuenta.")
-      })
-
-    }).catch(() => {
-      Alert.alert("Ocurrió un error al intentar eliminar la cuenta.")
-    })
-  }
+        Alert.alert(
+          "Error",
+          "Ocurrió un error al intentar eliminar la cuenta."
+        );
+      });
+  };
 
   const uploadImage = (uri) => {
     return new Promise((resolve, reject) => {
@@ -249,21 +282,20 @@ const UserScreen = (props) => {
   };
 
   const handlerIconPress = () => {
-    if(icon === "pencil"){
-      setIcon("check")
-      setChangeName(user.name)
-      setChanging(true) 
-    }else{
-        if(changeName !== user.name){
-          global.name = changeName
-          setUser({...user, name: changeName})
-          updateUser("name", changeName)
-        }
-        setIcon("pencil")
-        setChanging(false)
-      
+    if (icon === "pencil") {
+      setIcon("check");
+      setChangeName(user.name);
+      setChanging(true);
+    } else {
+      if (changeName !== user.name) {
+        global.name = changeName;
+        setUser({ ...user, name: changeName });
+        updateUser("name", changeName);
+      }
+      setIcon("pencil");
+      setChanging(false);
     }
-  }
+  };
 
   return (
     <SafeAreaView style={styles.areaview}>
@@ -315,37 +347,75 @@ const UserScreen = (props) => {
             </TouchableOpacity>
             <View style={styles.informationContainer}>
               <View style={styles.shadow}>
-                <View style={{flexDirection: 'row', marginTop: 20}}>
+                <View style={{ flexDirection: "row", marginTop: 20 }}>
                   <Text style={styles.titleInformation}>Nombre</Text>
-                  <TouchableOpacity onPress={handlerIconPress} style={{width: 40}}>
-                    <Icon type="font-awesome" name={icon} size={20} 
-                    color="#2c3e50" 
+                  <TouchableOpacity
+                    onPress={handlerIconPress}
+                    style={{ width: 40 }}
+                  >
+                    <Icon
+                      type="font-awesome"
+                      name={icon}
+                      size={20}
+                      color="#2c3e50"
                     />
                   </TouchableOpacity>
                 </View>
 
-                {
-                  (changing)
-                  ? 
-                    <Input style={styles.inputStyle} placeholder="Nombre Completo" value={changeName} 
-                    onChangeText={(value) => setChangeName(value)} autoCapitalize="words"/>                    
-                  :
-                    <Text style={styles.subtitleInformation}>{user.name}</Text>
-                }
+                {changing ? (
+                  <Input
+                    style={styles.inputStyle}
+                    placeholder="Nombre Completo"
+                    value={changeName}
+                    onChangeText={(value) => setChangeName(value)}
+                    autoCapitalize="words"
+                  />
+                ) : (
+                  <Text style={styles.subtitleInformation}>{user.name}</Text>
+                )}
               </View>
 
-              <Overlay contentContainerStyle={styles.overStyle} isVisible={visibleOverlay} onBackdropPress={toggleOverlay}>
+              <Overlay
+                contentContainerStyle={styles.overStyle}
+                isVisible={visibleOverlay}
+                onBackdropPress={toggleOverlay}
+              >
                 <View style={styles.overStyle}>
-                  <Text style={{fontWeight: 'bold', textAlign: 'center', fontSize: 17, marginTop: 15}}>
-                    Para poder proceder a la eliminación de su cuenta, necesitamos asegurarnos que se trata del usuario de la cuenta, a continuación ingrese su contraseña:
+                  <Text
+                    style={{
+                      // fontWeight: "bold",
+                      textAlign: "center",
+                      fontSize: 17,
+                      marginTop: 15,
+                    }}
+                  >
+                    Para poder proceder a la eliminación de su cuenta,
+                    necesitamos asegurarnos que se trata del usuario de la
+                    cuenta, a continuación ingrese su contraseña:
                   </Text>
-                  <Input onChangeText={(value) => pass=value}/>
-                  <Button onPress={deleteAccount}>ELIMINAR</Button>
+                  <Input
+                    secureTextEntry={true}
+                    autoCapitalize="none"
+                    onChangeText={(value) => (pass = value)}
+                  />
+                  <Button
+                    theme={{
+                      ...DefaultTheme,
+                      roundness: 2,
+                      colors: {
+                        ...DefaultTheme.colors,
+                        primary: "#e54e42",
+                      },
+                    }}
+                    onPress={deleteAccount}
+                  >
+                    ELIMINAR
+                  </Button>
                 </View>
               </Overlay>
 
               <View style={styles.shadow}>
-                <Text style={styles.titleInformation}>Correo Electrónico</Text> 
+                <Text style={styles.titleInformation}>Correo Electrónico</Text>
                 <Text style={styles.subtitleInformation}>{user.email}</Text>
               </View>
               <View style={styles.shadow}>
@@ -354,8 +424,15 @@ const UserScreen = (props) => {
                   {user.gender === "M" ? "Masculino" : "Femenino"}
                 </Text>
               </View>
-              <TouchableOpacity style={styles.deleteAccount} onPress={toggleOverlay}>
-                <Text style={{color: "#e54e42", fontSize: 15, fontWeight: "bold"}}>ELIMINAR CUENTA</Text>
+              <TouchableOpacity
+                style={styles.deleteAccount}
+                onPress={toggleOverlay}
+              >
+                <Text
+                  style={{ color: "#e54e42", fontSize: 15, fontWeight: "bold" }}
+                >
+                  ELIMINAR CUENTA
+                </Text>
               </TouchableOpacity>
             </View>
           </ScrollView>

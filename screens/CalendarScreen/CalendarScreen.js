@@ -2,11 +2,17 @@ import React, { useState, useRef, useEffect } from "react";
 import { Text, View, TouchableOpacity, Alert } from "react-native";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
-import { ActivityIndicator, Appbar, DefaultTheme, List } from "react-native-paper";
+import {
+  ActivityIndicator,
+  Appbar,
+  DefaultTheme,
+  List,
+} from "react-native-paper";
 import { Calendar } from "react-native-calendars";
 import { LocaleConfig } from "react-native-calendars";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+import LoadScreen from "../LoadScreen/LoadScreen";
 
 LocaleConfig.locales["es"] = {
   monthNames: [
@@ -77,11 +83,12 @@ const CalendarScreen = (props) => {
   }, []);
 
   const [selected, setSelected] = useState(
-  new Date().getFullYear() 
-  + "-" + 
-  (new Date().getMonth() + 1)
-  + "-" + 
-  new Date().getDate());
+    new Date().getFullYear() +
+      "-" +
+      (new Date().getMonth() + 1) +
+      "-" +
+      new Date().getDate()
+  );
 
   const [dates, setDates] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -93,23 +100,20 @@ const CalendarScreen = (props) => {
     else setMarkIt(false);
     setSelected(day.dateString);
   };
-  
 
   const getLists = (userID) => {
     const listsRef = firebase.default.firestore().collection("lists");
-    listsRef
-      .where("createdBy", "==", userID)
-      .onSnapshot((snapshot) => {
-        const data = []
-        snapshot.docs.map((doc) => {
-          data.push({
-            id: doc.id,
-            ...doc.data(),
-          })
-          getTasks(doc.id)
+    listsRef.where("createdBy", "==", userID).onSnapshot((snapshot) => {
+      const data = [];
+      snapshot.docs.map((doc) => {
+        data.push({
+          id: doc.id,
+          ...doc.data(),
         });
-        getDates(data);
+        getTasks(doc.id);
       });
+      getDates(data);
+    });
   };
 
   const getTasks = (listID) => {
@@ -118,7 +122,7 @@ const CalendarScreen = (props) => {
       .where("listID", "==", listID)
       .where("done", "==", false)
       .onSnapshot((snapshot) => {
-        let data = tasks
+        let data = tasks;
         snapshot.docs.forEach((doc) => {
           data.push({
             id: doc.id,
@@ -135,72 +139,73 @@ const CalendarScreen = (props) => {
     if (lists) {
       lists.map((list) => {
         const taskRef = firebase.default.firestore().collection("tasks");
-        taskRef.where("listID", "==", list.id).where("done", "==", false).onSnapshot((snapshot) => {
-          snapshot.docs.forEach((doc) => {
-            const resul = new Date(doc.data().limit * 1000);
-            const str =
-              resul.getFullYear() +
-              "-" +
-              (resul.getMonth() + 1) +
-              "-" +
-              resul.getDate();
-            if(date[str]){
-              date[str].id.push(doc.id)
-            }else{
-              date[str] = {
-                id: [doc.id],
-                dotColor: "#3B99D8",
-                selectedColor: "white",
-                marked: true,
-              };
-            }
+        taskRef
+          .where("listID", "==", list.id)
+          .where("done", "==", false)
+          .onSnapshot((snapshot) => {
+            snapshot.docs.forEach((doc) => {
+              const resul = new Date(doc.data().limit * 1000);
+              const str =
+                resul.getFullYear() +
+                "-" +
+                (resul.getMonth() + 1) +
+                "-" +
+                resul.getDate();
+              if (date[str]) {
+                date[str].id.push(doc.id);
+              } else {
+                date[str] = {
+                  id: [doc.id],
+                  dotColor: "#3B99D8",
+                  selectedColor: "white",
+                  marked: true,
+                };
+              }
+            });
+            setDates(date);
           });
-          setDates(date);
-        });
       });
     }
     setLoading(false);
   };
 
   const renderTasks = (items) => {
-    const hash = {}
-    tasks = tasks.filter(current => {
-      const exist = !hash[current.id]
-      hash[current.id] = true
-      return exist
-    })
-    return(
+    const hash = {};
+    tasks = tasks.filter((current) => {
+      const exist = !hash[current.id];
+      hash[current.id] = true;
+      return exist;
+    });
+    return (
       <List.Section title={selected}>
-        {
-          items[selected].id.map((id) => {
-            return (
-              tasks.map((task) => {
-                if(task.id === id){
-                  return(
-                    <List.Item title={task.title} description={task.description} key={id}/>
-                  )
-                }
-              })
-            )
-          })
-        }
+        {items[selected].id.map((id) => {
+          return tasks.map((task) => {
+            if (task.id === id) {
+              return (
+                <List.Item
+                  title={task.title}
+                  description={task.description}
+                  key={id}
+                />
+              );
+            }
+          });
+        })}
         <View
-                        style={{
-                          borderBottomWidth: 1,
-                          borderBottomColor: '#bbb',
-                          marginLeft: 15,
-                          marginRight: 15,
-                        }}
-                    />
+          style={{
+            borderBottomWidth: 1,
+            borderBottomColor: "#bbb",
+            marginLeft: 15,
+            marginRight: 15,
+          }}
+        />
       </List.Section>
-    )
-  } 
+    );
+  };
 
   if (loading) {
     return (
-      <View>
-        <ActivityIndicator size="large" />
-      </View>
+      <LoadScreen />
     );
   }
 
@@ -258,18 +263,15 @@ const CalendarScreen = (props) => {
           }}
         ></Calendar>
         <SafeAreaView>
-            {
-              dates
-              ?
-                (dates[selected]
-                ?
-                renderTasks(dates)
-                :
-                <List.Item title="No hay tareas para este dia" />
-                )
-              :
-              <List.Item  title="Aún no tiene ninguna tarea creada" />
-            }
+          {dates ? (
+            dates[selected] ? (
+              renderTasks(dates)
+            ) : (
+              <List.Item title="No hay tareas para este dia" />
+            )
+          ) : (
+            <List.Item title="Aún no tiene ninguna tarea creada" />
+          )}
         </SafeAreaView>
       </ScrollView>
     </>
