@@ -1,5 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Text, View, TouchableOpacity, Alert } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  Alert,
+  DatePickerIOSComponent,
+} from "react-native";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
 import {
@@ -8,11 +14,12 @@ import {
   DefaultTheme,
   List,
 } from "react-native-paper";
-import { Calendar } from "react-native-calendars";
+import { Calendar, Agenda, CalendarTheme } from "react-native-calendars";
 import { LocaleConfig } from "react-native-calendars";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LoadScreen from "../LoadScreen/LoadScreen";
+import { Input, Icon, Overlay, ListItem } from "react-native-elements";
 
 LocaleConfig.locales["es"] = {
   monthNames: [
@@ -58,6 +65,38 @@ LocaleConfig.locales["es"] = {
 LocaleConfig.defaultLocale = "es";
 
 const CalendarScreen = (props) => {
+  const createEmptyDates = () => {
+    const datess = {};
+
+    for (let year = 2017; year <= 2023; year++) {
+      for (let month = 1; month <= 12; month++) {
+        for (let day = 1; day <= 31; day++) {
+          const date =
+            year +
+            "-" +
+            (month < 10 ? "0" : "") +
+            month +
+            "-" +
+            (day < 10 ? "0" : "") +
+            day;
+
+          datess[date] = [];
+        }
+      }
+    }
+
+    console.log("Salio aki");
+    return datess;
+  };
+
+  const [dates, setDates] = useState(createEmptyDates());
+  const [loading, setLoading] = useState(true);
+  const [ids, setIds] = useState([]);
+
+  useEffect(() => {
+    getTasks(props.route.params.userID);
+  }, []);
+
   const CustomHeader = () => {
     return (
       <Appbar.Header
@@ -78,202 +117,122 @@ const CalendarScreen = (props) => {
       </Appbar.Header>
     );
   };
-  useEffect(() => {
-    getLists(props.route.params.userID);
-  }, []);
 
-  const [selected, setSelected] = useState(
-    new Date().getFullYear() +
-      "-" +
-      (new Date().getMonth() + 1) +
-      "-" +
-      new Date().getDate()
-  );
-
-  const [dates, setDates] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [markIt, setMarkIt] = useState(false);
-  let [tasks, setTasks] = useState([]);
-
-  const onDayPress = (day) => {
-    if (Object.keys(dates).includes(day.dateString)) setMarkIt(true);
-    else setMarkIt(false);
-    setSelected(day.dateString);
-  };
-
-  const getLists = (userID) => {
-    const listsRef = firebase.default.firestore().collection("lists");
-    listsRef.where("createdBy", "==", userID).onSnapshot((snapshot) => {
-      const data = [];
-      snapshot.docs.map((doc) => {
-        data.push({
-          id: doc.id,
-          ...doc.data(),
-        });
-        getTasks(doc.id);
-      });
-      getDates(data);
-    });
-  };
-
-  const getTasks = (listID) => {
+  const getTasks = (id) => {
     const tasksRef = firebase.default.firestore().collection("tasks");
     tasksRef
-      .where("listID", "==", listID)
+      .where("userID", "==", id)
       .where("done", "==", false)
       .onSnapshot((snapshot) => {
-        let data = tasks;
         snapshot.docs.forEach((doc) => {
-          data.push({
-            id: doc.id,
-            ...doc.data(),
-          });
+          console.log("A");
+          const resul = new Date(doc.data().limit * 1000);
+          const year = resul.getFullYear();
+          const month = resul.getMonth() + 1;
+          const day = resul.getDate();
+
+          const date =
+            year +
+            "-" +
+            (month < 10 ? "0" : "") +
+            month +
+            "-" +
+            (day < 10 ? "0" : "") +
+            day;
+
+          if (!ids.includes(doc.id)) {
+            dates[date].push(doc.data());
+            ids.push(doc.id);
+          }
         });
-        if (data.length === 0) setTasks(null);
-        else setTasks(data);
+        setLoading(false);
       });
   };
 
-  const getDates = (lists) => {
-    let date = {};
-    if (lists) {
-      lists.map((list) => {
-        const taskRef = firebase.default.firestore().collection("tasks");
-        taskRef
-          .where("listID", "==", list.id)
-          .where("done", "==", false)
-          .onSnapshot((snapshot) => {
-            snapshot.docs.forEach((doc) => {
-              const resul = new Date(doc.data().limit * 1000);
-              const str =
-                resul.getFullYear() +
-                "-" +
-                (resul.getMonth() + 1) +
-                "-" +
-                resul.getDate();
-              if (date[str]) {
-                date[str].id.push(doc.id);
-              } else {
-                date[str] = {
-                  id: [doc.id],
-                  dotColor: "#3B99D8",
-                  selectedColor: "white",
-                  marked: true,
-                };
-              }
-            });
-            setDates(date);
-          });
-      });
-    }
-    setLoading(false);
-  };
+  const getDateFromString = (limit) => {
+    const resul = new Date(limit * 1000);
 
-  const renderTasks = (items) => {
-    const hash = {};
-    tasks = tasks.filter((current) => {
-      const exist = !hash[current.id];
-      hash[current.id] = true;
-      return exist;
-    });
+    const getTime = (date) => {
+      let hours = date.getHours() % 12;
+      let minutes = date.getMinutes();
+
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+
+      return hours + ":" + minutes + " " + (date.getHours() < 12 ? "AM" : "PM");
+    };
+
     return (
-      <List.Section title={selected}>
-        {items[selected].id.map((id) => {
-          return tasks.map((task) => {
-            if (task.id === id) {
-              return (
-                <List.Item
-                  title={task.title}
-                  description={task.description}
-                  key={id}
-                />
-              );
-            }
-          });
-        })}
-        <View
-          style={{
-            borderBottomWidth: 1,
-            borderBottomColor: "#bbb",
-            marginLeft: 15,
-            marginRight: 15,
-          }}
-        />
-      </List.Section>
+      resul.getDate() +
+      "/" +
+      (resul.getMonth() + 1) +
+      "/" +
+      resul.getFullYear() +
+      " " +
+      getTime(resul)
     );
   };
 
   if (loading) {
-    return (
-      <LoadScreen />
-    );
+    return <LoadScreen />;
   }
 
   return (
     <>
       <CustomHeader />
-      <ScrollView>
-        <Calendar
-          enableSwipeMonths={true}
-          onDayPress={onDayPress}
-          //estilo de la fecha seleccionada
-          markedDates={{
-            ...dates,
-            [selected]: {
-              selected: true,
-              disableTouchEvent: true,
-              selectedColor: "#3B99D8",
-              selectedTextColor: "white",
-              dotColor: "white",
-              marked: markIt,
-            },
-          }}
-          style={styles.calendar}
-          theme={{
-            //Calendario
-            calendarBackground: "#E8E8F4",
-            //Mes
-            monthTextColor: "#63656A",
-            textMonthFontSize: 22,
-            textMonthFontWeight: "bold",
-            //Días
-            textDayFontSize: 16,
-            textDayFontWeight: "bold",
-            todayTextColor: "#3B99D8",
-            dayTextColor: "#63656A",
-            //Flecha
-            arrowColor: "#3B99D8",
-            "stylesheet.calendar.header": {
-              //mes header
-              header: {
-                marginTop: 3,
-                borderRadius: 3,
-                flexDirection: "row",
-                backgroundColor: "#E8E8F4",
-                justifyContent: "space-between",
-              },
-              //dias header
-              dayHeader: {
-                flexDirection: "row",
-                justifyContent: "space-between",
-                color: "#3B99D8",
-                fontWeight: "bold",
-              },
-            },
-          }}
-        ></Calendar>
-        <SafeAreaView>
-          {dates ? (
-            dates[selected] ? (
-              renderTasks(dates)
-            ) : (
-              <List.Item title="No hay tareas para este dia" />
-            )
-          ) : (
-            <List.Item title="Aún no tiene ninguna tarea creada" />
-          )}
-        </SafeAreaView>
-      </ScrollView>
+      <Agenda
+        items={dates}
+        renderItem={(item, firstItemInDay) => {
+          return (
+            <View style={{paddingTop: 22}} >
+              <List.Accordion
+                title={item.title}
+                description={getDateFromString(item.limit)}
+                titleStyle={
+                  ({ fontWeight: "bold" },
+                  item.done
+                    ? { textDecorationLine: "line-through" }
+                    : undefined)
+                }
+                descriptionStyle={
+                  new Date(item.limit * 1000) < new Date()
+                    ? { color: "red" }
+                    : undefined
+                }
+                style={{ paddingBottom: 0 }}
+                theme={{
+                  ...DefaultTheme,
+                  roundness: 2,
+                  colors: {
+                    ...DefaultTheme.colors,
+                    primary: "#e54e42",
+                  },
+                }}
+              >
+                <TouchableOpacity activeOpacity={0.7} /*onLongPress={}*/>
+                  <List.Item
+                    style={{ paddingTop: 0 }}
+                    description={item.description}
+                    descriptionStyle={
+                      item.done
+                        ? { textDecorationLine: "line-through" }
+                        : undefined
+                    }
+                    titleStyle={{ display: "none" }}
+                  />
+                </TouchableOpacity>
+              </List.Accordion>
+            </View>
+          );
+        }}
+        renderEmptyDate={() => {
+          return (
+            <View style={{paddingTop: 22}} >
+              <Text style={{marginTop: 22}}>No hay tareas para este día</Text>
+            </View>
+          );
+        }}
+      />
     </>
   );
 };
