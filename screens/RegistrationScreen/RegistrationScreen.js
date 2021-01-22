@@ -49,8 +49,10 @@ const RegistrationScreen = (props) => {
           },
         }}
       >
-        <Appbar.BackAction onPress={() => props.navigation.navigate("Iniciar Sesión")} />
-        <Appbar.Content title="Registrarse"/>
+        <Appbar.BackAction
+          onPress={() => props.navigation.navigate("Iniciar Sesión")}
+        />
+        <Appbar.Content title="Registrarse" />
       </Appbar.Header>
     );
   };
@@ -100,17 +102,26 @@ const RegistrationScreen = (props) => {
     const values = Object.values(user);
 
     if (values.some((value) => value.trim() === "")) {
-      Alert.alert("Error", "Debe llenar todos los campos.");
+      Alert.alert(
+        "Error",
+        "Debes llenar todos los campos, intenta nuevamente."
+      );
       return;
     }
 
     if (user.username.trim().indexOf(" ") != -1) {
-      Alert.alert("Error", "El nombre de usuario no puede contener espacios.");
+      Alert.alert(
+        "Error",
+        "El nombre de usuario no puede contener espacios, intenta otra vez."
+      );
       return;
     }
 
     if (user.password !== user.confirmPassword) {
-      Alert.alert("Error", "Ambas contraseñas deben coincidir.");
+      Alert.alert(
+        "Error",
+        "Ambas contraseñas deben coincidir, prueba de nuevo."
+      );
       return;
     }
 
@@ -130,15 +141,30 @@ const RegistrationScreen = (props) => {
 
     if (!validUsername) {
       setVisibleOverlay(false);
-      Alert.alert("Error", "Este nombre de usuario no está disponible");
+      Alert.alert(
+        "Error",
+        "Este nombre de usuario no está disponible, intenta con otro."
+      );
       return;
     }
 
     const colorHEX = () => {
       const colores = [
-        "#e67e22", "#8e44ad", "#1abc9c", "#16a085", "#0097e6", "#273c75", "#487eb0",
-        "#fbc531", "#f53b57", "#3c40c6", "#ff5e57", "#485460", "#00d8d6", "#574b90",
-                      ];
+        "#e67e22",
+        "#8e44ad",
+        "#1abc9c",
+        "#16a085",
+        "#0097e6",
+        "#273c75",
+        "#487eb0",
+        "#fbc531",
+        "#f53b57",
+        "#3c40c6",
+        "#ff5e57",
+        "#485460",
+        "#00d8d6",
+        "#574b90",
+      ];
       return colores[(Math.random() * (colores.length - 1)).toFixed()];
     };
 
@@ -161,19 +187,30 @@ const RegistrationScreen = (props) => {
           .set(data)
           .then(() => {
             setVisibleOverlay(false);
-            // TODO: Cambiar esta alerta por una mejor
-            Alert.alert("Enhorabuena", "Usuario creado satisfactoriamente");
+            Alert.alert("Enhorabuena", "Usuario creado satisfactoriamente.");
           })
           .catch((error) => {
             setVisibleOverlay(false);
-            // TODO: Texto errores
-            alert(error);
+            Alert.alert(
+              "Error",
+              "Revisa tu conexión a internet y vuelve a intentar."
+            );
           });
       })
       .catch((error) => {
         setVisibleOverlay(false);
-        // TODO: Texto errores
-        alert(error);
+        let message = error.code;
+        if (error.code == "auth/invalid-email") {
+          message = "Ingresa una dirección de correo electrónico válida.";
+        } else if (
+          error.code == "auth/email-already-in-use"
+        ) {
+          message = "Ya existe un usuario con esta dirección de correo, intenta nuevamente.";
+        }
+        else if (error.code == "auth/weak-password") {
+          message = "Ingresa una contraseña de al menos 6 caracteres para crear tu usuario, por favor."
+        }
+        Alert.alert("Error", message);
       });
   };
 

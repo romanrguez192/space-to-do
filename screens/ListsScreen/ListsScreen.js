@@ -116,7 +116,7 @@ const ListsScreen = (props) => {
       .catch(() => {
         Alert.alert(
           "Error",
-          "Ocurrió un error al eliminar esta lista, revise su conexión a internet."
+          "Ocurrió un error al eliminar esta lista, revisa tu conexión a internet."
         );
       });
   };

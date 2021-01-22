@@ -39,7 +39,7 @@ const LoginScreen = (props) => {
           },
         }}
       >
-        <Appbar.Content title="Iniciar Sesión"/>
+        <Appbar.Content title="Iniciar Sesión" />
       </Appbar.Header>
     );
   };
@@ -79,7 +79,7 @@ const LoginScreen = (props) => {
 
   const loginUser = () => {
     if (user.email.trim() === "" || user.password.trim() === "") {
-      Alert.alert("Error", "Ingresa tu correo y tu contraseña.");
+      Alert.alert("Error", "Ingresa tu correo y tu contraseña, por favor.");
       return;
     }
 
@@ -96,23 +96,35 @@ const LoginScreen = (props) => {
           .get()
           .then((firestoreDocument) => {
             if (!firestoreDocument.exists) {
-              Alert.alert("Error", "Este usuario ya no existe.");
+              Alert.alert(
+                "Error",
+                "Este usuario ya no existe, intenta de nuevo."
+              );
               return;
             }
             setVisibleOverlay(false);
-            // TODO: Cambiar esta alerta por una mejor
-            Alert.alert("Enhorabuena", "Has iniciado sesión");
+            Alert.alert("Enhorabuena", "Has iniciado sesión correctamente.");
           })
           .catch((error) => {
             setVisibleOverlay(false);
-            // TODO: Textos de error
-            alert(error);
+            Alert.alert(
+              "Error",
+              "Revisa tu conexión a internet y vuelve a intentar."
+            );
           });
       })
       .catch((error) => {
         setVisibleOverlay(false);
-        // TODO: Textos de error
-        alert(error);
+        let message = error.code;
+        if (error.code == "auth/invalid-email") {
+          message = "Ingresa una dirección de correo electrónico válida.";
+        } else if (
+          error.code == "auth/user-not-found" ||
+          error.code == "auth/wrong-password"
+        ) {
+          message = "Correo o contraseña inválidos, intenta nuevamente.";
+        }
+        Alert.alert("Error", message);
       });
   };
 
