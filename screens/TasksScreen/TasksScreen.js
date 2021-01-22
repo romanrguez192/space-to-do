@@ -7,7 +7,6 @@ import ContentLoader, {
 import {
   Appbar,
   DefaultTheme,
-  Checkbox,
   List,
   IconButton,
   Divider,
@@ -38,6 +37,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import * as Animatable from "react-native-animatable";
 import Collapsible from "react-native-collapsible";
 import Accordion from "react-native-collapsible/Accordion";
+import { CheckBox } from 'react-native-elements'
 
 const TasksScreen = (props) => {
   const [loading, setLoading] = useState(true);
@@ -218,11 +218,11 @@ const TasksScreen = (props) => {
                     margin: 0,
                   }}
                 >
-                  <Checkbox.Item
-                    status={item.done ? "checked" : "unchecked"}
+                  <CheckBox
+                    checked={item.done}
+                    uncheckedColor={props.list.theme}
                     onPress={() => setDone(item)}
-                    color={props.list.theme}
-                    style={{ marginRight:-20,paddingRight:10, paddingLeft: 10, marginTop: 10, borderRadius:50, borderWidth: 2, borderColor: "#bbb",width: 55}}
+                    checkedColor={props.list.theme}
                   />
                 </View>
                 <View style={{ flex: 0.9 }}>

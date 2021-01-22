@@ -25,7 +25,8 @@ import ContentLoader, {
 } from "react-native-easy-content-loader";
 import ProfilePicture from "../../components/ProfilePicture";
 import { Searchbar, Avatar } from "react-native-paper";
-import { Appbar, DefaultTheme, List, Checkbox } from "react-native-paper";
+import { Appbar, DefaultTheme, List } from "react-native-paper";
+import { CheckBox } from 'react-native-elements'
 
 // Pantalla de Inicio de Sesión
 const HomeScreen = (props) => {
@@ -150,7 +151,7 @@ const HomeScreen = (props) => {
                     margin: 0,
                   }}
                 >
-                  <Checkbox.Item
+                  <CheckBox
                     status={item.done ? "checked" : "unchecked"}
                     onPress={() => setDone(item)}
                     color={"dodgerblue"}
