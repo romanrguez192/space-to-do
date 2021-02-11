@@ -55,6 +55,7 @@ const HomeScreen = (props) => {
 
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState(null);
+  const [lists, setLists] = useState(null);
 
   useLayoutEffect(() => {
     props.navigation.setOptions({
@@ -71,7 +72,7 @@ const HomeScreen = (props) => {
   };
 
   const getTasks = () => {
-    const tasksRef = firebase.firestore().collection("tasks");
+    const tasksRef = firebase.default.firestore().collection("tasks");
     tasksRef
       .where("userID", "==", props.userID)
       .orderBy("limit", "asc")
@@ -79,6 +80,9 @@ const HomeScreen = (props) => {
       .onSnapshot((snapshot) => {
         const data = [];
         snapshot.docs.forEach((doc) => {
+          ///////////////////////////////////
+
+          ///////////////////////////////////////
           data.push({
             id: doc.id,
             ...doc.data(),
@@ -137,6 +141,7 @@ const HomeScreen = (props) => {
   };
 
   const renderList = (items) => {
+    
     return (
       <List.Section title="Tareas por culminar">
         {items.map((item) => {
@@ -174,7 +179,7 @@ const HomeScreen = (props) => {
                         : undefined
                     }
                     style={{ paddingBottom: 0 }}
-                    theme={theme("dodgerblue")}
+                    theme={theme(item.theme)}
                   >
                     <TouchableOpacity activeOpacity={0.7} /*onLongPress={}*/>
                       <List.Item

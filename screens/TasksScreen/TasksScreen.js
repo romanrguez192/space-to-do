@@ -205,7 +205,7 @@ const TasksScreen = (props) => {
 
   const renderList = (items) => {
     return (
-      <List.Section title="Tareas">
+      <List.Section title="Tareas" titleStyle={{color: "black"}}>
         {items.map((item) => {
           if (showCompleted || !item.done) {
             return (
@@ -249,10 +249,11 @@ const TasksScreen = (props) => {
                         description={item.description}
                         descriptionStyle={
                           item.done
-                            ? { textDecorationLine: "line-through" }
-                            : undefined
+                            ? { textDecorationLine: "line-through", color: '#57606f'}
+                            : {color: "#57606f"}
+                          
                         }
-                        titleStyle={{ display: "none" }}
+                        titleStyle={{ display: "none"}}
                       />
                     </TouchableOpacity>
                   </List.Accordion>
